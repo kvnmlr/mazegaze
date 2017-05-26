@@ -46,34 +46,43 @@ public class MazeGenerator : MonoBehaviour {
 
     void CreatPlayer()
     {
-        //GameObject tempPlayer;
-        //GameObject tempLight;
+        // playerlight.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+
         float nxSize = (float)xSize / 2.0f;
         float nySize = (float)ySize / 2.0f;
         player.transform.localScale = new Vector3(0.8f , 0.8f, 0.8f);
-       // playerlight.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-        Vector3 myPos = new Vector3(nxSize-0.5f, 0.5f,nySize-0.5f);
-         if (xSize % 2 == 0 && ySize % 2 == 1)
+        //playerlight.transform.Rotate(90, 0, 0);
+
+
+        Vector3 myPosp = new Vector3(nxSize-0.5f, 0.5f,nySize-0.5f);
+        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+
+
+        if (xSize % 2 == 0 && ySize % 2 == 1)
          {
-             myPos = new Vector3(nxSize-0.5f, 0.5f,nySize-0.5f);
-         }
+             myPosp = new Vector3(nxSize-0.5f, 0.5f,nySize-0.5f);
+             myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+        }
          else if (xSize % 2 == 0 && ySize % 2 == 0)
          {
-             myPos = new Vector3(nxSize-0.5f, 0.5f,nySize-1.0f);
-         }
-         else if (xSize % 2 == 1 && ySize % 2 == 1)
-         {
-             myPos = new Vector3(nxSize, 0.5f,nySize-0.5f);
-         }
-         else if (xSize % 2 == 1 && ySize % 2 == 0)
-         {
-             myPos = new Vector3(nxSize, 0.5f,nySize-1.0f);
-         }
+             myPosp = new Vector3(nxSize-0.5f, 0.5f,nySize-1.0f);
+            myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
 
-        playerlight = Instantiate(playerlight, myPos, Quaternion.identity) as GameObject;
-        playerlight.transform.Rotate(90, 0, 0);
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 1)
+         {
+             myPosp = new Vector3(nxSize, 0.5f,nySize-0.5f);
+            myPos = new Vector3(nxSize, 3.0f, nySize - 0.5f);
 
-        player = Instantiate(player, myPos, Quaternion.identity) as GameObject;
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 0)
+         {
+             myPosp = new Vector3(nxSize, 0.5f,nySize-1.0f);
+            myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
+
+        }
+        playerlight.transform.position = myPos;
+        player.transform.position = myPosp;
 
 
     }
