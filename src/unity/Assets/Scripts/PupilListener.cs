@@ -147,7 +147,7 @@ public class PupilListener : MonoBehaviour
                         string msgType = msg[0].ConvertToString();
                         var message = MsgPack.Unpacking.UnpackObject(msg[1].ToByteArray());
                         MsgPack.MessagePackObject mmap = message.Value;
-                        //Debug.Log(mmap.ToString());
+                        Debug.Log(mmap.ToString());
                         if (msgType.Contains("pupil"))
                         {
                             Debug.Log("PUPIL DETECTED");
