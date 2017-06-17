@@ -5,7 +5,7 @@ using UnityEngine;
 public class MazeGenerator : MonoBehaviour {
 
     [System.Serializable]
-    public class Cell
+    public class CellProperties
     {
         public bool visited;
         public GameObject north;//1
@@ -24,7 +24,9 @@ public class MazeGenerator : MonoBehaviour {
     public int ySize = 5;
     private Vector3 initialPos;
     private GameObject WallHolder;
-    public Cell[] cells;
+    private GameObject Maze;
+    private GameObject Cells;
+    public CellProperties[] cells;
     private int currentCell;
     private int totalCells;
     private int visitedCells = 0;
@@ -37,11 +39,20 @@ public class MazeGenerator : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        Maze = new GameObject("Maze");
+
+        WallHolder = new GameObject();
+        WallHolder.name = "Walls";
+        WallHolder.transform.parent = Maze.transform;
+
+
         CreatFloor();
 
         CreatWalls();
 
         CreatPlayer();
+
+        Destroy(WallHolder);
     }
 
     void CreatPlayer()
@@ -114,8 +125,7 @@ public class MazeGenerator : MonoBehaviour {
 
     void CreatWalls()
     {
-        WallHolder = new GameObject();
-        WallHolder.name = "Maze";
+
         initialPos = new Vector3((-xSize / 2) + wallLength / 2, 0.0f, (-ySize / 2) + wallLength / 2);
         Vector3 myPos = initialPos;
         GameObject tempWall;
@@ -149,12 +159,16 @@ public class MazeGenerator : MonoBehaviour {
 
     void creatCells()
     {
+        Cells = new GameObject("Cells");
+        Cells.transform.localPosition = new Vector3(-xSize * wallLength / 2, 0, ySize * wallLength / 2);
+        Cells.transform.parent = Maze.transform;
+
         lastCells = new List<int>();
         lastCells.Clear();
         totalCells = xSize * ySize;
         int children = WallHolder.transform.childCount;
         GameObject[] allWalls = new GameObject[children];
-        cells = new Cell[xSize * ySize];
+        cells = new CellProperties[xSize * ySize];
         int eastWestProcess = 0;
         int childprocess = 0;
         int termCount = 0;
@@ -168,6 +182,11 @@ public class MazeGenerator : MonoBehaviour {
         //Assigns Walls to the Cells
         for (int i = 0; i < cells.Length; i++)
         {
+            GameObject c = new GameObject("Cell_" + i);
+            c.transform.parent = Cells.transform;
+            c.AddComponent<BoxCollider>().size = new Vector3(wallLength, wallLength, wallLength);
+            c.GetComponent<BoxCollider>().isTrigger = true;
+            c.AddComponent<Cell>();
 
             if (termCount == xSize)
             {
@@ -175,17 +194,24 @@ public class MazeGenerator : MonoBehaviour {
                 termCount = 0;
             }
 
-            cells[i] = new Cell();
+            cells[i] = new CellProperties();
             cells[i].east = allWalls[eastWestProcess];
             cells[i].south = allWalls[childprocess + (xSize + 1) * ySize];
 
-
             eastWestProcess++;
-
             termCount++;
+
             childprocess++;
             cells[i].west = allWalls[eastWestProcess];
             cells[i].north = allWalls[(childprocess + (xSize + 1) * ySize) + xSize - 1];
+
+            c.transform.position = cells[i].north.transform.position - new Vector3(0, 0, wallLength / 2);
+
+            cells[i].east.transform.parent = c.transform;
+            cells[i].south.transform.parent = c.transform;
+            cells[i].west.transform.parent = c.transform;
+            cells[i].north.transform.parent = c.transform;
+
         }
         CreatMaze();
 
