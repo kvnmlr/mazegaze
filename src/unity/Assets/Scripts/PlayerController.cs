@@ -16,9 +16,13 @@ public class PlayerController : MonoBehaviour {
 
     void Update()
     {
-        Vector3 mousePos = Input.mousePosition;
-        Vector3 wantedPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, depth));
-        rb.AddForce(wantedPos * speed);
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
+        float radius = 2;
+        if (System.Math.Abs(transform.position.x - mousePos.x) < radius && System.Math.Abs(transform.position.y - mousePos.y) < radius)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, mousePos, speed * Time.deltaTime);
+
+        }
     }
 
 }
