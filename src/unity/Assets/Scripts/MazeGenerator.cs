@@ -39,6 +39,11 @@ public class MazeGenerator : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+
+    }
+
+    public void BuildMaze()
+    {
         Maze = new GameObject("Maze");
 
         WallHolder = new GameObject();
@@ -180,13 +185,16 @@ public class MazeGenerator : MonoBehaviour {
         }
 
         //Assigns Walls to the Cells
+        bool switcher = true;
         for (int i = 0; i < cells.Length; i++)
         {
+
             GameObject c = new GameObject("Cell_" + i);
             c.transform.parent = Cells.transform;
             c.AddComponent<BoxCollider>().size = new Vector3(wallLength, wallLength, wallLength);
             c.GetComponent<BoxCollider>().isTrigger = true;
-            c.AddComponent<Cell>();
+            c.AddComponent<Cell>().hasLight = switcher;
+            switcher = !switcher;
 
             if (termCount == xSize)
             {
