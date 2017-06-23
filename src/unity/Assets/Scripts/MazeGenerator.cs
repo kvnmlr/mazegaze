@@ -22,7 +22,10 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject playerC;
     public GameObject playerD;
     public int NumPlayer;
-    public GameObject playerlight;
+    public GameObject playerlightA;
+    public GameObject playerlightB;
+    public GameObject playerlightC;
+    public GameObject playerlightD;
     private float wallLength = 1.0f;
     public int xSize = 5;
     public int ySize = 5;
@@ -101,42 +104,7 @@ public class MazeGenerator : MonoBehaviour {
 
     }
 
-    void GeneratePlayerPfeil()
-    {
-        float nxSize = (float)xSize / 2.0f;
-        float nySize = (float)ySize / 2.0f;
-        playerB.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
-
-        Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
-        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-
-
-        if (xSize % 2 == 0 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
-            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-        }
-        else if (xSize % 2 == 0 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 1.0f);
-            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(-nxSize+1.0f, 0.5f, -nySize + 0.5f);
-            myPos = new Vector3(-nxSize+1.0f, 3.0f, -nySize + 0.5f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(-nxSize, 0.5f, -nySize + 1.0f);
-            //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
-
-        }
-        playerlight.transform.position = myPos;
-        playerB.transform.position = myPosp;
-    }
+    
 
     void GeneratePlayerMouse()
     {
@@ -171,8 +139,45 @@ public class MazeGenerator : MonoBehaviour {
             myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
 
         }
-        playerlight.transform.position = myPos;
+        playerlightA.transform.position = myPos;
         playerA.transform.position = myPosp;
+    }
+
+    void GeneratePlayerPfeil()
+    {
+        float nxSize = (float)xSize / 2.0f;
+        float nySize = (float)ySize / 2.0f;
+        playerB.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+        Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
+        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+
+
+        if (xSize % 2 == 0 && ySize % 2 == 1)
+        {
+            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
+            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+        }
+        else if (xSize % 2 == 0 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 1.0f);
+            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
+
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 1)
+        {
+            myPosp = new Vector3(-nxSize + 1.0f, 0.5f, -nySize + 0.5f);
+            myPos = new Vector3(-nxSize + 1.0f, 3.0f, -nySize + 0.5f);
+
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(-nxSize, 0.5f, -nySize + 1.0f);
+            //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
+
+        }
+        playerlightB.transform.position = myPos;
+        playerB.transform.position = myPosp;
     }
 
     void GeneratePlayerwasd()
@@ -208,7 +213,7 @@ public class MazeGenerator : MonoBehaviour {
             //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
 
         }
-        playerlight.transform.position = myPos;
+        playerlightC.transform.position = myPos;
         playerC.transform.position = myPosp;
     }
 
@@ -246,7 +251,7 @@ public class MazeGenerator : MonoBehaviour {
             //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
 
         }
-        playerlight.transform.position = myPos;
+        playerlightD.transform.position = myPos;
         playerD.transform.position = myPosp;
     }
 
