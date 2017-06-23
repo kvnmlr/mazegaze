@@ -22,10 +22,6 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject playerC;
     public GameObject playerD;
     public int NumPlayer;
-    public GameObject playerlightA;
-    public GameObject playerlightB;
-    public GameObject playerlightC;
-    public GameObject playerlightD;
     private float wallLength = 1.0f;
     public int xSize = 5;
     public int ySize = 5;
@@ -139,7 +135,6 @@ public class MazeGenerator : MonoBehaviour {
             myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
 
         }
-        playerlightA.transform.position = myPos;
         playerA.transform.position = myPosp;
     }
 
@@ -176,7 +171,6 @@ public class MazeGenerator : MonoBehaviour {
             //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
 
         }
-        playerlightB.transform.position = myPos;
         playerB.transform.position = myPosp;
     }
 
@@ -213,7 +207,6 @@ public class MazeGenerator : MonoBehaviour {
             //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
 
         }
-        playerlightC.transform.position = myPos;
         playerC.transform.position = myPosp;
     }
 
@@ -251,7 +244,6 @@ public class MazeGenerator : MonoBehaviour {
             //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
 
         }
-        playerlightD.transform.position = myPos;
         playerD.transform.position = myPosp;
     }
 

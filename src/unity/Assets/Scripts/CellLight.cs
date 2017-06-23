@@ -8,9 +8,6 @@ public class CellLight : MonoBehaviour {
     private float timeToDarkness = 15f;
 
     private float decreaseRate = 0.2f;
-
-
-
     private float timePassed;
     private float currentIntensity;
 
