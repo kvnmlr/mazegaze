@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
             transform.position = Vector3.MoveTowards(transform.position, mousePos, speed * Time.deltaTime);
 
         }
-    }
+
+    }   
 
 }

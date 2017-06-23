@@ -17,7 +17,11 @@ public class MazeGenerator : MonoBehaviour {
 
     public GameObject wall;
     public GameObject floor;
-    public GameObject player;
+    public GameObject playerA;
+    public GameObject playerB;
+    public GameObject playerC;
+    public GameObject playerD;
+    public int NumPlayer;
     public GameObject playerlight;
     private float wallLength = 1.0f;
     public int xSize = 5;
@@ -60,47 +64,190 @@ public class MazeGenerator : MonoBehaviour {
         Destroy(WallHolder);
     }
 
+   
+    //TODO: Werte anpasse fuer jedes Maze
     void CreatPlayer()
     {
-        // playerlight.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
 
+        switch (NumPlayer)
+        {
+            case 1:
+                GeneratePlayerMouse();
+                playerB.SetActive(false);
+                playerC.SetActive(false);
+                playerD.SetActive(false);
+                break;
+            case 2:
+                GeneratePlayerMouse();
+                GeneratePlayerPfeil();
+                playerC.SetActive(false);
+                playerD.SetActive(false);
+                break;
+            case 3:
+                GeneratePlayerMouse();
+                GeneratePlayerPfeil();
+                GeneratePlayerwasd();
+                playerD.SetActive(false);
+                break;
+            case 4:
+                GeneratePlayerMouse();
+                GeneratePlayerPfeil();
+                GeneratePlayerwasd();
+                GeneratePlayeruhjk();
+                break;
+        }
+        
+
+
+    }
+
+    void GeneratePlayerPfeil()
+    {
         float nxSize = (float)xSize / 2.0f;
         float nySize = (float)ySize / 2.0f;
-        player.transform.localScale = new Vector3(0.8f , 0.8f, 0.8f);
-        //playerlight.transform.Rotate(90, 0, 0);
+        playerB.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
 
-
-        Vector3 myPosp = new Vector3(nxSize-0.5f, 0.5f,nySize-0.5f);
+        Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
         Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
 
 
         if (xSize % 2 == 0 && ySize % 2 == 1)
-         {
-             myPosp = new Vector3(nxSize-0.5f, 0.5f,nySize-0.5f);
-             myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+        {
+            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
+            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
         }
-         else if (xSize % 2 == 0 && ySize % 2 == 0)
-         {
-             myPosp = new Vector3(nxSize-0.5f, 0.5f,nySize-1.0f);
+        else if (xSize % 2 == 0 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 1.0f);
+            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
+
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 1)
+        {
+            myPosp = new Vector3(-nxSize+1.0f, 0.5f, -nySize + 0.5f);
+            myPos = new Vector3(-nxSize+1.0f, 3.0f, -nySize + 0.5f);
+
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(-nxSize, 0.5f, -nySize + 1.0f);
+            //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
+
+        }
+        playerlight.transform.position = myPos;
+        playerB.transform.position = myPosp;
+    }
+
+    void GeneratePlayerMouse()
+    {
+        float nxSize = (float)xSize / 2.0f;
+        float nySize = (float)ySize / 2.0f;
+        playerA.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+        Vector3 myPosp = new Vector3(nxSize - 0.5f, 0.5f, nySize - 0.5f);
+        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+
+
+        if (xSize % 2 == 0 && ySize % 2 == 1)
+        {
+            myPosp = new Vector3(nxSize - 0.5f, 0.5f, nySize - 0.5f);
+            myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+        }
+        else if (xSize % 2 == 0 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(nxSize - 0.5f, 0.5f, nySize - 1.0f);
             myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
 
         }
         else if (xSize % 2 == 1 && ySize % 2 == 1)
-         {
-             myPosp = new Vector3(nxSize, 0.5f,nySize-0.5f);
+        {
+            myPosp = new Vector3(nxSize, 0.5f, nySize - 0.5f);
             myPos = new Vector3(nxSize, 3.0f, nySize - 0.5f);
 
         }
         else if (xSize % 2 == 1 && ySize % 2 == 0)
-         {
-             myPosp = new Vector3(nxSize, 0.5f,nySize-1.0f);
+        {
+            myPosp = new Vector3(nxSize, 0.5f, nySize - 1.0f);
             myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
 
         }
         playerlight.transform.position = myPos;
-        player.transform.position = myPosp;
+        playerA.transform.position = myPosp;
+    }
+
+    void GeneratePlayerwasd()
+    {
+        float nxSize = (float)xSize / 2.0f;
+        float nySize = (float)ySize / 2.0f;
+        playerC.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+        Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
+        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
 
 
+        if (xSize % 2 == 0 && ySize % 2 == 1)
+        {
+            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
+            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+        }
+        else if (xSize % 2 == 0 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 1.0f);
+            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
+
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 1)
+        {
+            myPosp = new Vector3(-nxSize + 1.0f, 0.5f, nySize - 0.5f);
+            myPos = new Vector3(-nxSize+1.0f, 3.0f, nySize - 0.5f);
+
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(-nxSize, 0.5f, -nySize + 1.0f);
+            //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
+
+        }
+        playerlight.transform.position = myPos;
+        playerC.transform.position = myPosp;
+    }
+
+    void GeneratePlayeruhjk()
+    {
+        float nxSize = (float)xSize / 2.0f;
+        float nySize = (float)ySize / 2.0f;
+        playerD.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+
+        Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
+        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+
+
+        if (xSize % 2 == 0 && ySize % 2 == 1)
+        {
+            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
+            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
+        }
+        else if (xSize % 2 == 0 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 1.0f);
+            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
+
+        }
+        //Nur das ist wichtig!!
+        else if (xSize % 2 == 1 && ySize % 2 == 1)
+        {
+            myPosp = new Vector3(nxSize, 0.5f, -nySize + 0.5f);
+            myPos = new Vector3(nxSize, 3.0f, -nySize + 0.5f);
+
+        }
+        else if (xSize % 2 == 1 && ySize % 2 == 0)
+        {
+            myPosp = new Vector3(-nxSize, 0.5f, -nySize + 1.0f);
+            //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
+
+        }
+        playerlight.transform.position = myPos;
+        playerD.transform.position = myPosp;
     }
 
     void CreatFloor()
