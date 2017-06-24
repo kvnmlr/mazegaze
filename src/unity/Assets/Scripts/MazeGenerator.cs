@@ -17,11 +17,11 @@ public class MazeGenerator : MonoBehaviour {
 
     public GameObject wall;
     public GameObject floor;
-    public GameObject playerA;
-    public GameObject playerB;
-    public GameObject playerC;
-    public GameObject playerD;
-    public int NumPlayer;
+    public GameObject playerA { get; set; }
+    public GameObject playerB { get; set; }
+    public GameObject playerC { get; set; }
+    public GameObject playerD { get; set; }
+    public int NumPlayer { get; set; }
     private float wallLength = 1.0f;
     public int xSize = 5;
     public int ySize = 5;
@@ -29,7 +29,7 @@ public class MazeGenerator : MonoBehaviour {
     private GameObject WallHolder;
     private GameObject Maze;
     private GameObject Cells;
-    public CellProperties[] cells;
+    public CellProperties[] cells { get; set; }
     private int currentCell;
     private int totalCells;
     private int visitedCells = 0;
@@ -72,21 +72,21 @@ public class MazeGenerator : MonoBehaviour {
         {
             case 1:
                 GeneratePlayerMouse();
-                playerB.SetActive(false);
-                playerC.SetActive(false);
-                playerD.SetActive(false);
+                //playerB.SetActive(false);
+                //playerC.SetActive(false);
+                //playerD.SetActive(false);
                 break;
             case 2:
                 GeneratePlayerMouse();
                 GeneratePlayerPfeil();
-                playerC.SetActive(false);
-                playerD.SetActive(false);
+                //playerC.SetActive(false);
+                //playerD.SetActive(false);
                 break;
             case 3:
                 GeneratePlayerMouse();
                 GeneratePlayerPfeil();
                 GeneratePlayerwasd();
-                playerD.SetActive(false);
+                //playerD.SetActive(false);
                 break;
             case 4:
                 GeneratePlayerMouse();
@@ -95,18 +95,13 @@ public class MazeGenerator : MonoBehaviour {
                 GeneratePlayeruhjk();
                 break;
         }
-        
-
-
     }
-
-    
 
     void GeneratePlayerMouse()
     {
         float nxSize = (float)xSize / 2.0f;
         float nySize = (float)ySize / 2.0f;
-        playerA.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+        playerA.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
         Vector3 myPosp = new Vector3(nxSize - 0.5f, 0.5f, nySize - 0.5f);
         Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
@@ -136,13 +131,14 @@ public class MazeGenerator : MonoBehaviour {
 
         }
         playerA.transform.position = myPosp;
+        playerA.SetActive(true);
     }
 
     void GeneratePlayerPfeil()
     {
         float nxSize = (float)xSize / 2.0f;
         float nySize = (float)ySize / 2.0f;
-        playerB.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+        playerB.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
         Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
         Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
@@ -172,13 +168,14 @@ public class MazeGenerator : MonoBehaviour {
 
         }
         playerB.transform.position = myPosp;
+        playerB.SetActive(true);
     }
 
     void GeneratePlayerwasd()
     {
         float nxSize = (float)xSize / 2.0f;
         float nySize = (float)ySize / 2.0f;
-        playerC.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+        playerC.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
         Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
         Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
@@ -208,13 +205,14 @@ public class MazeGenerator : MonoBehaviour {
 
         }
         playerC.transform.position = myPosp;
+        playerC.SetActive(true);
     }
 
     void GeneratePlayeruhjk()
     {
         float nxSize = (float)xSize / 2.0f;
         float nySize = (float)ySize / 2.0f;
-        playerD.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+        playerD.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
         Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
         Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
@@ -245,6 +243,7 @@ public class MazeGenerator : MonoBehaviour {
 
         }
         playerD.transform.position = myPosp;
+        playerD.SetActive(true);
     }
 
     void CreatFloor()

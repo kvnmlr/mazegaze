@@ -3,22 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour {
-
     public Player[] players;
     public MazeGenerator mazeGenerator;
 
-	// Use this for initialization
 	void Start () {
         Debug.Log("MazeGaze");
 		foreach (Player p in players)
         {
             Debug.Log("Player " + p.name + " joined the game");
         }
+        if (players.Length > 4)
+        {
+            Debug.Log("The maximum number of players is 4");
+        }
+
+        if (players.Length > 0)
+        {
+            mazeGenerator.playerA = players[0].gameObject;
+            mazeGenerator.NumPlayer = 1;
+        }
+        if (players.Length > 1)
+        {
+            mazeGenerator.playerB = players[1].gameObject;
+            mazeGenerator.NumPlayer = 2;
+        }
+        if (players.Length > 2)
+        {
+            mazeGenerator.playerC = players[2].gameObject;
+            mazeGenerator.NumPlayer = 3;
+        }
+        if (players.Length > 3)
+        {
+            mazeGenerator.playerD = players[3].gameObject;
+            mazeGenerator.NumPlayer = 4;
+        }
         mazeGenerator.BuildMaze();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 }

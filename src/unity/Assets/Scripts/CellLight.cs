@@ -1,19 +1,18 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CellLight : MonoBehaviour {
     private Player player;
-    private float initialLightIntesity = 5f;
-    private float timeToDarkness = 15f;
+    public float initialLightIntesity = 5f;
+    public float timeToDarkness = 20f;
 
-    private float decreaseRate = 0.2f;
+    public float decreaseRate = 0.2f;
     private float timePassed;
     private float currentIntensity;
 
     public void setPlayer(Player player)
     {
-        gameObject.GetComponent<Light>().color = player.playerLightColor;
+        gameObject.GetComponent<Light>().color = player.cellLightColor;
         this.player = player;
     }
     public Player getPlayer()
@@ -21,10 +20,18 @@ public class CellLight : MonoBehaviour {
         return player;
     }
 
-    public void Restart()
+    public void restart()
     {
         currentIntensity = initialLightIntesity;
         timePassed = 0;
+    }
+
+    public void mix(Player.PlayerColor other)
+    {
+        Player.PlayerColor color = player.color;
+        int mix = (int)color + (int)other;
+        Player.MixColor mixColor = (Player.MixColor)mix;
+        gameObject.GetComponent<Light>().color = player.getColor(mixColor);
     }
 
     void Start()
@@ -33,15 +40,12 @@ public class CellLight : MonoBehaviour {
         timePassed = 0;
 
         gameObject.GetComponent<Light>().range = currentIntensity;
-
         StartCoroutine(lowerLightIntensity());
     }
 
     IEnumerator lowerLightIntensity()
     {
         float intensityInterval = initialLightIntesity / (timeToDarkness/decreaseRate);
-
-        Debug.Log("Lowering intensity");
         while (timePassed < timeToDarkness && currentIntensity > 0)
         {
             yield return new WaitForSeconds(decreaseRate);

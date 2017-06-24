@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LightController : MonoBehaviour {
 
-    public GameObject player;
+    public GameObject player { get; set; }
     private Vector3 offset;
 
     // Use this for initialization

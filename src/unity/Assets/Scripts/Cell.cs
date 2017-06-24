@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour {
     // players who discovered this cell
-    private List<GameObject> lights = new List<GameObject>();
+    public List<GameObject> lights = new List<GameObject>();
     public bool hasLight;
 
 	// Use this for initialization
@@ -29,24 +29,29 @@ public class Cell : MonoBehaviour {
         if (other.gameObject.GetComponent<Player>() != null)
         {
             Player p = other.gameObject.GetComponent<Player>();
-            Debug.Log("Player " + p.name + " entered cell " + gameObject.name);
-
-
 
             if (p==null || !hasLight)
             {
                 return;
             }
 
+            //Debug.Log(p.name + " entered " + gameObject.name);
+
             for (int i = 0; i < lights.Count; i++)
             {
-                if (lights[i].GetComponent<CellLight>().getPlayer().name == p.name) { }
+                if (lights[i].GetComponent<CellLight>().getPlayer().name.Equals(p.name))
                 {
-                    lights[i].GetComponent<CellLight>().Restart();
+                    lights[i].GetComponent<CellLight>().restart();
+                    return;
+                } else
+                {
+                    lights[i].GetComponent<CellLight>().mix(p.color);
+                    lights[i].GetComponent<CellLight>().restart();
                     return;
                 }
             }
-            
+
+            Debug.Log("Starting light for " + p.name + " in " + gameObject.name);
             GameObject g;
             g = Instantiate(p.cellLight.gameObject, gameObject.transform, true);
             g.name = "CellLightInstance";
