@@ -15,7 +15,7 @@ public class PlayerControlleruhjk : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
         if (Input.GetKey(KeyCode.K))
         {
@@ -34,5 +34,14 @@ public class PlayerControlleruhjk : MonoBehaviour {
         }
 
 
+    }
+
+    void Update()
+    {
+        Vector3 temp = transform.position;
+        if (transform.position.y > 0.5)
+        {
+            transform.position = new Vector3(temp.x, 0.5f, temp.z);
+        }
     }
 }

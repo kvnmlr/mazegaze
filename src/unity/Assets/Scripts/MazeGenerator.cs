@@ -103,18 +103,18 @@ public class MazeGenerator : MonoBehaviour {
         float nySize = (float)ySize / 2.0f;
         playerA.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
-        Vector3 myPosp = new Vector3(nxSize - 0.5f, 0.5f, nySize - 0.5f);
+        Vector3 myPosp = new Vector3(nxSize - 0.5f, 0, nySize - 0.5f);
         Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
 
 
         if (xSize % 2 == 0 && ySize % 2 == 1)
         {
-            myPosp = new Vector3(nxSize - 0.5f, 0.5f, nySize - 0.5f);
+            myPosp = new Vector3(nxSize - 0.5f,0, nySize - 0.5f);
             myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
         }
         else if (xSize % 2 == 0 && ySize % 2 == 0)
         {
-            myPosp = new Vector3(nxSize - 0.5f, 0.5f, nySize - 1.0f);
+            myPosp = new Vector3(nxSize - 0.5f, 0, nySize - 1.0f);
             myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
 
         }
@@ -252,18 +252,18 @@ public class MazeGenerator : MonoBehaviour {
         float nxSize = (float)xSize;
         float nySize = (float)ySize;
         floor.transform.localScale = new Vector3(nxSize / 10, 0.5f, nySize / 10);
-        Vector3 myPos = new Vector3(0, -0.5f, 0);
+        Vector3 myPos = new Vector3(0, 0, 0);
         if(xSize % 2 == 0 && ySize % 2 == 1)
         {
-            myPos = new Vector3(0, -0.5f, 0);
+            myPos = new Vector3(0, 0, 0);
         }else if(xSize % 2 == 0 && ySize%2 == 0)
         {
-            myPos = new Vector3(0, -0.5f, -0.5f);
+            myPos = new Vector3(0, 0, -0.5f);
         }else if(xSize % 2 == 1 && ySize %2 == 1){
-            myPos = new Vector3(0.5f, -0.5f, 0);
+            myPos = new Vector3(0.5f, 0, 0);
         }else if (xSize %2 == 1 && ySize % 2 == 0)
         {
-            myPos = new Vector3(0.5f, -0.5f, -0.5f);
+            myPos = new Vector3(0.5f, 0, -0.5f);
         }
 
         

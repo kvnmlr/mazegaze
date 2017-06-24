@@ -16,6 +16,7 @@ public class PlayerControllerArrow : MonoBehaviour {
 
     void FixedUpdate()
     {
+       
         if (Input.GetKey(KeyCode.RightArrow))
         {
             transform.position += Vector3.right * speed * Time.deltaTime;
@@ -31,6 +32,16 @@ public class PlayerControllerArrow : MonoBehaviour {
         if (Input.GetKey(KeyCode.DownArrow))
         {
             transform.position += Vector3.back * speed * Time.deltaTime;
+        }
+
+       
+    }
+    void Update()
+    {
+        Vector3 temp = transform.position;
+        if (transform.position.y > 0.5)
+        {
+            transform.position = new Vector3(temp.x, 0.5f, temp.z);
         }
     }
 }

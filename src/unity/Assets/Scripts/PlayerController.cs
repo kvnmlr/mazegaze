@@ -28,7 +28,29 @@ public class PlayerController : MonoBehaviour {
             
             rb.position = transform.position;
         }
+        if(transform.position.y > 0.5)
+        {
+            transform.position = new Vector3(temp.x, 0.5f, temp.z);
+        }
 
-    }   
+        
+
+    }
+
+    /*private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("nophysics"))
+        {
+            
+            other.gameObject.SetActive(false);
+            /*rb.isKinematic = true;
+            int i = 0;
+            while(i< 1000)
+            {
+                i++;
+            }
+            rb.isKinematic = false;
+        }
+    }*/
 
 }

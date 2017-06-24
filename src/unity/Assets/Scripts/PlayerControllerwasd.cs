@@ -16,7 +16,7 @@ public class PlayerControllerwasd : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.D))
         {
@@ -33,6 +33,15 @@ public class PlayerControllerwasd : MonoBehaviour {
         if (Input.GetKey(KeyCode.S))
         {
             transform.position += Vector3.back * speed * Time.deltaTime;
+        }
+    }
+
+    void Update()
+    {
+        Vector3 temp = transform.position;
+        if (transform.position.y > 0.5)
+        {
+            transform.position = new Vector3(temp.x, 0.5f, temp.z);
         }
     }
 }
