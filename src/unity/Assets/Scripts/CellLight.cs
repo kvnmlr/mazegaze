@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CellLight : MonoBehaviour {
     private Player player;
-    public float initialLightIntesity = 5f;
+    public float initialLightIntesity = 10f;
     public float timeToDarkness = 20f;
 
     public float decreaseRate = 0.2f;
@@ -39,7 +39,7 @@ public class CellLight : MonoBehaviour {
         currentIntensity = initialLightIntesity;
         timePassed = 0;
 
-        gameObject.GetComponent<Light>().range = currentIntensity;
+        gameObject.GetComponent<Light>().intensity = currentIntensity;
         StartCoroutine(lowerLightIntensity());
     }
 
@@ -52,7 +52,7 @@ public class CellLight : MonoBehaviour {
             timePassed += decreaseRate;
             currentIntensity -= intensityInterval;
 
-            gameObject.GetComponent<Light>().range = currentIntensity;
+            gameObject.GetComponent<Light>().intensity = currentIntensity;
         }
     }
 }

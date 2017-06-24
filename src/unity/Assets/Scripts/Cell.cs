@@ -16,7 +16,7 @@ public class Cell : MonoBehaviour {
 	void Update () {
 		for(int i = 0; i < lights.Count; ++i)
         {
-            if(lights[i].GetComponent<Light>().range <= 0)
+            if(lights[i].GetComponent<Light>().intensity <= 0)
             {
                 DestroyImmediate(lights[i]);
                 lights.RemoveAt(i);
@@ -55,7 +55,7 @@ public class Cell : MonoBehaviour {
             GameObject g;
             g = Instantiate(p.cellLight.gameObject, gameObject.transform, true);
             g.name = "CellLightInstance";
-            g.transform.position = transform.position - new Vector3(0, 0, 0);
+            g.transform.localPosition = new Vector3(0, 0.25f, 0);
             g.GetComponent<CellLight>().setPlayer(p);
             lights.Add(g);
             g.SetActive(true);

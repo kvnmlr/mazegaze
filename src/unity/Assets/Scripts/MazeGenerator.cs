@@ -266,7 +266,6 @@ public class MazeGenerator : MonoBehaviour {
             myPos = new Vector3(0.5f, 0, -0.5f);
         }
 
-        
         tempFloor = Instantiate(floor, myPos, Quaternion.identity) as GameObject;
 
     }
@@ -284,7 +283,7 @@ public class MazeGenerator : MonoBehaviour {
             for (int j = 0; j <= xSize; j++)
             {
                 myPos = new Vector3(initialPos.x + (j * wallLength) - wallLength / 2,
-                    0.0f, initialPos.z + (i * wallLength) - wallLength / 2);
+                    wallLength / 2, initialPos.z + (i * wallLength) - wallLength / 2);
                 tempWall = Instantiate(wall, myPos, Quaternion.identity) as GameObject;
                 tempWall.transform.parent = WallHolder.transform;
             }
@@ -296,7 +295,7 @@ public class MazeGenerator : MonoBehaviour {
             for (int j = 0; j < xSize; j++)
             {
                 myPos = new Vector3(initialPos.x + (j * wallLength),
-                    0.0f, initialPos.z + (i * wallLength) - wallLength);
+                    wallLength / 2, initialPos.z + (i * wallLength) - wallLength);
                 tempWall = Instantiate(wall, myPos, Quaternion.Euler(0.0f, 90.0f, 0.0f)) as GameObject;
                 tempWall.transform.parent = WallHolder.transform;
             }

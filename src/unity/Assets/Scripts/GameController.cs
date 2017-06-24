@@ -26,17 +26,26 @@ public class GameController : MonoBehaviour {
         {
             mazeGenerator.playerB = players[1].gameObject;
             mazeGenerator.NumPlayer = 2;
+            Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[1].gameObject.GetComponent<Collider>());
         }
         if (players.Length > 2)
         {
             mazeGenerator.playerC = players[2].gameObject;
             mazeGenerator.NumPlayer = 3;
+            Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[2].gameObject.GetComponent<Collider>());
+            Physics.IgnoreCollision(players[1].gameObject.GetComponent<Collider>(), players[2].gameObject.GetComponent<Collider>());
+
         }
         if (players.Length > 3)
         {
             mazeGenerator.playerD = players[3].gameObject;
             mazeGenerator.NumPlayer = 4;
+            Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[3].gameObject.GetComponent<Collider>());
+            Physics.IgnoreCollision(players[1].gameObject.GetComponent<Collider>(), players[3].gameObject.GetComponent<Collider>());
+            Physics.IgnoreCollision(players[2].gameObject.GetComponent<Collider>(), players[3].gameObject.GetComponent<Collider>());
+
         }
         mazeGenerator.BuildMaze();
+
 	}
 }
