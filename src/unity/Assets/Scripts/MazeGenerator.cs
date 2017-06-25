@@ -22,6 +22,8 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject playerC { get; set; }
     public GameObject playerD { get; set; }
     public int NumPlayer { get; set; }
+    public GameObject target { get; set; }
+    public GameObject targetLight { get; set; }
     private float wallLength = 1.0f;
     public int xSize = 5;
     public int ySize = 5;
@@ -38,6 +40,7 @@ public class MazeGenerator : MonoBehaviour {
     private List<int> lastCells;
     private int backingUp = 0;
     private int wallToBreak = 0;
+    private CellProperties start;
 
     // Use this for initialization
     void Start()
@@ -61,6 +64,8 @@ public class MazeGenerator : MonoBehaviour {
         CreatPlayer();
 
         Destroy(WallHolder);
+
+        PlottTarget();
     }
 
    
@@ -390,7 +395,8 @@ public class MazeGenerator : MonoBehaviour {
             }
             else
             {
-                currentCell = Random.Range(0, totalCells); //Startzelle
+                currentCell = Random.Range(0, totalCells); 
+                start = cells[currentCell]; //Startcell
                 cells[currentCell].visited = true;
                 visitedCells++;
                 startedBuilding = true;
@@ -483,6 +489,24 @@ public class MazeGenerator : MonoBehaviour {
                 backingUp--;
             }
         }
+    }
+
+    IEnumerator PlottTarget()
+    {
+        Vector3 TargetPos;
+        float rdx = Random.Range(0, (xSize + 1) / 4);
+        float rdz = Random.Range(0, (ySize + 1) / 4);
+        TargetPos = new Vector3(rdx + 0.5f, 0.5f, rdz);
+        targetLight.transform.position = TargetPos;
+        target.transform.position = TargetPos;
+        //Licht an und licht aus klappt noch nich, aber muesste eigentlich so geheh
+        //muss man morgen mal nach schauen...
+
+        yield return new WaitForSeconds(15);
+        targetLight.SetActive(true);
+        yield return new WaitForSeconds(2);
+        targetLight.SetActive(false);
+        
     }
 
     // Update is called once per frame
