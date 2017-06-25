@@ -58,4 +58,13 @@ public class GameController : MonoBehaviour {
         mazeGenerator.BuildMaze();
 
 	}
+
+    public void Set_Player(int numPlayers) {
+
+    }
+
+    public void Set_Maze(int x, int y) {
+        mazeGenerator.xSize = x;
+        mazeGenerator.ySize = y;
+    }
 }

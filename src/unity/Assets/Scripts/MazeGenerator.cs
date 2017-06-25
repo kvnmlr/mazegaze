@@ -25,8 +25,8 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject target { get; set; }
     public GameObject targetLight { get; set; }
     private float wallLength = 1.0f;
-    public int xSize = 5;
-    public int ySize = 5;
+    public int xSize;
+    public int ySize;
     private Vector3 initialPos;
     private GameObject WallHolder;
     private GameObject Maze;
