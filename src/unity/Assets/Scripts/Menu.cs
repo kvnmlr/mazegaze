@@ -11,17 +11,13 @@ public class Menu : MonoBehaviour {
     public GameObject player_screen;
     public GameObject level_screen;
     public GameController gameController;
+    public Canvas canvas;
 
 
     // Use this for initialization
     void Start () {
-        GameObject gameControllerObject = GameObject.FindGameObjectWithTag("GameController");
-        if (gameControllerObject != null) {
-            gameController = gameControllerObject.GetComponent<GameController>();
-        } else {
-            Debug.Log("Cannot find 'GameController' script!");
-        }
-	}
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -59,7 +55,7 @@ public class Menu : MonoBehaviour {
 
     public void OnePlayer() {
 
-        gameController.Set_Player(1);
+        gameController.mazeGenerator.NumPlayer = 1;
 
         option_player = false;
         option_level = true;     
@@ -67,6 +63,7 @@ public class Menu : MonoBehaviour {
 
     public void TwoPlayer() {
 
+        gameController.mazeGenerator.NumPlayer = 2;
 
         option_player = false;
         option_level = true;
@@ -74,11 +71,15 @@ public class Menu : MonoBehaviour {
 
     public void ThreePlayer() {
 
+        gameController.mazeGenerator.NumPlayer = 3;
+
         option_player = false;
         option_level = true;
     }
 
     public void FourPlayer() {
+
+        gameController.mazeGenerator.NumPlayer = 4;
 
         option_player = false;
         option_level = true;
@@ -89,19 +90,24 @@ public class Menu : MonoBehaviour {
 
     public void SimpleLevel() {
 
-        gameController.Set_Maze(5, 5);
+        gameController.mazeGenerator.x_Size = 9;
+        gameController.mazeGenerator.y_Size = 9;
 
         StartGame();
     }
 
     public void MiddleLevel() {
 
+        gameController.mazeGenerator.x_Size = 15;
+        gameController.mazeGenerator.y_Size = 15;
+
         StartGame();
     }
 
     public void HardLevel() {
 
-        gameController.Set_Maze(11, 11);
+        gameController.mazeGenerator.x_Size = 21;
+        gameController.mazeGenerator.y_Size = 21;
 
         StartGame();
     }
@@ -110,7 +116,8 @@ public class Menu : MonoBehaviour {
     //General Start/Quit Functions
 
     public void StartGame() {
-        SceneManager.LoadScene(0);
+        //gameController.mazeGenerator.BuildMaze();
+        canvas.enabled = false;
     }
 
     //Main Buttons

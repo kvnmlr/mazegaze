@@ -25,13 +25,16 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject target { get; set; }
     public GameObject targetLight { get; set; }
     private float wallLength = 1.0f;
-    private int xSize = 9;
-    private int ySize = 9;
+    private int xSize;
+    private int ySize;
+    public int x_Size { get { return xSize; } set { xSize = value; }}
+    public int y_Size { get { return ySize; } set { ySize = value; }}
     private Vector3 initialPos;
     private GameObject WallHolder;
     private GameObject Maze;
     private GameObject Cells;
-    public CellProperties[] cells { get; set; }
+    public CellProperties[] cellProperties { get; set; }
+    public GameObject[] cells { get; set; }
     private int currentCell;
     private int totalCells;
     private int visitedCells = 0;
@@ -45,7 +48,7 @@ public class MazeGenerator : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        
+
     }
 
     public void BuildMaze()
@@ -320,7 +323,8 @@ public class MazeGenerator : MonoBehaviour {
         totalCells = xSize * ySize;
         int children = WallHolder.transform.childCount;
         GameObject[] allWalls = new GameObject[children];
-        cells = new CellProperties[xSize * ySize];
+        cellProperties = new CellProperties[xSize * ySize];
+        cells = new GameObject[xSize * ySize];
         int eastWestProcess = 0;
         int childprocess = 0;
         int termCount = 0;
@@ -333,7 +337,7 @@ public class MazeGenerator : MonoBehaviour {
 
         //Assigns Walls to the Cells
         bool switcher = true;
-        for (int i = 0; i < cells.Length; i++)
+        for (int i = 0; i < cellProperties.Length; i++)
         {
 
             GameObject c = new GameObject("Cell_" + i);
@@ -341,6 +345,7 @@ public class MazeGenerator : MonoBehaviour {
             c.AddComponent<BoxCollider>().size = new Vector3(wallLength, wallLength, wallLength);
             c.GetComponent<BoxCollider>().isTrigger = true;
             c.AddComponent<Cell>().hasLight = switcher;
+            cells[i] = c.gameObject;
             switcher = !switcher;
 
             if (termCount == xSize)
@@ -349,23 +354,23 @@ public class MazeGenerator : MonoBehaviour {
                 termCount = 0;
             }
 
-            cells[i] = new CellProperties();
-            cells[i].east = allWalls[eastWestProcess];
-            cells[i].south = allWalls[childprocess + (xSize + 1) * ySize];
+            cellProperties[i] = new CellProperties();
+            cellProperties[i].east = allWalls[eastWestProcess];
+            cellProperties[i].south = allWalls[childprocess + (xSize + 1) * ySize];
 
             eastWestProcess++;
             termCount++;
 
             childprocess++;
-            cells[i].west = allWalls[eastWestProcess];
-            cells[i].north = allWalls[(childprocess + (xSize + 1) * ySize) + xSize - 1];
+            cellProperties[i].west = allWalls[eastWestProcess];
+            cellProperties[i].north = allWalls[(childprocess + (xSize + 1) * ySize) + xSize - 1];
 
-            c.transform.position = cells[i].north.transform.position - new Vector3(0, 0, wallLength / 2);
+            c.transform.position = cellProperties[i].north.transform.position - new Vector3(0, 0, wallLength / 2);
 
-            cells[i].east.transform.parent = c.transform;
-            cells[i].south.transform.parent = c.transform;
-            cells[i].west.transform.parent = c.transform;
-            cells[i].north.transform.parent = c.transform;
+            cellProperties[i].east.transform.parent = c.transform;
+            cellProperties[i].south.transform.parent = c.transform;
+            cellProperties[i].west.transform.parent = c.transform;
+            cellProperties[i].north.transform.parent = c.transform;
 
         }
         CreatMaze();
@@ -380,10 +385,10 @@ public class MazeGenerator : MonoBehaviour {
             if (startedBuilding)
             {
                 GiveMeNeighbour();
-                if (cells[currentNeighbour].visited == false && cells[currentCell].visited)
+                if (cellProperties[currentNeighbour].visited == false && cellProperties[currentCell].visited)
                 {
                     BreakWall();
-                    cells[currentNeighbour].visited = true;
+                    cellProperties[currentNeighbour].visited = true;
                     visitedCells++;
                     lastCells.Add(currentCell);
                     currentCell = currentNeighbour;
@@ -396,8 +401,8 @@ public class MazeGenerator : MonoBehaviour {
             else
             {
                 currentCell = Random.Range(0, totalCells); 
-                start = cells[currentCell]; //Startcell
-                cells[currentCell].visited = true;
+                start = cellProperties[currentCell]; //Startcell
+                cellProperties[currentCell].visited = true;
                 visitedCells++;
                 startedBuilding = true;
                 //TODO: Von dieser Zelle Koordinaten rausbekommen -> Zielobjekt hierhin plotten
@@ -412,10 +417,10 @@ public class MazeGenerator : MonoBehaviour {
     {
         switch (wallToBreak)
         {
-            case 1: Destroy(cells[currentCell].north); break;
-            case 2: Destroy(cells[currentCell].east); break;
-            case 3: Destroy(cells[currentCell].west); break;
-            case 4: Destroy(cells[currentCell].south); break;
+            case 1: Destroy(cellProperties[currentCell].north); break;
+            case 2: Destroy(cellProperties[currentCell].east); break;
+            case 3: Destroy(cellProperties[currentCell].west); break;
+            case 4: Destroy(cellProperties[currentCell].south); break;
         }
     }
 
@@ -434,7 +439,7 @@ public class MazeGenerator : MonoBehaviour {
         //West
         if (currentCell + 1 < totalCells && currentCell + 1 != check)
         {
-            if (cells[currentCell + 1].visited == false)
+            if (cellProperties[currentCell + 1].visited == false)
             {
                 neighbour[length] = currentCell + 1;
                 connectingWalls[length] = 3;
@@ -445,7 +450,7 @@ public class MazeGenerator : MonoBehaviour {
         //East
         if (currentCell - 1 >= 0 && currentCell != check)
         {
-            if (cells[currentCell - 1].visited == false)
+            if (cellProperties[currentCell - 1].visited == false)
             {
                 neighbour[length] = currentCell - 1;
                 connectingWalls[length] = 2;
@@ -456,7 +461,7 @@ public class MazeGenerator : MonoBehaviour {
         //North
         if (currentCell + xSize < totalCells)
         {
-            if (cells[currentCell + xSize].visited == false)
+            if (cellProperties[currentCell + xSize].visited == false)
             {
                 neighbour[length] = currentCell + xSize;
                 connectingWalls[length] = 1;
@@ -467,7 +472,7 @@ public class MazeGenerator : MonoBehaviour {
         //South
         if (currentCell - xSize >= 0)
         {
-            if (cells[currentCell - xSize].visited == false)
+            if (cellProperties[currentCell - xSize].visited == false)
             {
                 neighbour[length] = currentCell - xSize;
                 connectingWalls[length] = 4;
@@ -491,21 +496,25 @@ public class MazeGenerator : MonoBehaviour {
         }
     }
 
-    IEnumerator PlottTarget()
+    void PlottTarget()
     {
         Vector3 TargetPos;
         float rdx = Random.Range(0, (xSize + 1) / 4);
         float rdz = Random.Range(0, (ySize + 1) / 4);
         TargetPos = new Vector3(rdx + 0.5f, 0.5f, rdz);
-        targetLight.transform.position = TargetPos;
-        target.transform.position = TargetPos;
+
+        targetLight.transform.parent = cells[0].transform;
+        targetLight.transform.localPosition = new Vector3(0, 0, 0);
+
+        //targetLight.transform.position = TargetPos;
+        //target.transform.position = TargetPos;
         //Licht an und licht aus klappt noch nich, aber muesste eigentlich so geheh
         //muss man morgen mal nach schauen...
 
-        yield return new WaitForSeconds(15);
+        //yield return new WaitForSeconds(15);
         targetLight.SetActive(true);
-        yield return new WaitForSeconds(2);
-        targetLight.SetActive(false);
+        //yield return new WaitForSeconds(2);
+        //targetLight.SetActive(false);
         
     }
 
@@ -514,16 +523,5 @@ public class MazeGenerator : MonoBehaviour {
     {
 
     }
-
-    public void Set_x(int x)
-    {
-        this.xSize = x;
-    }
-
-    public void Set_y(int y)
-    {
-        this.ySize = y;
-    }
-
 
 }

@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour {
     public GameObject targetLight;
 
     void Start () {
+        mazeGenerator.x_Size = 9;
+        mazeGenerator.y_Size = 9;
         Debug.Log("MazeGaze");
 		foreach (Player p in players)
         {
@@ -59,12 +61,4 @@ public class GameController : MonoBehaviour {
 
 	}
 
-    public void Set_Player(int numPlayers) {
-
-    }
-
-    public void Set_Maze(int x, int y) {
-        mazeGenerator.Set_x(x);
-        mazeGenerator.Set_y(y);
-    }
 }
