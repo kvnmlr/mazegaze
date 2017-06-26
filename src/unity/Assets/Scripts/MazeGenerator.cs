@@ -25,8 +25,8 @@ public class MazeGenerator : MonoBehaviour {
     public GameObject target { get; set; }
     public GameObject targetLight { get; set; }
     private float wallLength = 1.0f;
-    public int xSize;
-    public int ySize;
+    private int xSize = 9;
+    private int ySize = 9;
     private Vector3 initialPos;
     private GameObject WallHolder;
     private GameObject Maze;
@@ -45,7 +45,7 @@ public class MazeGenerator : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
+        
     }
 
     public void BuildMaze()
@@ -514,4 +514,16 @@ public class MazeGenerator : MonoBehaviour {
     {
 
     }
+
+    public void Set_x(int x)
+    {
+        this.xSize = x;
+    }
+
+    public void Set_y(int y)
+    {
+        this.ySize = y;
+    }
+
+
 }

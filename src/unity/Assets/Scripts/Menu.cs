@@ -15,7 +15,12 @@ public class Menu : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+        GameObject gameControllerObject = GameObject.FindGameObjectWithTag("GameController");
+        if (gameControllerObject != null) {
+            gameController = gameControllerObject.GetComponent<GameController>();
+        } else {
+            Debug.Log("Cannot find 'GameController' script!");
+        }
 	}
 	
 	// Update is called once per frame
@@ -84,6 +89,8 @@ public class Menu : MonoBehaviour {
 
     public void SimpleLevel() {
 
+        gameController.Set_Maze(5, 5);
+
         StartGame();
     }
 
@@ -94,7 +101,7 @@ public class Menu : MonoBehaviour {
 
     public void HardLevel() {
 
-        //gameController.Set_Maze(11, 11);
+        gameController.Set_Maze(11, 11);
 
         StartGame();
     }
