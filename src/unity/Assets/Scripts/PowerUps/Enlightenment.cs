@@ -12,7 +12,6 @@ public class Enlightenment : PowerUp {
     void Start()
     {
         this.type = PowerUpManager.PowerUpTypes.Enlightenment;
-
     }
 
     void Update()

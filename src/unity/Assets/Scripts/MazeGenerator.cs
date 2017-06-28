@@ -17,18 +17,20 @@ public class MazeGenerator : MonoBehaviour {
 
     public GameObject wall;
     public GameObject floor;
+
     public GameObject playerA { get; set; }
     public GameObject playerB { get; set; }
     public GameObject playerC { get; set; }
     public GameObject playerD { get; set; }
-    public int NumPlayer { get; set; }
+    public int numPlayers { get; set; }
+
     public GameObject target { get; set; }
-    public GameObject targetLight { get; set; }
+    //public GameObject targetLight { get; set; }   targetLight is im target drin, wir brauchen dafuer keine extra variable hier.
+
     private float wallLength = 1.0f;
-    private int xSize;
-    private int ySize;
-    public int x_Size { get { return xSize; } set { xSize = value; }}
-    public int y_Size { get { return ySize; } set { ySize = value; }}
+    public int xSize { get; set; }
+    public int ySize { get; set; }
+
     private Vector3 initialPos;
     private GameObject WallHolder;
     private GameObject Maze;
@@ -76,7 +78,7 @@ public class MazeGenerator : MonoBehaviour {
     void CreatPlayer()
     {
 
-        switch (NumPlayer)
+        switch (numPlayers)
         {
             case 1:
                 GeneratePlayerMouse();
@@ -501,16 +503,17 @@ public class MazeGenerator : MonoBehaviour {
         float rdz = Random.Range(0, (ySize + 1) / 4);
         TargetPos = new Vector3(rdx + 0.5f, 0.5f, rdz);
 
-        targetLight.transform.parent = cells[0].transform;
-        targetLight.transform.localPosition = new Vector3(0, 0, 0);
+        //targetLight.transform.parent = cells[0].transform;
+        //targetLight.transform.localPosition = new Vector3(0, 0, 0);
 
         //targetLight.transform.position = TargetPos;
-        //target.transform.position = TargetPos;
+        target.transform.position = TargetPos;
+        target.SetActive(true);
         //Licht an und licht aus klappt noch nich, aber muesste eigentlich so geheh
         //muss man morgen mal nach schauen...
 
         //yield return new WaitForSeconds(15);
-        targetLight.SetActive(true);
+        //targetLight.SetActive(true);
         //yield return new WaitForSeconds(2);
         //targetLight.SetActive(false);
         

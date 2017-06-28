@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour {
 
-    private bool option_player = false;
-    private bool option_level = false;
+    private bool optionPlayer = false;
+    private bool optionLevel = false;
 
-    public GameObject player_screen;
-    public GameObject level_screen;
+    public GameObject playerScreen;
+    public GameObject levelScreen;
     public GameController gameController;
     public Canvas canvas;
 
@@ -26,28 +26,28 @@ public class Menu : MonoBehaviour {
 	}
 
     void CheckPlayerScreen() {
-        if (option_player == true) {
-            player_screen.SetActive(true);
+        if (optionPlayer == true) {
+            playerScreen.SetActive(true);
         } else {
-            player_screen.SetActive(false);
+            playerScreen.SetActive(false);
         }
     }
 
     void CheckLevelScreen() {
-        if (option_level == true) {
-            level_screen.SetActive(true);
+        if (optionLevel == true) {
+            levelScreen.SetActive(true);
         } else {
-            level_screen.SetActive(false);
+            levelScreen.SetActive(false);
         }
     }
 
     public void ClosePlayerScreen() {
-        option_player = false;
+        optionPlayer = false;
     }
 
     public void CloseLevelScreen() {
-        option_level = false;
-        option_player = true;
+        optionLevel = false;
+        optionPlayer = true;
     }
 
 
@@ -55,34 +55,34 @@ public class Menu : MonoBehaviour {
 
     public void OnePlayer() {
 
-        gameController.mazeGenerator.NumPlayer = 1;
+        gameController.mazeGenerator.numPlayers = 1;
 
-        option_player = false;
-        option_level = true;     
+        optionPlayer = false;
+        optionLevel = true;     
     }
 
     public void TwoPlayer() {
 
-        gameController.mazeGenerator.NumPlayer = 2;
+        gameController.mazeGenerator.numPlayers = 2;
 
-        option_player = false;
-        option_level = true;
+        optionPlayer = false;
+        optionLevel = true;
     }
 
     public void ThreePlayer() {
 
-        gameController.mazeGenerator.NumPlayer = 3;
+        gameController.mazeGenerator.numPlayers = 3;
 
-        option_player = false;
-        option_level = true;
+        optionPlayer = false;
+        optionLevel = true;
     }
 
     public void FourPlayer() {
 
-        gameController.mazeGenerator.NumPlayer = 4;
+        gameController.mazeGenerator.numPlayers = 4;
 
-        option_player = false;
-        option_level = true;
+        optionPlayer = false;
+        optionLevel = true;
     }
 
 
@@ -90,24 +90,24 @@ public class Menu : MonoBehaviour {
 
     public void SimpleLevel() {
 
-        gameController.mazeGenerator.x_Size = 9;
-        gameController.mazeGenerator.y_Size = 9;
+        gameController.mazeGenerator.xSize = 9;
+        gameController.mazeGenerator.ySize = 9;
 
         StartGame();
     }
 
     public void MiddleLevel() {
 
-        gameController.mazeGenerator.x_Size = 15;
-        gameController.mazeGenerator.y_Size = 15;
+        gameController.mazeGenerator.xSize = 15;
+        gameController.mazeGenerator.ySize = 15;
 
         StartGame();
     }
 
     public void HardLevel() {
 
-        gameController.mazeGenerator.x_Size = 21;
-        gameController.mazeGenerator.y_Size = 21;
+        gameController.mazeGenerator.xSize = 21;
+        gameController.mazeGenerator.ySize = 21;
 
         StartGame();
     }
@@ -116,7 +116,7 @@ public class Menu : MonoBehaviour {
     //General Start/Quit Functions
 
     public void StartGame() {
-        //gameController.mazeGenerator.BuildMaze();
+        gameController.startNewRound();
         canvas.enabled = false;
     }
 
@@ -127,8 +127,8 @@ public class Menu : MonoBehaviour {
     }
 
     public void Play() {
-        option_player = true;
-        option_level = false;
+        optionPlayer = true;
+        optionLevel = false;
     }
 
     public void Settings() {

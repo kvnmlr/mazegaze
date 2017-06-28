@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShowTarget : PowerUp {
+public class Target : PowerUp {
 
     public override void activate(Player p)
     {
-        Debug.Log(p.name + " collected Target PowerUp");
+        Debug.Log("Player " + p.name + " Gewinnt");
     }
 
     void Start()
     {
-        this.type = PowerUpManager.PowerUpTypes.ShowTarget;
+        this.type = PowerUpManager.PowerUpTypes.Target;
     }
 
     void Update()

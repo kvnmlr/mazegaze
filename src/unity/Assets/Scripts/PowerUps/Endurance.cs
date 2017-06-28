@@ -12,7 +12,6 @@ public class Endurance : PowerUp
 
     void Start () {
         this.type = PowerUpManager.PowerUpTypes.Endurance;
-		
 	}
 	
 	void Update () {
