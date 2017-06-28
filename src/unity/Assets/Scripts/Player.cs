@@ -95,10 +95,6 @@ public class Player : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Target"))
-        {
-            other.gameObject.SetActive(false);
-            Debug.Log("Player " + name +" Gewinnt");
-        }
+
     }
 }
