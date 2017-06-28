@@ -409,8 +409,6 @@ public class MazeGenerator : MonoBehaviour {
             }
 
         }
-        Debug.Log("Finied");
-
     }
 
     void BreakWall()

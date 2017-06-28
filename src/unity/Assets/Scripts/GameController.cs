@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
     public Player[] players;
     public MazeGenerator mazeGenerator;
+    public PowerUpManager powerUpManager;
     public GameObject target;
     public GameObject targetLight;
 
@@ -59,6 +60,11 @@ public class GameController : MonoBehaviour {
         }
         mazeGenerator.BuildMaze();
 
-	}
+        // Just for testing
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance, mazeGenerator.cells[3].GetComponent<Cell>());
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[4].GetComponent<Cell>());
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, mazeGenerator.cells[5].GetComponent<Cell>());
+
+    }
 
 }

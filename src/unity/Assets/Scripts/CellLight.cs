@@ -2,11 +2,14 @@
 using UnityEngine;
 
 public class CellLight : MonoBehaviour {
-    private Player player;
+    // the player who this light belongs to
+    public Player player { get; set; }
+
+    // parameters for the light
     public float initialLightIntesity = 10f;
     public float timeToDarkness = 20f;
-
     public float decreaseRate = 0.2f;
+
     private float timePassed;
     private float currentIntensity;
 

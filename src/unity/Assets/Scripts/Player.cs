@@ -77,7 +77,6 @@ public class Player : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
     void Start () {
         playerLight.color = getColor(color);
         cellLightColor = playerLight.color;
