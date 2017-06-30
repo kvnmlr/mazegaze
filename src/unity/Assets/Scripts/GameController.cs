@@ -39,6 +39,10 @@ public class GameController : Singleton<GameController>
 
         mazeGenerator.BuildMaze();
 
+        // adjust camera height
+        Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 5, 0);
+
+
         // Just for testing
         powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, mazeGenerator.cells[11].GetComponent<Cell>());
         powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[3*7 + 3].GetComponent<Cell>());
