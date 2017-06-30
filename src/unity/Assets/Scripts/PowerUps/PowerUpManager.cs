@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpManager : MonoBehaviour {
+public class PowerUpManager : Singleton<PowerUpManager> {
     public PowerUp[] powerUps;
     public enum PowerUpTypes
     {

@@ -3,23 +3,18 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class Menu : MonoBehaviour {
+public class Menu : Singleton<Menu> {
 
     private bool optionPlayer = false;
     private bool optionLevel = false;
 
     public GameObject playerScreen;
     public GameObject levelScreen;
-    public GameController gameController;
     public Canvas canvas;
 
-
-    // Use this for initialization
     void Start () {
-        
     }
 	
-	// Update is called once per frame
 	void Update () {
         CheckPlayerScreen();
         CheckLevelScreen();
@@ -55,7 +50,7 @@ public class Menu : MonoBehaviour {
 
     public void OnePlayer() {
 
-        gameController.mazeGenerator.numPlayers = 1;
+        MazeGenerator.Instance.numPlayers = 1;
 
         optionPlayer = false;
         optionLevel = true;     
@@ -63,7 +58,7 @@ public class Menu : MonoBehaviour {
 
     public void TwoPlayer() {
 
-        gameController.mazeGenerator.numPlayers = 2;
+        MazeGenerator.Instance.numPlayers = 2;
 
         optionPlayer = false;
         optionLevel = true;
@@ -71,7 +66,7 @@ public class Menu : MonoBehaviour {
 
     public void ThreePlayer() {
 
-        gameController.mazeGenerator.numPlayers = 3;
+        MazeGenerator.Instance.numPlayers = 3;
 
         optionPlayer = false;
         optionLevel = true;
@@ -79,7 +74,7 @@ public class Menu : MonoBehaviour {
 
     public void FourPlayer() {
 
-        gameController.mazeGenerator.numPlayers = 4;
+        MazeGenerator.Instance.numPlayers = 4;
 
         optionPlayer = false;
         optionLevel = true;
@@ -90,24 +85,24 @@ public class Menu : MonoBehaviour {
 
     public void SimpleLevel() {
 
-        gameController.mazeGenerator.xSize = 9;
-        gameController.mazeGenerator.ySize = 9;
+        MazeGenerator.Instance.xSize = 9;
+        MazeGenerator.Instance.ySize = 9;
 
         StartGame();
     }
 
     public void MiddleLevel() {
 
-        gameController.mazeGenerator.xSize = 15;
-        gameController.mazeGenerator.ySize = 15;
+        MazeGenerator.Instance.xSize = 15;
+        MazeGenerator.Instance.ySize = 15;
 
         StartGame();
     }
 
     public void HardLevel() {
 
-        gameController.mazeGenerator.xSize = 21;
-        gameController.mazeGenerator.ySize = 21;
+        MazeGenerator.Instance.xSize = 21;
+        MazeGenerator.Instance.ySize = 21;
 
         StartGame();
     }
@@ -116,7 +111,7 @@ public class Menu : MonoBehaviour {
     //General Start/Quit Functions
 
     public void StartGame() {
-        gameController.startNewRound();
+        GameController.Instance.startNewRound();
         canvas.enabled = false;
     }
 

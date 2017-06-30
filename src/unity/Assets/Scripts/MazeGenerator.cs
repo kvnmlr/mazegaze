@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MazeGenerator : MonoBehaviour {
+public class MazeGenerator : Singleton<MazeGenerator> {
 
     [System.Serializable]
     public class CellProperties

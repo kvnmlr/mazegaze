@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : MonoBehaviour {
+public class GameController : Singleton<GameController>
+{
     public bool useMenu = false;
     public Player[] players;
-    public MazeGenerator mazeGenerator;
-    public PowerUpManager powerUpManager;
-    public Menu menu;
+
+    private MazeGenerator mazeGenerator;
+    private PowerUpManager powerUpManager;
+    private Menu menu;
     //public GameObject target;
     //public GameObject targetLight;
 
     void Start () {
+        mazeGenerator = MazeGenerator.Instance;
+        powerUpManager = PowerUpManager.Instance;
+        menu = Menu.Instance;
+
         mazeGenerator.xSize = 9;
         mazeGenerator.ySize = 9;
         Debug.Log("MazeGaze");
@@ -36,8 +42,8 @@ public class GameController : MonoBehaviour {
 
         // Just for testing
         powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance, mazeGenerator.cells[3].GetComponent<Cell>().gameObject);
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[4].GetComponent<Cell>().gameObject);
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
+        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[4].GetComponent<Cell>().gameObject);
+        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
     }
 
     private void setUpPlayers()
