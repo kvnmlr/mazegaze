@@ -521,6 +521,95 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         */
     }
 
+    public IEnumerable StartNewGame()
+    {
+        
+        int m = 0;
+        Vector2 player1 = new Vector2();
+        Vector2 player2 = new Vector2();
+        Vector2 player3 = new Vector2();
+        Vector2 player4 = new Vector2();
+        float x, y;
+        switch (numPlayers)
+        {
+            case 1:
+                x = playerA.transform.position.x;
+                y = playerA.transform.position.z;
+                player1 = new Vector2(x, y);
+                m = 1;
+                break;
+            case 2:
+                x = playerA.transform.position.x;
+                y = playerA.transform.position.z;
+                player1 = new Vector2(x, y);
+
+                x = playerB.transform.position.x;
+                y = playerB.transform.position.z;
+                player2 = new Vector2(x, y);
+                m = 2;
+                break;
+            case 3:
+                x = playerA.transform.position.x;
+                y = playerA.transform.position.z;
+                player1 = new Vector2(x, y);
+
+                x = playerB.transform.position.x;
+                y = playerB.transform.position.z;
+                player2 = new Vector2(x, y);
+
+                x = playerC.transform.position.x;
+                y = playerC.transform.position.z;
+                player3 = new Vector2(x, y);
+                m = 3;
+                break;
+            case 4:
+                x = playerA.transform.position.x;
+                y = playerA.transform.position.z;
+                player1 = new Vector2(x, y);
+
+                x = playerB.transform.position.x;
+                y = playerB.transform.position.z;
+                player2 = new Vector2(x, y);
+
+                x = playerC.transform.position.x;
+                y = playerC.transform.position.z;
+                player3 = new Vector2(x, y);
+
+                x = playerD.transform.position.x;
+                y = playerD.transform.position.z;
+                player4 = new Vector2(x, y);
+                m = 4;
+                break;
+        }
+
+        //eventuell ueberall noch +.5f fuer x 
+        Vector3 newPos = new Vector3();
+        switch (m)
+        {
+            case 1:
+                newPos = target.gameObject.GetComponent<Target>().TransformpositionRandom();
+                break;
+            case 2:
+                newPos = new Vector3((player1.x + player2.x) / 2, 0.5f, (player2.y + player1.y) / 2);
+                break;
+            case 3:
+                newPos = new Vector3((player1.x + player2.x + player3.x) / 3, 0.5f, (player2.y + player1.y + player3.y) / 3);
+                break;
+            case 4:
+                newPos = new Vector3((player1.x + player2.x + player3.x + player4.x) / 4, 0.5f, (player2.y + player1.y + player3.y + player4.y) / 4);
+
+                break;
+
+        }
+
+        // Neuer Standort gesetzt
+        target.gameObject.transform.position = newPos;
+        yield return new WaitForSeconds(20);
+        target.gameObject.SetActive(true);
+        //Also hier könnte das Spiel dann vom Target aus wieder beginnen
+
+
+    }
     // Update is called once per frame
     void Update()
     {

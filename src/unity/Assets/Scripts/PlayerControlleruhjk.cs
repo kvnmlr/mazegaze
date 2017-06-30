@@ -44,4 +44,14 @@ public class PlayerControlleruhjk : MonoBehaviour {
             transform.position = new Vector3(temp.x, 0.5f, temp.z);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Target"))
+        {
+
+            other.gameObject.SetActive(false);
+            //MazeGenerator.Instance.StartNewGame();
+        }
+    }
 }

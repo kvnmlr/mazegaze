@@ -40,10 +40,20 @@ public class GameController : Singleton<GameController>
         mazeGenerator.BuildMaze();
 
         // Just for testing
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, mazeGenerator.cells[1].GetComponent<Cell>());
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, mazeGenerator.cells[11].GetComponent<Cell>());
         powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance, mazeGenerator.cells[3].GetComponent<Cell>());
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[4].GetComponent<Cell>().gameObject);
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
+    }
+
+    private Cell getRandomCell()
+    {
+        double mitteungerundet = (mazeGenerator.xSize / 2);
+        double mitte = System.Math.Floor((double)(mazeGenerator.xSize / 2));
+
+
+
+        return mazeGenerator.cells[11].GetComponent<Cell>();
     }
 
     private void setUpPlayers()

@@ -37,20 +37,14 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    /*private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("nophysics"))
+        if (other.gameObject.CompareTag("Target"))
         {
             
             other.gameObject.SetActive(false);
-            /*rb.isKinematic = true;
-            int i = 0;
-            while(i< 1000)
-            {
-                i++;
-            }
-            rb.isKinematic = false;
+            //MazeGenerator.Instance.StartNewGame();
         }
-    }*/
+    }
 
 }
