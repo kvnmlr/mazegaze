@@ -9,6 +9,9 @@ public class Cell : MonoBehaviour {
     // players that are currently in this cell (note that players can be in two cells at once)
     public List<Player> players = new List<Player>();
 
+    // players that are currently in this cell (note that players can be in two cells at once)
+    public List<PowerUp> powerUps = new List<PowerUp>();
+
     // determines whether this cell has a light source (to optimize performance)
     public bool hasLight;
 	

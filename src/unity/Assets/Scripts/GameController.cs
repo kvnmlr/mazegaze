@@ -20,7 +20,6 @@ public class GameController : Singleton<GameController>
 
         mazeGenerator.xSize = 9;
         mazeGenerator.ySize = 9;
-        Debug.Log("MazeGaze");
 
         setUpPlayers();
 
@@ -35,23 +34,20 @@ public class GameController : Singleton<GameController>
 
     public void startNewRound()
     {
-        mazeGenerator.target = powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, gameObject).gameObject;
+        mazeGenerator.target = powerUpManager.target.gameObject;
 
 
         mazeGenerator.BuildMaze();
 
         // Just for testing
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance, mazeGenerator.cells[3].GetComponent<Cell>().gameObject);
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, mazeGenerator.cells[1].GetComponent<Cell>());
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance, mazeGenerator.cells[3].GetComponent<Cell>());
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[4].GetComponent<Cell>().gameObject);
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
     }
 
     private void setUpPlayers()
     {
-        foreach (Player p in players)
-        {
-            Debug.Log("Player " + p.name + " joined the game");
-        }
         if (players.Length > 4)
         {
             Debug.Log("The maximum number of players is 4");

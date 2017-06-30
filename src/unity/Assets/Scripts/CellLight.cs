@@ -7,15 +7,16 @@ public class CellLight : MonoBehaviour {
 
     // parameters for the light
     public float initialLightIntesity = 10f;
-    public float timeToDarkness = 20f;
+    public float timeToDarkness = 10f;
     public float decreaseRate = 0.2f;
 
     private float timePassed;
-    private float currentIntensity;
+    public float currentIntensity { get; set; }
 
     public void setPlayer(Player player)
     {
         gameObject.GetComponent<Light>().color = player.cellLightColor;
+        timeToDarkness = player.timeToDarkness;
         this.player = player;
     }
     public Player getPlayer()

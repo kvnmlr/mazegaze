@@ -5,16 +5,49 @@ using UnityEngine;
 
 public class Endurance : PowerUp
 {
-    public override void activate(Player p)
+    public float factor = 2;
+    public float duration = 5;
+
+    public override IEnumerator performPowerUp(Player p)
     {
-        Debug.Log(p.name + " collected Endurance");
+        p.timeToDarkness = p.timeToDarkness * factor;
+        foreach (GameObject c in MazeGenerator.Instance.cells)
+        {
+            foreach (GameObject cl in c.GetComponent<Cell>().lights) {
+                if (cl.GetComponent<CellLight>().player.Equals(p))
+                {
+                    cl.GetComponent<CellLight>().timeToDarkness = p.timeToDarkness;
+                    cl.GetComponent<CellLight>().decreaseRate = cl.GetComponent<CellLight>().decreaseRate * factor;
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        p.timeToDarkness = p.timeToDarkness / factor;
+        foreach (GameObject c in MazeGenerator.Instance.cells)
+        {
+            foreach (GameObject cl in c.GetComponent<Cell>().lights)
+            {
+                if (cl.GetComponent<CellLight>().player.Equals(p))
+                {
+                    cl.GetComponent<CellLight>().timeToDarkness = p.timeToDarkness;
+                    cl.GetComponent<CellLight>().decreaseRate = cl.GetComponent<CellLight>().decreaseRate / factor;
+                    float i = cl.GetComponent<CellLight>().initialLightIntesity;
+                    cl.GetComponent<CellLight>().restart();
+                    cl.GetComponent<CellLight>().currentIntensity = i;
+                }
+            }
+        }
+
     }
 
     void Start () {
         this.type = PowerUpManager.PowerUpTypes.Endurance;
 	}
-	
-	void Update () {
-		
-	}
+
+    void Update()
+    {
+
+    }
 }

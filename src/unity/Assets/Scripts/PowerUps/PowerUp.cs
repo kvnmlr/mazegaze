@@ -5,7 +5,14 @@ using UnityEngine;
 public abstract class PowerUp : MonoBehaviour
 {
     public PowerUpManager.PowerUpTypes type { get; set; }
-    public abstract void activate(Player p);
+    public abstract IEnumerator performPowerUp(Player p);
+
+    public void activate(Player p)
+    {
+        Debug.Log(p.name + " collected " + type);
+        StartCoroutine(performPowerUp(p));
+    }
+
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<Player>() != null)
@@ -17,7 +24,7 @@ public abstract class PowerUp : MonoBehaviour
                 return;
             }
             activate(p);
-            gameObject.SetActive(false);
+            Destroy(gameObject.GetComponent<SphereCollider>());
         }
     }
 }

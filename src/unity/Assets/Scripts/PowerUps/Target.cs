@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Target : PowerUp {
 
-    public override void activate(Player p)
+    public override IEnumerator performPowerUp(Player p)
     {
-        Debug.Log("Player " + p.name + " Gewinnt");
+        Debug.Log(p + " wins");
+        yield return new WaitForSeconds(0);
     }
 
     void Start()

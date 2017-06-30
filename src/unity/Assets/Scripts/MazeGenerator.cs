@@ -498,6 +498,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     void PlottTarget()
     {
+        /*
+
         Vector3 TargetPos;
         float rdx = Random.Range(0, (xSize + 1) / 4);
         float rdz = Random.Range(0, (ySize + 1) / 4);
@@ -516,7 +518,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         //targetLight.SetActive(true);
         //yield return new WaitForSeconds(2);
         //targetLight.SetActive(false);
-        
+        */
     }
 
     // Update is called once per frame

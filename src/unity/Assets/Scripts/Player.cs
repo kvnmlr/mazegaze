@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
     public string name;
+    public float timeToDarkness { get; set; }
+    public int points { get; set; }
     
     public enum PlayerColor
     {
@@ -80,6 +82,9 @@ public class Player : MonoBehaviour {
     void Start () {
         playerLight.color = getColor(color);
         cellLightColor = playerLight.color;
+
+        timeToDarkness = 10.0f;
+        points = 0;
 
         GameObject playerLightObj = Instantiate(playerLight.gameObject, gameObject.transform, false);
 

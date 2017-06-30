@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PowerUpManager : Singleton<PowerUpManager> {
     public PowerUp[] powerUps;
+    public PowerUp target;
     public enum PowerUpTypes
     {
         Enlightenment = 1,
@@ -12,9 +13,16 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         Target = 4
     }
 
-    public PowerUp spawnPowerUp (PowerUpTypes type, GameObject cell)
+    public PowerUp spawnPowerUp (PowerUpTypes type, Cell cell)
     {
-        Debug.Log("spawning powerup " + type.ToString());
+        if (type.Equals(PowerUpTypes.Target))
+        {
+            target.transform.parent = cell.gameObject.transform;
+            target.transform.localPosition = new Vector3(0, 0, 0);
+            target.gameObject.SetActive(true);
+            cell.powerUps.Add(target);
+        }
+
         foreach (PowerUp p in powerUps)
         {
             if (p.type.ToString().Equals(type.ToString()))
@@ -22,6 +30,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                 GameObject powerUp = Instantiate(p.gameObject, cell.transform, true);
                 powerUp.transform.localPosition = new Vector3(0, 0, 0);
                 powerUp.SetActive(true);
+                cell.powerUps.Add(powerUp.GetComponent<PowerUp>());
 
                 return powerUp.GetComponent<PowerUp>();
             }
