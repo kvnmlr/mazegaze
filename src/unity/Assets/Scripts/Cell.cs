@@ -60,17 +60,23 @@ public class Cell : MonoBehaviour {
 
             if (hasLight)
             {
-                // if there is no light yet shining, create a new one
-                GameObject g;
-                g = Instantiate(p.cellLight.gameObject, gameObject.transform, true);
-                g.name = "CellLightInstance";
-                g.transform.localPosition = new Vector3(0, 0.25f, 0);
-                g.GetComponent<CellLight>().setPlayer(p);
-                lights.Add(g);
-                g.SetActive(true);
+                spawnLight(p);
             }
         }
     }
+
+    public void spawnLight(Player p)
+    {
+        // if there is no light yet shining, create a new one
+        GameObject g;
+        g = Instantiate(p.cellLight.gameObject, gameObject.transform, true);
+        g.name = "CellLightInstance";
+        g.transform.localPosition = new Vector3(0, 0.25f, 0);
+        g.GetComponent<CellLight>().setPlayer(p);
+        lights.Add(g);
+        g.SetActive(true);
+    }
+
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.GetComponent<Player>() != null)

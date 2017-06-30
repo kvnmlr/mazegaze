@@ -47,10 +47,24 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     private int wallToBreak = 0;
     private CellProperties start;
 
-    // Use this for initialization
-    void Start()
+    public GameObject[][] toMatrix(GameObject[] cells)
     {
-
+        GameObject[][] board = new GameObject[ySize][];
+        int index = 0;
+        for (int row = 0; row <ySize; ++row)
+        {
+            board[row] = new GameObject[xSize];
+            for(int column = 0; column < xSize; ++column)
+            {
+                board[row][column] = cells[index];
+                index++;
+                if (index > cells.Length)
+                {
+                    throw new System.Exception("tried to convert too many cells to matrix");
+                }
+            }
+        }
+        return board;
     }
 
     public void BuildMaze()

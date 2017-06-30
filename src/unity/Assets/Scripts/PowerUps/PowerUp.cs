@@ -27,4 +27,39 @@ public abstract class PowerUp : MonoBehaviour
             Destroy(gameObject.GetComponent<SphereCollider>());
         }
     }
+
+    public int[] findCell()
+    {
+        GameObject[][] board = MazeGenerator.Instance.toMatrix(MazeGenerator.Instance.cells);
+
+        // find current cell
+        GameObject cell = transform.parent.gameObject;
+        if (cell.GetComponent<Cell>() == null)
+        {
+            throw new System.Exception("Power up is not in a cell");
+        }
+
+        int posX = 0;
+        int posY = 0;
+
+        for (int row = 0; row < board.Length; ++row)
+        {
+            for (int column = 0; column < board[row].Length; ++column)
+            {
+                if (board[row][column].Equals(cell))
+                {
+                    posX = column;
+                    posY = row;
+                }
+            }
+        }
+
+        Debug.Log("PowerUp is at Cell " + posY + ", " + posX);
+
+        int[] res = new int[2];
+        res[0] = posY;
+        res[1] = posX;
+        return res;
+
+    }
 }

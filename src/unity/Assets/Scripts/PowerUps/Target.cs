@@ -33,6 +33,13 @@ public class Target : PowerUp {
         float rdz = Random.Range(0, (ySize + 1) / 4);
         Debug.Log(rdx + " and " + rdz);
         this.transform.position = new Vector3(rdx + 0.5f, 0.5f, rdz);
+
+        /* TODO @Marco du suchst hier einen random Vector3 wo du das Target spawnst oder?
+         * Wäre es möglich keinen Vector3 sondern eine Cell zu finden? 
+         * Wenn du dann PowerUpManager.spawnPowerUp(PowerUpTypes.Target, cell) machst setzt er 
+         * es automatisch in die Zelle. Nur so kann ich dann das PowerUp welches das Target
+         * aufleuchten lässt implementieren.
+         * */
     }
 
     public Vector3 TransformpositionRandom()
