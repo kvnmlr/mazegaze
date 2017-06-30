@@ -54,6 +54,10 @@ public class CellLight : MonoBehaviour {
             yield return new WaitForSeconds(decreaseRate);
             timePassed += decreaseRate;
             currentIntensity -= intensityInterval;
+            if (currentIntensity < 0.01f)
+            {
+                currentIntensity = 0;
+            }
 
             gameObject.GetComponent<Light>().intensity = currentIntensity;
         }
