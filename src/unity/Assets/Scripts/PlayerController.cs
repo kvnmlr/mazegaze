@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour {
             
             other.gameObject.SetActive(false);
             MazeGenerator.Instance.StartNewGame();
+            Menu.Instance.GameOver();
         }
     }
 

@@ -7,9 +7,13 @@ public class Menu : Singleton<Menu> {
 
     private bool optionPlayer = false;
     private bool optionLevel = false;
+    private bool optionMainButton = true;
+    private bool optionGameOver = false;
 
+    public GameObject mainButtonScreen;
     public GameObject playerScreen;
     public GameObject levelScreen;
+    public GameObject gameOverScreen;
     public Canvas canvas;
 
     void Start () {
@@ -18,6 +22,8 @@ public class Menu : Singleton<Menu> {
 	void Update () {
         CheckPlayerScreen();
         CheckLevelScreen();
+        CheckMainButtonScreen();
+        CheckGameOverScreen();
 	}
 
     void CheckPlayerScreen() {
@@ -35,6 +41,23 @@ public class Menu : Singleton<Menu> {
             levelScreen.SetActive(false);
         }
     }
+
+    void CheckMainButtonScreen() {
+        if (optionMainButton == true) {
+            mainButtonScreen.SetActive(true);
+        } else {
+            mainButtonScreen.SetActive(false);
+        }
+    }
+
+    void CheckGameOverScreen() {
+        if (optionGameOver == true) {
+            gameOverScreen.SetActive(true);
+        } else {
+            gameOverScreen.SetActive(false);
+        }
+    }
+
 
     public void ClosePlayerScreen() {
         optionPlayer = false;
@@ -107,12 +130,30 @@ public class Menu : Singleton<Menu> {
         StartGame();
     }
 
+    //GameOverScreen Button Control
+
+    public void BackMainMenu() {
+        optionGameOver = false;
+        optionPlayer = false;
+        optionLevel = false;
+        optionMainButton = true;
+       
+    }
+
 
     //General Start/Quit Functions
 
     public void StartGame() {
         GameController.Instance.startNewRound();
         canvas.enabled = false;
+    }
+
+    public void GameOver() {
+        canvas.enabled = true;
+        optionPlayer = false;
+        optionLevel = false;
+        optionMainButton = false;
+        optionGameOver = true;
     }
 
     //Main Buttons

@@ -13,7 +13,13 @@ public class GameController : Singleton<GameController>
     //public GameObject target;
     //public GameObject targetLight;
 
+    private bool gameover;
+    private bool restart;
+
     void Start () {
+        gameover = false;
+        restart = false;
+
         mazeGenerator = MazeGenerator.Instance;
         powerUpManager = PowerUpManager.Instance;
         menu = Menu.Instance;
@@ -52,6 +58,11 @@ public class GameController : Singleton<GameController>
 
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[4].GetComponent<Cell>().gameObject);
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
+    }
+
+    public void GameOver()
+    {
+        gameover = true;
     }
 
     private int getRandomCellTarget()
