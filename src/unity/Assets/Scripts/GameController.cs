@@ -42,23 +42,46 @@ public class GameController : Singleton<GameController>
         // adjust camera height
         Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 5, 0);
 
+        int rd = getRandomCellTarget();
+        Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
+        
 
-        // Just for testing
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, mazeGenerator.cells[11].GetComponent<Cell>());
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[3*7 + 3].GetComponent<Cell>());
+        // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, celltarget);
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[Random.Range(0,mazeGenerator.xSize* mazeGenerator.ySize)].GetComponent<Cell>());
 
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[4].GetComponent<Cell>().gameObject);
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
     }
 
-    private Cell getRandomCell()
+    private int getRandomCellTarget()
     {
         double mitteungerundet = (mazeGenerator.xSize / 2);
         double mitte = System.Math.Floor((double)(mazeGenerator.xSize / 2));
+        double wRand = System.Math.Floor((mazeGenerator.xSize - mitte) / 2);
+        double eRand = System.Math.Ceiling((mazeGenerator.xSize - mitte) / 2);
+        double sRand = wRand;
+        double nRand = eRand;
+        double[] zufall = new double[(int)mitte];
+        float RechteGrenze = (float)(sRand * mazeGenerator.xSize + wRand);
+        float LinkeGrenze = (float)(sRand * mazeGenerator.xSize + wRand + mitte);
+        for (int i=1; i <= mitte; i++)
+        {
+            
+           
+            float rd = Random.Range(RechteGrenze + (float)mazeGenerator.xSize* (i-1),
+           LinkeGrenze + mazeGenerator.xSize * (i-1));
+            
+            zufall[i - 1] = rd;
+        }
+
+        int j = Random.Range(0, (int)mitte-1);
+        Debug.Log(j);
+        j = (int)zufall[j];
+        Debug.Log("Zufallszelle ist: " + j);
 
 
-
-        return mazeGenerator.cells[11].GetComponent<Cell>();
+        return j;
     }
 
     private void setUpPlayers()

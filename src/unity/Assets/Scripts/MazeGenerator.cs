@@ -84,7 +84,6 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
         Destroy(WallHolder);
 
-        PlottTarget();
     }
 
    
@@ -95,22 +94,16 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         switch (numPlayers)
         {
             case 1:
-                GeneratePlayerMouse();
-                //playerB.SetActive(false);
-                //playerC.SetActive(false);
-                //playerD.SetActive(false);
+                GeneratePlayerMouse(); 
                 break;
             case 2:
                 GeneratePlayerMouse();
                 GeneratePlayerPfeil();
-                //playerC.SetActive(false);
-                //playerD.SetActive(false);
                 break;
             case 3:
                 GeneratePlayerMouse();
                 GeneratePlayerPfeil();
                 GeneratePlayerwasd();
-                //playerD.SetActive(false);
                 break;
             case 4:
                 GeneratePlayerMouse();
@@ -510,34 +503,13 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         }
     }
 
-    void PlottTarget()
+    
+
+    public void StartNewGame()
     {
-        /*
 
-        Vector3 TargetPos;
-        float rdx = Random.Range(0, (xSize + 1) / 4);
-        float rdz = Random.Range(0, (ySize + 1) / 4);
-        TargetPos = new Vector3(rdx + 0.5f, 0.5f, rdz);
+        Debug.Log("Geghen rhie rein");
 
-        //targetLight.transform.parent = cells[0].transform;
-        //targetLight.transform.localPosition = new Vector3(0, 0, 0);
-
-        //targetLight.transform.position = TargetPos;
-        target.transform.position = TargetPos;
-        target.SetActive(true);
-        //Licht an und licht aus klappt noch nich, aber muesste eigentlich so geheh
-        //muss man morgen mal nach schauen...
-
-        //yield return new WaitForSeconds(15);
-        //targetLight.SetActive(true);
-        //yield return new WaitForSeconds(2);
-        //targetLight.SetActive(false);
-        */
-    }
-
-    public IEnumerable StartNewGame()
-    {
-        
         int m = 0;
         Vector2 player1 = new Vector2();
         Vector2 player2 = new Vector2();
@@ -604,23 +576,44 @@ public class MazeGenerator : Singleton<MazeGenerator> {
                 newPos = target.gameObject.GetComponent<Target>().TransformpositionRandom();
                 break;
             case 2:
-                newPos = new Vector3((player1.x + player2.x) / 2, 0.5f, (player2.y + player1.y) / 2);
+                Vector2 v = player1 - player2;
+                Vector2 mitte = new Vector2(0.5f * (player1.x + player2.x), 0.5f * (player1.y + player2.y));
+                Vector2 lamda = new Vector2(1 / v.x, -1 / v.x);
+                //Vector2 zufall = Random.insideUnitCircle;
+                //TODO: eventuell noch zufall einbauen in die funktion, um auch 
+                //tatsaechlich einen zufall zu erzeugen und nicht immer ene voraussehbare Position zu haben
+                newPos = new Vector3(mitte.x + lamda.x, 0.5f, mitte.y + lamda.y);
                 break;
             case 3:
-                newPos = new Vector3((player1.x + player2.x + player3.x) / 3, 0.5f, (player2.y + player1.y + player3.y) / 3);
+                //Loesung durch umkreismittelpunkt
+                float d = 2 * (player1.x * (player2.y - player3.y) + player2.x * (player3.y - player1.y) +
+                    player3.x * (player1.y - player2.y));
+                float mx = ((player1.x * player1.x + player1.y * player1.y) * (player2.y - player3.y) + 
+                    (player2.x * player2.x + player2.y * player2.y) * (player3.y - player1.y) + 
+                    (player3.x * player3.x + player3.y * player3.y) * (player3.y - player3.y)) / d;
+
+                float my = ((player1.x * player1.x + player1.y * player1.y) * (player2.x - player3.x) +
+                    (player2.x * player2.x + player2.y * player2.y) * (player3.x - player1.x) +
+                    (player3.x * player3.x + player3.y * player3.y) * (player3.x - player3.x)) / d;
+                newPos = new Vector3(mx, 0.5f, my);
                 break;
             case 4:
+                //noch keine optimale loesung, aber glaube gibt auch keine, da man bei 4 punkten nicht immer einen Umkreismittelpunkt findet
                 newPos = new Vector3((player1.x + player2.x + player3.x + player4.x) / 4, 0.5f, (player2.y + player1.y + player3.y + player4.y) / 4);
 
                 break;
 
         }
 
-        // Neuer Standort gesetzt
-        target.gameObject.transform.position = newPos;
-        yield return new WaitForSeconds(20);
-        target.gameObject.SetActive(true);
-        //Also hier könnte das Spiel dann vom Target aus wieder beginnen
+        
+        float xtest = newPos.x + ((xSize/2));
+        float ytest = newPos.z + (xSize/2);
+
+        GameObject[][] checking = toMatrix(cells);
+        int xwert = (int)System.Math.Floor(xtest);
+        int ywert = (int)System.Math.Floor(ytest);
+        Debug.Log("x " + xwert + " y " + ywert);
+        //TODO dieser x und y wert muss jetzt in eine Cell umgewandelt werden und da muss das neue target spawnen
 
 
     }
