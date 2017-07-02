@@ -51,8 +51,10 @@ public class PlayerControllerArrow : MonoBehaviour {
         {
 
             other.gameObject.SetActive(false);
-            //MazeGenerator.Instance.StartNewGame();
+            MazeGenerator.Instance.StartNewGame();
+            Menu.Instance.GameOver();
         }
     }
+
 }
 

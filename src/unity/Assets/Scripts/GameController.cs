@@ -46,7 +46,8 @@ public class GameController : Singleton<GameController>
         mazeGenerator.BuildMaze();
 
         // adjust camera height
-        Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 5, 0);
+        Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
+       
 
         int rd = getRandomCellTarget();
         Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();

@@ -41,21 +41,21 @@ public class Menu : Singleton<Menu> {
             levelScreen.SetActive(false);
         }
     }
-
+    //TODO: @Lena: Wenn unkommentiert einen Fehler, weil in Unity kein Object uebergeben
     void CheckMainButtonScreen() {
-        if (optionMainButton == true) {
+        /*if (optionMainButton == true) {
             mainButtonScreen.SetActive(true);
         } else {
             mainButtonScreen.SetActive(false);
-        }
+        {*/
     }
-
+    //TODO: @Lena: Wenn unkommentiert einen Fehler, weil in Unity kein Object uebergeben
     void CheckGameOverScreen() {
-        if (optionGameOver == true) {
+       /* if (optionGameOver == true) {
             gameOverScreen.SetActive(true);
         } else {
             gameOverScreen.SetActive(false);
-        }
+        }*/
     }
 
 

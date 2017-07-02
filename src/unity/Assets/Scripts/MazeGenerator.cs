@@ -502,9 +502,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             }
         }
     }
-
     
-
     public void StartNewGame()
     {
 

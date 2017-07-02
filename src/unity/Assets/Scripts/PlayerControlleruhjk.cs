@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControlleruhjk : MonoBehaviour {
+public class PlayerControlleruhjk : MonoBehaviour
+{
 
     public float speed;
     private Rigidbody rb;
     Vector3 pos;
-	// Use this for initialization
+    // Use this for initialization
 
-	void Start () {
+    void Start()
+    {
         rb = GetComponent<Rigidbody>();
         pos = transform.position;
-	}
-	
-	// Update is called once per frame
-	void FixedUpdate ()
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
     {
         if (Input.GetKey(KeyCode.K))
         {
@@ -25,7 +27,8 @@ public class PlayerControlleruhjk : MonoBehaviour {
         {
             transform.position += Vector3.left * speed * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.U)){ 
+        if (Input.GetKey(KeyCode.U))
+        {
             transform.position += Vector3.forward * speed * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.J))
@@ -51,7 +54,9 @@ public class PlayerControlleruhjk : MonoBehaviour {
         {
 
             other.gameObject.SetActive(false);
-            //MazeGenerator.Instance.StartNewGame();
+            MazeGenerator.Instance.StartNewGame();
+            Menu.Instance.GameOver();
         }
     }
+
 }
