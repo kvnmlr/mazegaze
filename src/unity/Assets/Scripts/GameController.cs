@@ -54,9 +54,12 @@ public class GameController : Singleton<GameController>
 
         // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
         powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, celltarget);
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[Random.Range(0,mazeGenerator.xSize* mazeGenerator.ySize)].GetComponent<Cell>());
+        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[Random.Range(0,mazeGenerator.xSize* mazeGenerator.ySize)].GetComponent<Cell>());
 
-        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[4].GetComponent<Cell>().gameObject);
+        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[1].GetComponent<Cell>());
+        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance, mazeGenerator.cells[2].GetComponent<Cell>());
+        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[3].GetComponent<Cell>());
+
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
     }
 

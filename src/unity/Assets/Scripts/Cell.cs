@@ -65,14 +65,21 @@ public class Cell : MonoBehaviour {
         }
     }
 
-    public void spawnLight(Player p)
+    public void spawnLight(Player p, bool neutral = false)
     {
         // if there is no light yet shining, create a new one
-        GameObject g;
+        GameObject g = new GameObject();
         g = Instantiate(p.cellLight.gameObject, gameObject.transform, true);
         g.name = "CellLightInstance";
         g.transform.localPosition = new Vector3(0, 0.25f, 0);
-        g.GetComponent<CellLight>().setPlayer(p);
+        if (neutral)
+        {
+            g.GetComponent<CellLight>().setPlayer(p);
+            g.GetComponent<CellLight>().setNeutral();
+        } else
+        {
+            g.GetComponent<CellLight>().setPlayer(p);
+        }
         lights.Add(g);
         g.SetActive(true);
     }

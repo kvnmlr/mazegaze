@@ -21,17 +21,25 @@ public class PowerUpManager : Singleton<PowerUpManager> {
             target.transform.localPosition = new Vector3(0, 0, 0);
             target.gameObject.SetActive(true);
             cell.powerUps.Add(target);
+            target.cell = cell;
+
+            // let target light up
+            GameObject g = new GameObject();
+            g.AddComponent<ShowTarget>();
+            g.GetComponent<ShowTarget>().type = PowerUpTypes.ShowTarget;
+            g.GetComponent<ShowTarget>().activate(GameController.Instance.players[0]);
+            Destroy(g.GetComponent<ShowTarget>());
+            return target.GetComponent<Target>();
         }
 
         foreach (PowerUp p in powerUps)
         {
-            if (p.type.ToString().Equals(type.ToString()))
+            if (p.type.Equals(type))
             {
                 GameObject powerUp = Instantiate(p.gameObject, cell.transform, true);
                 powerUp.transform.localPosition = new Vector3(0, 0, 0);
                 powerUp.SetActive(true);
                 cell.powerUps.Add(powerUp.GetComponent<PowerUp>());
-
                 return powerUp.GetComponent<PowerUp>();
             }
         }

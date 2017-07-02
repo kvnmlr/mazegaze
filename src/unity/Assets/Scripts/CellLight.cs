@@ -4,6 +4,7 @@ using UnityEngine;
 public class CellLight : MonoBehaviour {
     // the player who this light belongs to
     public Player player { get; set; }
+    public bool neutral { get; set; }
 
     // parameters for the light
     public float initialLightIntesity = 10f;
@@ -15,10 +16,21 @@ public class CellLight : MonoBehaviour {
 
     public void setPlayer(Player player)
     {
-        gameObject.GetComponent<Light>().color = player.cellLightColor;
-        timeToDarkness = player.timeToDarkness;
-        this.player = player;
+        if (player != null)
+        {
+            neutral = false;
+            gameObject.GetComponent<Light>().color = player.cellLightColor;
+            timeToDarkness = player.timeToDarkness;
+            this.player = player;
+        }          
     }
+    public void setNeutral(float timeToDarkness = 1)
+    {
+            neutral = true;
+            gameObject.GetComponent<Light>().color = new Color(1,1,1,1);
+            this.timeToDarkness = timeToDarkness;
+    }
+
     public Player getPlayer()
     {
         return player;

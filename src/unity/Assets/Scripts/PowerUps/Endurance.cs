@@ -33,12 +33,13 @@ public class Endurance : PowerUp
                 {
                     cl.GetComponent<CellLight>().timeToDarkness = p.timeToDarkness;
                     cl.GetComponent<CellLight>().decreaseRate = cl.GetComponent<CellLight>().decreaseRate / factor;
-                    float i = cl.GetComponent<CellLight>().initialLightIntesity;
+                    float i = cl.GetComponent<CellLight>().currentIntensity;
                     cl.GetComponent<CellLight>().restart();
                     cl.GetComponent<CellLight>().currentIntensity = i;
                 }
             }
         }
+        gameObject.SetActive(false);
 
     }
 

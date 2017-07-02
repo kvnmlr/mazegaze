@@ -35,6 +35,7 @@ public class Enlightenment : PowerUp {
         }
         yield return new WaitForSeconds(3);
         p.timeToDarkness = timeToDarknessOld;
+        gameObject.SetActive(false);
 
     }
 

@@ -4,8 +4,14 @@ using UnityEngine;
 
 public abstract class PowerUp : MonoBehaviour
 {
+    public Cell cell { get; set; }
     public PowerUpManager.PowerUpTypes type { get; set; }
     public abstract IEnumerator performPowerUp(Player p);
+
+    void Start()
+    {
+        this.cell = transform.parent.gameObject.GetComponent<Cell>();
+    }
 
     public void activate(Player p)
     {
@@ -15,6 +21,7 @@ public abstract class PowerUp : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        this.cell = transform.parent.gameObject.GetComponent<Cell>();
         if (other.gameObject.GetComponent<Player>() != null)
         {
             Player p = other.gameObject.GetComponent<Player>();
@@ -25,6 +32,7 @@ public abstract class PowerUp : MonoBehaviour
             }
             activate(p);
             Destroy(gameObject.GetComponent<SphereCollider>());
+            Destroy(gameObject.GetComponent<MeshRenderer>());
         }
     }
 
@@ -33,8 +41,8 @@ public abstract class PowerUp : MonoBehaviour
         GameObject[][] board = MazeGenerator.Instance.toMatrix(MazeGenerator.Instance.cells);
 
         // find current cell
-        GameObject cell = transform.parent.gameObject;
-        if (cell.GetComponent<Cell>() == null)
+        GameObject gCell = cell.gameObject;
+        if (gCell.GetComponent<Cell>() == null)
         {
             throw new System.Exception("Power up is not in a cell");
         }
@@ -46,7 +54,7 @@ public abstract class PowerUp : MonoBehaviour
         {
             for (int column = 0; column < board[row].Length; ++column)
             {
-                if (board[row][column].Equals(cell))
+                if (board[row][column].Equals(gCell))
                 {
                     posX = column;
                     posY = row;
