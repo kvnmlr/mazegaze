@@ -505,8 +505,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     
     public void StartNewGame()
     {
-
-        Debug.Log("Geghen rhie rein");
+        //TODO: neu
+    
 
         int m = 0;
         Vector2 player1 = new Vector2();

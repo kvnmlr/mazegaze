@@ -12,6 +12,12 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         Endurance = 3,
         Target = 4
     }
+    public PowerUp spawnPowerUp(PowerUpTypes type)
+    {
+        // random zelle finden.
+
+        return spawnPowerUp(type, null);
+    }
 
     public PowerUp spawnPowerUp (PowerUpTypes type, Cell cell)
     {

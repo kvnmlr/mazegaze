@@ -68,7 +68,7 @@ public class Cell : MonoBehaviour {
     public void spawnLight(Player p, bool neutral = false)
     {
         // if there is no light yet shining, create a new one
-        GameObject g = new GameObject();
+        GameObject g;
         g = Instantiate(p.cellLight.gameObject, gameObject.transform, true);
         g.name = "CellLightInstance";
         g.transform.localPosition = new Vector3(0, 0.25f, 0);

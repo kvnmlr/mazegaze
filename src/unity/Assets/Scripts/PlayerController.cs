@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour {
             
             rb.position = transform.position;
         }
-
+        
         if(transform.position.y > 0.5)
         {
             transform.position = new Vector3(temp.x, 0.5f, temp.z);
