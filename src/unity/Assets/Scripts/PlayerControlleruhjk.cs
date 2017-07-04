@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerControlleruhjk : MonoBehaviour
 {
-
+    //PlayerD
     public float speed;
     private Rigidbody rb;
     Vector3 pos;
@@ -19,21 +19,25 @@ public class PlayerControlleruhjk : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.K))
+        if (!Menu.Instance.canvas.enabled)
         {
-            transform.position += Vector3.right * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.H))
-        {
-            transform.position += Vector3.left * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.U))
-        {
-            transform.position += Vector3.forward * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.J))
-        {
-            transform.position += Vector3.back * speed * Time.deltaTime;
+
+            if (Input.GetKey(KeyCode.K))
+            {
+                transform.position += Vector3.right * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.H))
+            {
+                transform.position += Vector3.left * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.U))
+            {
+                transform.position += Vector3.forward * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.J))
+            {
+                transform.position += Vector3.back * speed * Time.deltaTime;
+            }
         }
 
 
@@ -52,10 +56,10 @@ public class PlayerControlleruhjk : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Target"))
         {
-
             other.gameObject.SetActive(false);
-            MazeGenerator.Instance.StartNewGame();
+            GameController.Instance.setRestart(true);
             Menu.Instance.GameOver();
+           
         }
     }
 

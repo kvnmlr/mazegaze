@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerControllerArrow : MonoBehaviour {
 
-
+    //PlayerB
     public float speed;
 
     private Rigidbody rb;
@@ -16,22 +16,24 @@ public class PlayerControllerArrow : MonoBehaviour {
 
     void FixedUpdate()
     {
-       
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (!Menu.Instance.canvas.enabled)
         {
-            transform.position += Vector3.right * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.position += Vector3.left * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.position += Vector3.forward * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.position += Vector3.back * speed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.position += Vector3.right * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.position += Vector3.left * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                transform.position += Vector3.forward * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                transform.position += Vector3.back * speed * Time.deltaTime;
+            }
         }
 
        
@@ -49,10 +51,10 @@ public class PlayerControllerArrow : MonoBehaviour {
     {
         if (other.gameObject.CompareTag("Target"))
         {
-
             other.gameObject.SetActive(false);
-            MazeGenerator.Instance.StartNewGame();
+            GameController.Instance.setRestart(true);
             Menu.Instance.GameOver();
+           
         }
     }
 

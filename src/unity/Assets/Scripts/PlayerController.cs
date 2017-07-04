@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    //PlayerA
     public float speed;
     private Rigidbody rb;
     private Vector3 offset;
@@ -31,30 +32,31 @@ public class PlayerController : MonoBehaviour {
 
     void Update()
     {
-        int size = MazeGenerator.Instance.xSize;
-
-      
-
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
-     
-        Vector3 temp = transform.position;
-
-        if (System.Math.Abs(transform.position.x - mousePos.x) < radius && System.Math.Abs(transform.position.z - mousePos.z) < radius)
+        if (!Menu.Instance.canvas.enabled)
         {
-            transform.position = Vector3.MoveTowards(transform.position, mousePos, speed * Time.deltaTime);
+            int size = MazeGenerator.Instance.xSize;
 
-        }else if(System.Math.Abs(transform.position.x - mousePos.x) >= radius && System.Math.Abs(transform.position.z - mousePos.z) >= radius)
-        {
-            
-            rb.position = transform.position;
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
+
+            Vector3 temp = transform.position;
+
+            if (System.Math.Abs(transform.position.x - mousePos.x) < radius && System.Math.Abs(transform.position.z - mousePos.z) < radius)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, mousePos, speed * Time.deltaTime);
+
+            }
+            else if (System.Math.Abs(transform.position.x - mousePos.x) >= radius && System.Math.Abs(transform.position.z - mousePos.z) >= radius)
+            {
+
+                rb.position = transform.position;
+            }
+
+            if (transform.position.y > 0.5)
+            {
+                transform.position = new Vector3(temp.x, 0.5f, temp.z);
+            }
+
         }
-        
-        if(transform.position.y > 0.5)
-        {
-            transform.position = new Vector3(temp.x, 0.5f, temp.z);
-        }
-
-        
 
     }
 
@@ -62,10 +64,11 @@ public class PlayerController : MonoBehaviour {
     {
         if (other.gameObject.CompareTag("Target"))
         {
-            
+           
             other.gameObject.SetActive(false);
-            MazeGenerator.Instance.StartNewGame();
+            GameController.Instance.setRestart(true);
             Menu.Instance.GameOver();
+            
         }
     }
 

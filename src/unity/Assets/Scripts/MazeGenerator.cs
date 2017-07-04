@@ -69,24 +69,35 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     public void BuildMaze()
     {
-        Maze = new GameObject("Maze");
 
-        WallHolder = new GameObject();
-        WallHolder.name = "Walls";
-        WallHolder.transform.parent = Maze.transform;
+        if (!GameController.Instance.getRestart())
+        {
+            Maze = new GameObject("Maze");
+
+            WallHolder = new GameObject();
+            WallHolder.name = "Walls";
+            WallHolder.transform.parent = Maze.transform;
 
 
-        CreatFloor();
+            CreatFloor();
 
-        CreatWalls();
+            CreatWalls();
 
-        CreatPlayer();
+            CreatPlayer();
 
-        Destroy(WallHolder);
+            WallHolder.SetActive(false);
+        }
+        else
+        {
+            WallHolder.SetActive(true);
+            DeleteMaze();
+            CreatMaze();
+            WallHolder.SetActive(false);
+        }
+        
 
     }
 
-   
     //TODO: Werte anpasse fuer jedes Maze
     void CreatPlayer()
     {
@@ -289,7 +300,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     void CreatWalls()
     {
-
+        Debug.Log("hier rein");
         initialPos = new Vector3((-xSize / 2) + wallLength / 2, 0.0f, (-ySize / 2) + wallLength / 2);
         Vector3 myPos = initialPos;
         GameObject tempWall;
@@ -410,11 +421,9 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             else
             {
                 currentCell = Random.Range(0, totalCells); 
-                start = cellProperties[currentCell]; //Startcell
                 cellProperties[currentCell].visited = true;
                 visitedCells++;
                 startedBuilding = true;
-                //TODO: Von dieser Zelle Koordinaten rausbekommen -> Zielobjekt hierhin plotten
             }
 
         }
@@ -424,10 +433,10 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     {
         switch (wallToBreak)
         {
-            case 1: Destroy(cellProperties[currentCell].north); break;
-            case 2: Destroy(cellProperties[currentCell].east); break;
-            case 3: Destroy(cellProperties[currentCell].west); break;
-            case 4: Destroy(cellProperties[currentCell].south); break;
+            case 1: cellProperties[currentCell].north.SetActive(false); break;
+            case 2: cellProperties[currentCell].east.SetActive(false); break;
+            case 3: cellProperties[currentCell].west.SetActive(false); break;
+            case 4: cellProperties[currentCell].south.SetActive(false); break;
         }
     }
 
@@ -503,6 +512,25 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         }
     }
     
+    public void DeleteMaze()
+    {
+        
+        for (int i = 0; i < xSize * ySize; i++)
+        {
+            cellProperties[i].north.SetActive(true);
+            cellProperties[i].east.SetActive(true); 
+            cellProperties[i].west.SetActive(true); 
+            cellProperties[i].south.SetActive(true);
+            cellProperties[i].visited = false;
+            startedBuilding = false;
+            visitedCells = 0;
+            backingUp = 0;
+            wallToBreak = 0;
+        }
+        
+        
+    }
+
     public void StartNewGame()
     {
         //TODO: neu

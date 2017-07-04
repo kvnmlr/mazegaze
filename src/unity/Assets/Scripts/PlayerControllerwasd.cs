@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerControllerwasd : MonoBehaviour {
 
+    //PlayerC
     public float speed;
     private Rigidbody rb;
     Vector3 pos;
@@ -18,21 +19,25 @@ public class PlayerControllerwasd : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.D))
+
+        if (!Menu.Instance.canvas.enabled)
         {
-            transform.position += Vector3.right * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.position += Vector3.left * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.position += Vector3.forward * speed * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.position += Vector3.back * speed * Time.deltaTime;
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.position += Vector3.right * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.position += Vector3.left * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.position += Vector3.forward * speed * Time.deltaTime;
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.position += Vector3.back * speed * Time.deltaTime;
+            }
         }
     }
 
@@ -49,10 +54,10 @@ public class PlayerControllerwasd : MonoBehaviour {
     {
         if (other.gameObject.CompareTag("Target"))
         {
-
             other.gameObject.SetActive(false);
-            MazeGenerator.Instance.StartNewGame();
+            GameController.Instance.setRestart(true);
             Menu.Instance.GameOver();
+           
         }
     }
 

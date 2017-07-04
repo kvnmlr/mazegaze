@@ -11,7 +11,7 @@ public class Target : PowerUp {
         Debug.Log(p + " wins");
         p.points++;
         yield return new WaitForSeconds(1);
-        MazeGenerator.Instance.StartNewGame();
+        //MazeGenerator.Instance.StartNewGame();
     }
 
     void Start()

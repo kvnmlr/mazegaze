@@ -18,6 +18,17 @@ public class GameController : Singleton<GameController>
     private float waitTime = 3.0f;
     private float elapsedTime = 0.0f;
     private int enable = 0;
+    private bool firstround;
+
+    public void setRestart(bool b)
+    {
+        restart = b;
+    }
+
+    public bool getRestart()
+    {
+        return restart;
+    }
 
     void Start () {
         gameover = false;
@@ -43,28 +54,40 @@ public class GameController : Singleton<GameController>
 
     public void startNewRound()
     {
-        mazeGenerator.target = powerUpManager.target.gameObject;
+
+        if (!restart)
+        {
+            mazeGenerator.target = powerUpManager.target.gameObject;
 
 
-        mazeGenerator.BuildMaze();
+            mazeGenerator.BuildMaze();
 
-        // adjust camera height
-        Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
+            // adjust camera height
+            Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
+
+
+            int rd = getRandomCellTarget();
+            Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
+
+
+            // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
+            powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, celltarget);
+        }
+        else
+        {
+
+
+            mazeGenerator.BuildMaze();
+            Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
+
+            //TODO: @Kevin Hier neue Funktion fuer Target
+            int rd = getRandomCellTarget();
+            Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
+            powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, celltarget);
+        }
        
-
-        int rd = getRandomCellTarget();
-        Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
         
-
-        // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, celltarget);
         
-
-        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[Random.Range(0,mazeGenerator.xSize* mazeGenerator.ySize)].GetComponent<Cell>());
-        //powerUpManager.spawnPowerUps(PowerUpManager.PowerUpTypes.ShowTarget);
-        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment);
-        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[3].GetComponent<Cell>());
-        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
     }
 
     float RandomTime()
@@ -148,7 +171,7 @@ public class GameController : Singleton<GameController>
         int j = Random.Range(0, (int)mitte-1);
         Debug.Log(j);
         j = (int)zufall[j];
-        Debug.Log("Zufallszelle ist: " + j);
+        //Debug.Log("Zufallszelle ist: " + j);
 
 
         return j;
