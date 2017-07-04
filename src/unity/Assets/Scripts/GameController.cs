@@ -15,6 +15,9 @@ public class GameController : Singleton<GameController>
 
     private bool gameover;
     private bool restart;
+    private float waitTime = 3.0f;
+    private float elapsedTime = 0.0f;
+    private int enable = 0;
 
     void Start () {
         gameover = false;
@@ -55,13 +58,65 @@ public class GameController : Singleton<GameController>
 
         // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
         powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, celltarget);
+        
+
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[Random.Range(0,mazeGenerator.xSize* mazeGenerator.ySize)].GetComponent<Cell>());
-
-        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[1].GetComponent<Cell>());
-        powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[2].GetComponent<Cell>());
+        //powerUpManager.spawnPowerUps(PowerUpManager.PowerUpTypes.ShowTarget);
+        //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment);
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment, mazeGenerator.cells[3].GetComponent<Cell>());
-
         //powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget, mazeGenerator.cells[5].GetComponent<Cell>().gameObject);
+    }
+
+    float RandomTime()
+    {
+        float rd = Random.Range(3.0f, 6.0f);
+
+        return rd;
+    }
+    
+    private void Update()
+    {
+        /*
+         enable = 0 <=> nichts gespawned
+         enable = 1 <=> Enlightenment gespawned
+         enable = 2 <=> ShowTarget gespawned
+         enable = 3 <=> alles gespawned*/
+         if(enable <= 2 && MazeGenerator.Instance.cells != null)
+        {
+            elapsedTime += Time.deltaTime;
+            switch (enable)
+            {
+                case 0:
+                    if (elapsedTime >= waitTime)
+                    {
+                        
+                        powerUpManager.spawnPowerUps(PowerUpManager.PowerUpTypes.Enlightenment);
+                        elapsedTime = 0.0f;
+                        waitTime = RandomTime();
+                        enable++;
+                    }
+                    break;
+                case 1:
+                    if (elapsedTime >= waitTime)
+                    {
+                      
+                        powerUpManager.spawnPowerUps(PowerUpManager.PowerUpTypes.ShowTarget);
+                        elapsedTime = 0.0f;
+                        waitTime = RandomTime();
+                        enable++;
+                    }
+                    break;
+                case 2:
+                    if (elapsedTime >= waitTime)
+                    {
+                        powerUpManager.spawnPowerUps(PowerUpManager.PowerUpTypes.Endurance);
+                        enable++;
+                    }
+                    break;
+            }
+        }
+        
+        
     }
 
     public void GameOver()
