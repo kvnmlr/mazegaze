@@ -53,13 +53,11 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 
                         int diffY = Math.Abs(row - y);
                         int diffX = Math.Abs(column - x);
-
-                        board[row][column] += diffY + diffX;
+                        board[row][column] += (diffY + diffX);
                     }
 
                     // average distance to each cell
                     float average = board[row][column] / (1.0f * MazeGenerator.Instance.numPlayers);
-
                     board[row][column] = 0.0f;
 
                     // sum up difference to average
@@ -78,8 +76,8 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 
                         board[row][column] += diffToAverage;
                     }
-                    board[row][column] += UnityEngine.Random.Range(0,10) * 0.1f;
-                    Debug.Log("Value for " + row + ", " + column + ": " + board[row][column]);
+                    
+                    board[row][column] += UnityEngine.Random.Range(0,10 * MazeGenerator.Instance.xSize * MazeGenerator.Instance.numPlayers) * 0.1f;
 
                     if (board[row][column] < bestCellValue)
                     {

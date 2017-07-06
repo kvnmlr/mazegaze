@@ -26,7 +26,6 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     private int oldNumPlayers;
 
     public GameObject target { get; set; }
-    //public GameObject targetLight { get; set; }   targetLight is im target drin, wir brauchen dafuer keine extra variable hier.
 
     private float wallLength = 1.0f;
     public int xSize { get; set; }
@@ -75,7 +74,6 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     public void BuildMaze()
     {
-        
         if (!GameController.Instance.getRestart())
         {
             Maze = new GameObject("Maze");
@@ -88,8 +86,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             CreatWalls();
             CreatPlayer();
 
-            WallHolder.SetActive(false);
-            
+            WallHolder.SetActive(false);    
         }
         else
         {
@@ -203,7 +200,6 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     }
 
-   
     void CreatPlayer()
     {
 
@@ -232,174 +228,42 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     void GeneratePlayerMouse()
     {
-        float nxSize = (float)xSize / 2.0f;
-        float nySize = (float)ySize / 2.0f;
         playerA.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-
-        playerA.transform.position = cells[0].transform.position;
-        playerA.gameObject.GetComponent<Player>().cell = cells[0].GetComponent<Cell>();
-        cells[0].GetComponent<Cell>().players.Add(playerA.gameObject.GetComponent<Player>());
-        playerA.SetActive(true);
-
-        return;
-
-        // TODO Rewrite for cell instead of vector
-        Vector3 myPosp = new Vector3(nxSize - 0.5f, 0, nySize - 0.5f);
-        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-
-
-        if (xSize % 2 == 0 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(nxSize - 0.5f,0, nySize - 0.5f);
-            myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-        }
-        else if (xSize % 2 == 0 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(nxSize - 0.5f, 0, nySize - 1.0f);
-            myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(nxSize, 0.5f, nySize - 0.5f);
-            myPos = new Vector3(nxSize, 3.0f, nySize - 0.5f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(nxSize, 0.5f, nySize - 1.0f);
-            myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
-
-        }
-        playerA.transform.position = myPosp;
+        playerA.transform.position = toMatrix()[0][0].transform.position;
+        playerA.gameObject.GetComponent<Player>().cell = toMatrix()[0][0].GetComponent<Cell>();
+        toMatrix()[0][0].GetComponent<Cell>().players.Add(playerA.gameObject.GetComponent<Player>());
         playerA.SetActive(true);
     }
 
     void GeneratePlayerPfeil()
     {
-        float nxSize = (float)xSize / 2.0f;
-        float nySize = (float)ySize / 2.0f;
         playerB.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-
-        playerB.transform.position = cells[cells.Length-1].transform.position;
-        playerB.gameObject.GetComponent<Player>().cell = cells[cells.Length-1].GetComponent<Cell>();
-        cells[cells.Length - 1].GetComponent<Cell>().players.Add(playerB.gameObject.GetComponent<Player>());
-        playerB.SetActive(true);
-
-        return;
-
-
-        // TODO Rewrite for cell instead of vector
-
-        Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
-        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-
-
-        if (xSize % 2 == 0 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
-            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-        }
-        else if (xSize % 2 == 0 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 1.0f);
-            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(-nxSize + 1.0f, 0.5f, -nySize + 0.5f);
-            myPos = new Vector3(-nxSize + 1.0f, 3.0f, -nySize + 0.5f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(-nxSize, 0.5f, -nySize + 1.0f);
-            //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
-
-        }
-        playerB.transform.position = myPosp;
+        playerB.transform.position = toMatrix()[ySize-1][0].transform.position;
+        playerB.gameObject.GetComponent<Player>().cell = toMatrix()[ySize - 1][0].GetComponent<Cell>();
+        toMatrix()[ySize - 1][0].GetComponent<Cell>().players.Add(playerB.gameObject.GetComponent<Player>());
         playerB.SetActive(true);
     }
 
     void GeneratePlayerwasd()
     {
-        float nxSize = (float)xSize / 2.0f;
-        float nySize = (float)ySize / 2.0f;
         playerC.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-
-        Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
-        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-
-
-        if (xSize % 2 == 0 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
-            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-        }
-        else if (xSize % 2 == 0 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 1.0f);
-            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(-nxSize + 1.0f, 0.5f, nySize - 0.5f);
-            myPos = new Vector3(-nxSize+1.0f, 3.0f, nySize - 0.5f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(-nxSize, 0.5f, -nySize + 1.0f);
-            //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
-
-        }
-        playerC.transform.position = myPosp;
+        playerC.transform.position = toMatrix()[0][xSize-1].transform.position;
+        playerC.gameObject.GetComponent<Player>().cell = toMatrix()[0][xSize - 1].GetComponent<Cell>();
+        toMatrix()[0][xSize-1].GetComponent<Cell>().players.Add(playerC.gameObject.GetComponent<Player>());
         playerC.SetActive(true);
     }
 
     void GeneratePlayeruhjk()
     {
-        float nxSize = (float)xSize / 2.0f;
-        float nySize = (float)ySize / 2.0f;
         playerD.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-
-        Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
-        Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-
-
-        if (xSize % 2 == 0 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
-            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
-        }
-        else if (xSize % 2 == 0 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 1.0f);
-            //myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 1.0f);
-
-        }
-        //Nur das ist wichtig!!
-        else if (xSize % 2 == 1 && ySize % 2 == 1)
-        {
-            myPosp = new Vector3(nxSize, 0.5f, -nySize + 0.5f);
-            myPos = new Vector3(nxSize, 3.0f, -nySize + 0.5f);
-
-        }
-        else if (xSize % 2 == 1 && ySize % 2 == 0)
-        {
-            myPosp = new Vector3(-nxSize, 0.5f, -nySize + 1.0f);
-            //myPos = new Vector3(nxSize, 3.0f, nySize - 1.0f);
-
-        }
-        playerD.transform.position = myPosp;
+        playerD.transform.position = toMatrix()[ySize-1][xSize-1].transform.position;
+        playerD.gameObject.GetComponent<Player>().cell = toMatrix()[ySize - 1][xSize - 1].GetComponent<Cell>();
+        toMatrix()[ySize-1][xSize-1].GetComponent<Cell>().players.Add(playerD.gameObject.GetComponent<Player>());
         playerD.SetActive(true);
     }
 
-    void CreatFloor()
-    {
-        
+    private void CreatFloor()
+    {  
         float nxSize = (float)xSize;
         float nySize = (float)ySize;
         floor.transform.localScale = new Vector3(nxSize / 10, 0.5f, nySize / 10);
@@ -416,14 +280,11 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         {
             myPos = new Vector3(0.5f, 0, -0.5f);
         }
-        
         tempFloor = Instantiate(floor, myPos, Quaternion.identity) as GameObject;
-
     }
 
-    void CreatWalls()
-    {
-        
+    private void CreatWalls()
+    { 
         initialPos = new Vector3((-xSize / 2) + wallLength / 2, 0.0f, (-ySize / 2) + wallLength / 2);
         Vector3 myPos = initialPos;
         GameObject tempWall;
@@ -452,12 +313,10 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             }
         }
         creatCells();
-
     }
 
-    void creatCells()
+    private void creatCells()
     {
-
         Cells = new GameObject("Cells" + xSize);
 
         Cells.transform.localPosition = new Vector3(-xSize * wallLength / 2, 0, ySize * wallLength / 2);
@@ -522,7 +381,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     }
 
-    void CreatMaze()
+    private void CreatMaze()
     {
 
         while (visitedCells < totalCells)
@@ -554,7 +413,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         }
     }
 
-    void BreakWall()
+    private void BreakWall()
     {
         switch (wallToBreak)
         {
@@ -565,7 +424,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         }
     }
 
-    void GiveMeNeighbour()
+    private void GiveMeNeighbour()
     {
 
         int length = 0;
@@ -637,7 +496,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         }
     }
     
-    void ActivateMaze()
+    private void ActivateMaze()
     {
         
         for (int i = 0; i < oldXSize * oldYSize; i++)
@@ -655,7 +514,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     }
 
-    void DestroyMaze()
+    private void DestroyMaze()
     {
         
         DestroyObject(Cells);
