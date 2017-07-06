@@ -23,6 +23,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     public GameObject playerC { get; set; }
     public GameObject playerD { get; set; }
     public int numPlayers { get; set; }
+    private int oldNumPlayers;
 
     public GameObject target { get; set; }
     //public GameObject targetLight { get; set; }   targetLight is im target drin, wir brauchen dafuer keine extra variable hier.
@@ -30,6 +31,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     private float wallLength = 1.0f;
     public int xSize { get; set; }
     public int ySize { get; set; }
+    private int oldXSize;
+    private int oldYSize;
 
     private Vector3 initialPos;
     private GameObject WallHolder;
@@ -46,6 +49,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     private int backingUp = 0;
     private int wallToBreak = 0;
     private CellProperties start;
+    private GameObject tempFloor;
 
     public GameObject[][] toMatrix()
     {
@@ -71,7 +75,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     public void BuildMaze()
     {
-
+        
         if (!GameController.Instance.getRestart())
         {
             Maze = new GameObject("Maze");
@@ -80,27 +84,126 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             WallHolder.name = "Walls";
             WallHolder.transform.parent = Maze.transform;
 
-
             CreatFloor();
-
             CreatWalls();
-
             CreatPlayer();
 
             WallHolder.SetActive(false);
+            
         }
         else
         {
-            WallHolder.SetActive(true);
-            DeleteMaze();
-            CreatMaze();
-            WallHolder.SetActive(false);
+            if (oldXSize == xSize && oldYSize == ySize)
+            {
+                if (oldNumPlayers < numPlayers)
+                {
+                    switch (numPlayers - oldNumPlayers)
+                    {
+                        case 1:
+                            //erzeuge einen neuen B oder C oder D
+                            if (oldNumPlayers == 1)
+                            {
+                                GeneratePlayerPfeil();
+                            }
+                            else if (oldNumPlayers == 2)
+                            {
+                                GeneratePlayerwasd();
+                            }
+                            else
+                            {
+                                GeneratePlayeruhjk();
+                            }
+                            break;
+                        case 2:
+                            //erzeuge 2 neue B && C oder C && D
+                            if (oldNumPlayers == 1 && numPlayers == 3)
+                            {
+                                GeneratePlayerPfeil();
+                                GeneratePlayerwasd();
+                            }
+                            else
+                            {
+                                GeneratePlayerwasd();
+                                GeneratePlayeruhjk();
+                            }                            
+                            break;
+                        case 3:
+                            //erzeuge 3 neue B && C && D
+                            GeneratePlayerPfeil();
+                            GeneratePlayerwasd();
+                            GeneratePlayeruhjk();
+                            break;
+                    }
+                }
+                else if(oldNumPlayers > numPlayers) //oldNumPlayers > numPlayers
+                {
+                    switch (oldNumPlayers - numPlayers)
+                    {
+                        case 1:
+                            if(oldNumPlayers == 4)
+                            {
+                                playerD.SetActive(false);
+                            }
+                            else if(oldNumPlayers == 3)
+                            {
+                                playerC.SetActive(false);
+                            }
+                            else
+                            {
+                                playerB.SetActive(false);
+                            }
+                            //loesche 1 B oder C oder D
+                            break;
+                        case 2:
+                            //loesche 2 B && C(oldSize = 3) oder C && D (oldsize = 4)
+                            if(oldNumPlayers == 3 && numPlayers == 1)
+                            {
+                                playerB.SetActive(false);
+                                playerC.SetActive(false);
+                            }else 
+                            {
+                                playerC.SetActive(false);
+                                playerC.SetActive(false);
+                            }
+                            break;
+                        case 3:
+                            //loesche B, C und D
+                            playerB.SetActive(false);
+                            playerC.SetActive(false);
+                            playerD.SetActive(false);
+                            break;
+                    }
+
+                }
+
+
+                WallHolder.SetActive(true);
+                ActivateMaze();
+                CreatMaze();
+                WallHolder.SetActive(false);
+            }
+            else
+            {
+                //mach alles neu
+                WallHolder.SetActive(true);
+                DestroyMaze();
+
+                CreatFloor();
+                CreatWalls();
+                CreatPlayer();
+                WallHolder.SetActive(false);
+
+            }
+           
         }
-        
+
+        oldXSize = xSize;
+        oldYSize = ySize;
+        oldNumPlayers = numPlayers;
 
     }
 
-    //TODO: Werte anpasse fuer jedes Maze
+   
     void CreatPlayer()
     {
 
@@ -296,7 +399,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     void CreatFloor()
     {
-        GameObject tempFloor;
+        
         float nxSize = (float)xSize;
         float nySize = (float)ySize;
         floor.transform.localScale = new Vector3(nxSize / 10, 0.5f, nySize / 10);
@@ -313,14 +416,14 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         {
             myPos = new Vector3(0.5f, 0, -0.5f);
         }
-
+        
         tempFloor = Instantiate(floor, myPos, Quaternion.identity) as GameObject;
 
     }
 
     void CreatWalls()
     {
-        Debug.Log("hier rein");
+        
         initialPos = new Vector3((-xSize / 2) + wallLength / 2, 0.0f, (-ySize / 2) + wallLength / 2);
         Vector3 myPos = initialPos;
         GameObject tempWall;
@@ -354,7 +457,9 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     void creatCells()
     {
-        Cells = new GameObject("Cells");
+
+        Cells = new GameObject("Cells" + xSize);
+
         Cells.transform.localPosition = new Vector3(-xSize * wallLength / 2, 0, ySize * wallLength / 2);
         Cells.transform.parent = Maze.transform;
 
@@ -532,10 +637,10 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         }
     }
     
-    public void DeleteMaze()
+    void ActivateMaze()
     {
         
-        for (int i = 0; i < xSize * ySize; i++)
+        for (int i = 0; i < oldXSize * oldYSize; i++)
         {
             cellProperties[i].north.SetActive(true);
             cellProperties[i].east.SetActive(true); 
@@ -547,122 +652,21 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             backingUp = 0;
             wallToBreak = 0;
         }
-        
-        
+
     }
 
-    public void StartNewGame()
+    void DestroyMaze()
     {
-        //TODO: neu
-    
-
-        int m = 0;
-        Vector2 player1 = new Vector2();
-        Vector2 player2 = new Vector2();
-        Vector2 player3 = new Vector2();
-        Vector2 player4 = new Vector2();
-        float x, y;
-        switch (numPlayers)
-        {
-            case 1:
-                x = playerA.transform.position.x;
-                y = playerA.transform.position.z;
-                player1 = new Vector2(x, y);
-                m = 1;
-                break;
-            case 2:
-                x = playerA.transform.position.x;
-                y = playerA.transform.position.z;
-                player1 = new Vector2(x, y);
-
-                x = playerB.transform.position.x;
-                y = playerB.transform.position.z;
-                player2 = new Vector2(x, y);
-                m = 2;
-                break;
-            case 3:
-                x = playerA.transform.position.x;
-                y = playerA.transform.position.z;
-                player1 = new Vector2(x, y);
-
-                x = playerB.transform.position.x;
-                y = playerB.transform.position.z;
-                player2 = new Vector2(x, y);
-
-                x = playerC.transform.position.x;
-                y = playerC.transform.position.z;
-                player3 = new Vector2(x, y);
-                m = 3;
-                break;
-            case 4:
-                x = playerA.transform.position.x;
-                y = playerA.transform.position.z;
-                player1 = new Vector2(x, y);
-
-                x = playerB.transform.position.x;
-                y = playerB.transform.position.z;
-                player2 = new Vector2(x, y);
-
-                x = playerC.transform.position.x;
-                y = playerC.transform.position.z;
-                player3 = new Vector2(x, y);
-
-                x = playerD.transform.position.x;
-                y = playerD.transform.position.z;
-                player4 = new Vector2(x, y);
-                m = 4;
-                break;
-        }
-
-        //eventuell ueberall noch +.5f fuer x 
-        Vector3 newPos = new Vector3();
-        switch (m)
-        {
-            case 1:
-                newPos = target.gameObject.GetComponent<Target>().TransformpositionRandom();
-                break;
-            case 2:
-                Vector2 v = player1 - player2;
-                Vector2 mitte = new Vector2(0.5f * (player1.x + player2.x), 0.5f * (player1.y + player2.y));
-                Vector2 lamda = new Vector2(1 / v.x, -1 / v.x);
-                //Vector2 zufall = Random.insideUnitCircle;
-                //TODO: eventuell noch zufall einbauen in die funktion, um auch 
-                //tatsaechlich einen zufall zu erzeugen und nicht immer ene voraussehbare Position zu haben
-                newPos = new Vector3(mitte.x + lamda.x, 0.5f, mitte.y + lamda.y);
-                break;
-            case 3:
-                //Loesung durch umkreismittelpunkt
-                float d = 2 * (player1.x * (player2.y - player3.y) + player2.x * (player3.y - player1.y) +
-                    player3.x * (player1.y - player2.y));
-                float mx = ((player1.x * player1.x + player1.y * player1.y) * (player2.y - player3.y) + 
-                    (player2.x * player2.x + player2.y * player2.y) * (player3.y - player1.y) + 
-                    (player3.x * player3.x + player3.y * player3.y) * (player3.y - player3.y)) / d;
-
-                float my = ((player1.x * player1.x + player1.y * player1.y) * (player2.x - player3.x) +
-                    (player2.x * player2.x + player2.y * player2.y) * (player3.x - player1.x) +
-                    (player3.x * player3.x + player3.y * player3.y) * (player3.x - player3.x)) / d;
-                newPos = new Vector3(mx, 0.5f, my);
-                break;
-            case 4:
-                //noch keine optimale loesung, aber glaube gibt auch keine, da man bei 4 punkten nicht immer einen Umkreismittelpunkt findet
-                newPos = new Vector3((player1.x + player2.x + player3.x + player4.x) / 4, 0.5f, (player2.y + player1.y + player3.y + player4.y) / 4);
-
-                break;
-
-        }
-
         
-        float xtest = newPos.x + ((xSize/2));
-        float ytest = newPos.z + (xSize/2);
+        DestroyObject(Cells);
+        DestroyObject(tempFloor);
 
-        GameObject[][] checking = toMatrix();
-        int xwert = (int)System.Math.Floor(xtest);
-        int ywert = (int)System.Math.Floor(ytest);
-        Debug.Log("x " + xwert + " y " + ywert);
-        //TODO dieser x und y wert muss jetzt in eine Cell umgewandelt werden und da muss das neue target spawnen
-
-
+        startedBuilding = false;
+        visitedCells = 0;
+        backingUp = 0;
+        wallToBreak = 0;
     }
+
     // Update is called once per frame
     void Update()
     {

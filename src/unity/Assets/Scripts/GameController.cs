@@ -63,25 +63,25 @@ public class GameController : Singleton<GameController>
             // adjust camera height
             Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
-
-            //int rd = getRandomCellTarget();
-            //Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
-
+            int rd = getRandomCellTarget();
+            Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
 
             // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target);
+
         }
         else
         {
-
-
             mazeGenerator.BuildMaze();
             Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
-            //TODO: @Kevin Hier neue Funktion fuer Target
             int rd = getRandomCellTarget();
             Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, celltarget);
+            powerUpManager.setSpawnedPowerUps(0);
+            //TODO: eventuell spawnedPowerUps nicht wieder auf 0 setzen was denken die andern, ich finds eig geil so
+
+            
         }
        
         
@@ -121,9 +121,8 @@ public class GameController : Singleton<GameController>
         }
 
         int j = Random.Range(0, (int)mitte-1);
-        Debug.Log(j);
         j = (int)zufall[j];
-        //Debug.Log("Zufallszelle ist: " + j);
+
 
 
         return j;

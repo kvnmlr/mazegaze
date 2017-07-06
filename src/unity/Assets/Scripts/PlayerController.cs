@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (!Menu.Instance.canvas.enabled)
         {
+            depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
             int size = MazeGenerator.Instance.xSize;
 
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
@@ -68,6 +69,7 @@ public class PlayerController : MonoBehaviour {
             other.gameObject.SetActive(false);
             GameController.Instance.setRestart(true);
             Menu.Instance.GameOver();
+            
             
         }
     }

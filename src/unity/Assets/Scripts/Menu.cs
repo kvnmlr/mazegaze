@@ -76,85 +76,30 @@ public class Menu : Singleton<Menu> {
     //Player Button Control
 
     public void OnePlayer() {
-        if (!GameController.Instance.getRestart())     
-        {
-            MazeGenerator.Instance.numPlayers = 1;
 
-            
-        }
-        else
-        {
-            if(MazeGenerator.Instance.numPlayers != 1)
-            {
-                //Alle Spieler bis auf einen löschen
-                
-            }
-        }
+        MazeGenerator.Instance.numPlayers = 1;
         optionPlayer = false;
         optionLevel = true;
 
     }
 
     public void TwoPlayer() {
-        if (!GameController.Instance.getRestart())
-        {
 
-            MazeGenerator.Instance.numPlayers = 2;
-        }
-        else
-        {
-            if(MazeGenerator.Instance.numPlayers < 2)
-            {
-                //mache einen dazu
-            }else if(MazeGenerator.Instance.numPlayers > 2)
-            {
-                //loesch einen oder zwei
-            }
-        }
+        MazeGenerator.Instance.numPlayers = 2;
         optionPlayer = false;
         optionLevel = true;
     }
 
     public void ThreePlayer() {
 
-        if (!GameController.Instance.getRestart())
-        {
-
-            MazeGenerator.Instance.numPlayers = 3;
-        }
-        else
-        {
-            if (MazeGenerator.Instance.numPlayers < 3)
-            {
-                //mache einen oder zwei dazu
-            }
-            else if (MazeGenerator.Instance.numPlayers > 3)
-            {
-                //loesch einen
-            }
-        }
-
+        MazeGenerator.Instance.numPlayers = 3;
         optionPlayer = false;
         optionLevel = true;
     }
 
     public void FourPlayer() {
 
-
-        if (!GameController.Instance.getRestart())
-        {
-
-            MazeGenerator.Instance.numPlayers = 4;
-        }
-        else
-        {
-            if (MazeGenerator.Instance.numPlayers < 4)
-            {
-                //mache einen, zwei oder drei dazu
-            }
-            
-        }
-
+        MazeGenerator.Instance.numPlayers = 4;
         optionPlayer = false;
         optionLevel = true;
     }
@@ -164,65 +109,22 @@ public class Menu : Singleton<Menu> {
 
     public void SimpleLevel() {
 
-        if (!GameController.Instance.getRestart())
-        {
-            MazeGenerator.Instance.xSize = 9;
-            MazeGenerator.Instance.ySize = 9;
-
-        }
-        else { 
-        
-            if(MazeGenerator.Instance.xSize != 9)
-            {
-                //mache groesser
-            }
-            
-        }
-        
-
+        MazeGenerator.Instance.xSize = 9;
+        MazeGenerator.Instance.ySize = 9;
         StartGame();
     }
 
     public void MiddleLevel() {
 
-        if (!GameController.Instance.getRestart())
-        {
-            MazeGenerator.Instance.xSize = 15;
-            MazeGenerator.Instance.ySize = 15;
-
-        }
-        else
-        {
-
-            if (MazeGenerator.Instance.xSize != 15)
-            {
-                //mache auf 15
-            }
-
-        }
-
+        MazeGenerator.Instance.xSize = 15;
+        MazeGenerator.Instance.ySize = 15;
         StartGame();
     }
 
     public void HardLevel() {
 
-        if (!GameController.Instance.getRestart())
-        {
-            MazeGenerator.Instance.xSize = 21;
-            MazeGenerator.Instance.ySize = 21;
-
-        }
-        else
-        {
-
-            if (MazeGenerator.Instance.xSize != 21)
-            {
-                //mache auf 21
-            }
-
-        }
-       
-
+        MazeGenerator.Instance.xSize = 21;
+        MazeGenerator.Instance.ySize = 21;
         StartGame();
     }
 
@@ -240,45 +142,10 @@ public class Menu : Singleton<Menu> {
     //General Start/Quit Functions
 
     public void StartGame() {
+
         winText.gameObject.SetActive(false);
-        if(aenderung  == 0)
-        {
-            
-        }
-        else
-        {
-
-        }
-
-        switch (aenderung)
-        {
-            case 0:
-                GameController.Instance.startNewRound();
-                canvas.enabled = false;
-                break;
-            case 1:
-                //TODO: Neues SPielfeld jeder wird auf startpunkt gespawnd
-                break;
-            case 2:
-                //TODO: +1 Spieler naechster Spieler
-                break;
-            case 3:
-                //TODO: -1 Spieler niedrigester Spiler
-                break;
-            case 4:
-                //TODO: +2 Spieler
-                break;
-            case 5:
-                //TODO: -2 Spieler
-                break;
-            case 6:
-                //TODO: +3 Spieler
-                break;
-            case 7:
-                //TODO: -3 Spieler
-                break;
-
-        }
+        GameController.Instance.startNewRound();
+        canvas.enabled = false;
        
     }
 
@@ -321,7 +188,6 @@ public class Menu : Singleton<Menu> {
                 text = "PlayerA: " + GameController.Instance.players[0].points;
                 break;
             case 2:
-                Debug.Log("Gespielr");
                 text = "PlayerA: "  + GameController.Instance.players[0].points + " PlayerB: " + GameController.Instance.players[1].points;
                 break;
             case 3:

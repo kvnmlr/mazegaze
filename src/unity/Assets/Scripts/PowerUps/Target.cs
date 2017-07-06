@@ -11,11 +11,10 @@ public class Target : PowerUp {
         Debug.Log(p + " wins");
         p.points++;
         yield return new WaitForSeconds(1);
-        //MazeGenerator.Instance.StartNewGame();
     }
 
     void Start()
-    {
+    {  
         numGame = 0;
         this.type = PowerUpManager.PowerUpTypes.Target;
     }

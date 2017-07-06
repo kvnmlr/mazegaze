@@ -25,6 +25,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 
     public PowerUp spawnPowerUp(PowerUpTypes type)
     {
+        
         int cell = 0;
         if (type.Equals(PowerUpTypes.Target))
         {
@@ -135,7 +136,10 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 	// Use this for initialization
 	void Start () {
 	}
-	
+	public void setSpawnedPowerUps(int id)
+    {
+        spawnedPowerups = id;
+    }
 	// Update is called once per frame
 	void Update () {
         elapsedTime += Time.deltaTime;
