@@ -6,6 +6,9 @@ public class Player : MonoBehaviour {
     public string name;
     public float timeToDarkness { get; set; }
     public int points { get; set; }
+
+    // the cell in which this player currently is
+    public Cell cell { get; set; }
     
     public enum PlayerColor
     {

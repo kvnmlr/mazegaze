@@ -38,7 +38,7 @@ public abstract class PowerUp : MonoBehaviour
 
     public int[] findCell()
     {
-        GameObject[][] board = MazeGenerator.Instance.toMatrix(MazeGenerator.Instance.cells);
+        GameObject[][] board = MazeGenerator.Instance.toMatrix();
 
         // find current cell
         GameObject gCell = cell.gameObject;

@@ -14,6 +14,9 @@ public class Cell : MonoBehaviour {
 
     // determines whether this cell has a light source (to optimize performance)
     public bool hasLight;
+
+    public int posX;
+    public int posY;
 	
 	void Update () {
 		for(int i = 0; i < lights.Count; ++i)
@@ -40,6 +43,7 @@ public class Cell : MonoBehaviour {
             if (!players.Contains(p))
             {
                 players.Add(p);
+                p.cell = this;
             }
 
             for (int i = 0; i < lights.Count; i++)

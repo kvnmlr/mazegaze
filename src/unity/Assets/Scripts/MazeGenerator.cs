@@ -47,7 +47,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     private int wallToBreak = 0;
     private CellProperties start;
 
-    public GameObject[][] toMatrix(GameObject[] cells)
+    public GameObject[][] toMatrix()
     {
         GameObject[][] board = new GameObject[ySize][];
         int index = 0;
@@ -57,6 +57,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             for(int column = 0; column < xSize; ++column)
             {
                 board[row][column] = cells[index];
+                cells[index].GetComponent<Cell>().posY = row;
+                cells[index].GetComponent<Cell>().posX = column;
                 index++;
                 if (index > cells.Length)
                 {
@@ -131,6 +133,14 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         float nySize = (float)ySize / 2.0f;
         playerA.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
+        playerA.transform.position = cells[0].transform.position;
+        playerA.gameObject.GetComponent<Player>().cell = cells[0].GetComponent<Cell>();
+        cells[0].GetComponent<Cell>().players.Add(playerA.gameObject.GetComponent<Player>());
+        playerA.SetActive(true);
+
+        return;
+
+        // TODO Rewrite for cell instead of vector
         Vector3 myPosp = new Vector3(nxSize - 0.5f, 0, nySize - 0.5f);
         Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
 
@@ -167,6 +177,16 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         float nxSize = (float)xSize / 2.0f;
         float nySize = (float)ySize / 2.0f;
         playerB.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
+        playerB.transform.position = cells[cells.Length-1].transform.position;
+        playerB.gameObject.GetComponent<Player>().cell = cells[cells.Length-1].GetComponent<Cell>();
+        cells[cells.Length - 1].GetComponent<Cell>().players.Add(playerB.gameObject.GetComponent<Player>());
+        playerB.SetActive(true);
+
+        return;
+
+
+        // TODO Rewrite for cell instead of vector
 
         Vector3 myPosp = new Vector3(-nxSize + 0.5f, 0.5f, -nySize + 0.5f);
         Vector3 myPos = new Vector3(nxSize - 0.5f, 3.0f, nySize - 0.5f);
@@ -635,7 +655,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         float xtest = newPos.x + ((xSize/2));
         float ytest = newPos.z + (xSize/2);
 
-        GameObject[][] checking = toMatrix(cells);
+        GameObject[][] checking = toMatrix();
         int xwert = (int)System.Math.Floor(xtest);
         int ywert = (int)System.Math.Floor(ytest);
         Debug.Log("x " + xwert + " y " + ywert);

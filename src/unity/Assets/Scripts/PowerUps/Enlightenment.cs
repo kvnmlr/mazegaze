@@ -11,7 +11,7 @@ public class Enlightenment : PowerUp {
 
         int[] pos = findCell();
 
-        GameObject[][] board = MazeGenerator.Instance.toMatrix(MazeGenerator.Instance.cells);
+        GameObject[][] board = MazeGenerator.Instance.toMatrix();
 
         float timeToDarknessOld = p.timeToDarkness;
         p.timeToDarkness = 3;
