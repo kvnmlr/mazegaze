@@ -75,9 +75,7 @@ public class GameController : Singleton<GameController>
             mazeGenerator.BuildMaze();
             Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
-            int rd = getRandomCellTarget();
-            Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
-            powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, celltarget);
+            powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target);
             powerUpManager.setSpawnedPowerUps(0);
             //TODO: eventuell spawnedPowerUps nicht wieder auf 0 setzen was denken die andern, ich finds eig geil so
 

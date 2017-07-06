@@ -31,8 +31,8 @@ public abstract class PowerUp : MonoBehaviour
                 return;
             }
             activate(p);
-            Destroy(gameObject.GetComponent<SphereCollider>());
-            Destroy(gameObject.GetComponent<MeshRenderer>());
+            gameObject.GetComponent<Collider>().enabled = false;
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 

@@ -108,6 +108,9 @@ public class PowerUpManager : Singleton<PowerUpManager> {
             cell.powerUps.Add(target);
             target.cell = cell;
 
+            target.gameObject.GetComponent<Collider>().enabled = true;
+            target.gameObject.GetComponent<MeshRenderer>().enabled = true;
+
             // let target light up
             GameObject g = new GameObject();
             g.AddComponent<ShowTarget>();
@@ -125,6 +128,8 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                 powerUp.transform.localPosition = new Vector3(0, 0, 0);
                 powerUp.SetActive(true);
                 cell.powerUps.Add(powerUp.GetComponent<PowerUp>());
+                powerUp.gameObject.GetComponent<Collider>().enabled = true;
+                powerUp.gameObject.GetComponent<MeshRenderer>().enabled = true;
                 return powerUp.GetComponent<PowerUp>();
             }
         }
