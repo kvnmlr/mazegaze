@@ -18,6 +18,9 @@ public class GameController : Singleton<GameController>
 
     private bool firstround;
 
+    private int playedGames = 0;
+    private int numGames;
+
     public void setRestart(bool b)
     {
         restart = b;
@@ -26,6 +29,22 @@ public class GameController : Singleton<GameController>
     public bool getRestart()
     {
         return restart;
+    }
+
+    public void setNumGames(int i)
+    {
+        playedGames = 0;
+        numGames = i;
+    }
+
+    public int getNumGames()
+    {
+        return numGames;
+    }
+
+    public int getPlayedGames()
+    {
+        return playedGames;
     }
 
     void Start () {
@@ -53,7 +72,7 @@ public class GameController : Singleton<GameController>
     public void startNewRound()
     {
 
-        if (!restart)
+        if (playedGames == 0)
         {
             mazeGenerator.target = powerUpManager.target.gameObject;
 
@@ -72,8 +91,10 @@ public class GameController : Singleton<GameController>
         }
         else
         {
-            mazeGenerator.BuildMaze();
-            Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
+            
+
+            //mazeGenerator.BuildMaze();
+            //Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target);
             powerUpManager.setSpawnedPowerUps(0);
@@ -81,9 +102,10 @@ public class GameController : Singleton<GameController>
 
             
         }
-       
-        
-        
+        playedGames++;
+
+
+
     }
 
     

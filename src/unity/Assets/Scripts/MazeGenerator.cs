@@ -90,7 +90,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         }
         else
         {
-            if (oldXSize == xSize && oldYSize == ySize)
+            if (oldXSize != xSize && oldYSize == ySize)//ausgeschaltet
+                //setze oldXSize == xSize => spieler bleiben bei neuem spiel, auf der selben stelle stehen
             {
                 if (oldNumPlayers < numPlayers)
                 {

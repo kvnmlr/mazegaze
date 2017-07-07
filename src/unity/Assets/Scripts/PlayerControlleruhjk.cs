@@ -56,10 +56,20 @@ public class PlayerControlleruhjk : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Target"))
         {
+
             other.gameObject.SetActive(false);
             GameController.Instance.setRestart(true);
-            Menu.Instance.GameOver();
-           
+            if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
+            {
+                Menu.Instance.GameOver();
+            }
+            else
+            {
+                StartCoroutine(Menu.Instance.GetWinText());
+
+                GameController.Instance.startNewRound();
+
+            }
         }
     }
 

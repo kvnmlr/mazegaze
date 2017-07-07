@@ -68,9 +68,17 @@ public class PlayerController : MonoBehaviour {
            
             other.gameObject.SetActive(false);
             GameController.Instance.setRestart(true);
-            Menu.Instance.GameOver();
-            
-            
+            if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
+            {
+                Menu.Instance.GameOver();
+            }
+            else
+            {
+                StartCoroutine(Menu.Instance.GetWinText());
+                
+                GameController.Instance.startNewRound();
+                
+            }            
         }
     }
 
