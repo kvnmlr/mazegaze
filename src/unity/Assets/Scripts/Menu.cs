@@ -11,12 +11,16 @@ public class Menu : Singleton<Menu> {
     private bool optionMainButton = true;
     private bool optionGameOver = false;
     private bool optionRound = false;
+    private bool optionBreakButton = false;
+    private bool optionBreakScreen = false;
 
     public GameObject mainButtonScreen;
     public GameObject playerScreen;
     public GameObject levelScreen;
     public GameObject roundScreen;
     public GameObject gameOverScreen;
+    public GameObject breakButton;
+    public GameObject breakScreen;
     public Canvas canvas;
     public Text winText;
 
@@ -29,6 +33,8 @@ public class Menu : Singleton<Menu> {
         CheckMainButtonScreen();
         //CheckGameOverScreen();
         CheckRoundScreen();
+        CheckBreakScreen();
+        CheckBreakButton();
 	}
 
     void CheckPlayerScreen() {
@@ -56,6 +62,31 @@ public class Menu : Singleton<Menu> {
         else
         {
             roundScreen.SetActive(false);
+        }
+    }
+
+    void CheckBreakButton()
+    {
+        if (optionBreakButton == true)
+        {
+            breakButton.SetActive(true);
+        }
+        else
+        {
+            breakButton.SetActive(false);
+        }
+
+    }
+
+    void CheckBreakScreen()
+    {
+        if (optionBreakScreen == true)
+        {
+            breakScreen.SetActive(true);
+        }
+        else
+        {
+            breakScreen.SetActive(false);
         }
     }
    
@@ -97,6 +128,17 @@ public class Menu : Singleton<Menu> {
         optionLevel = true;
     }
 
+    public void CloseBreakButton()
+    {
+        optionBreakButton = false;
+        optionBreakScreen = true;
+    }
+
+    public void CloseBreakScreen()
+    {
+        optionBreakScreen = false;
+    }
+
     //Player Button Control
 
     public void OnePlayer() {
@@ -136,7 +178,6 @@ public class Menu : Singleton<Menu> {
         MazeGenerator.Instance.ySize = 9;
         optionLevel = false;
         optionRound = true;
-        //StartGame();
     }
 
     public void MiddleLevel() {
@@ -193,13 +234,56 @@ public class Menu : Singleton<Menu> {
         optionMainButton = true;
        
     }
+    
+    //Break Button Control
+    
+    public void GoOnButton()
+    {
+        CloseBreakScreen();
+        canvas.enabled = false;
+    }
 
+    public void LeaveGame()
+    {
+        if(MazeGenerator.Instance.numPlayers == 1)
+        {
+            Debug.Log("Press Quite to leave the game");
+        }
+        else
+        {
+            MazeGenerator.Instance.LeaveGame();
+            //TODO übergebe spieler, welcher das gedrückt hat
+        }
+    }
+
+    public void AddPlayer()
+    {
+        if(MazeGenerator.Instance.numPlayers == 4)
+        {
+            Debug.Log("Nicht mehr als 4 Spieler");
+        }
+        else
+        {
+            MazeGenerator.Instance.AddPlayer();
+            canvas.enabled = false;
+        }
+
+    }
+
+
+    public void PressBreak()
+    {
+        CloseBreakButton();
+        optionBreakScreen = true;
+    }
 
     //General Start/Quit Functions
+
 
     public void StartGame() {
 
         winText.gameObject.SetActive(false);
+        optionBreakButton = true;
         GameController.Instance.startNewRound();
         canvas.enabled = false;
        
@@ -212,6 +296,8 @@ public class Menu : Singleton<Menu> {
         optionLevel = false;
         optionMainButton = true;
         optionRound = false;
+        optionBreakButton = false;
+        optionBreakScreen = false;
         optionGameOver = true;//TODO implement this
         
     }

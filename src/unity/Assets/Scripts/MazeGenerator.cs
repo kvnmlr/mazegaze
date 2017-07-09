@@ -201,6 +201,36 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     }
 
+    public void AddPlayer()
+    {
+        numPlayers++;
+        switch (numPlayers)
+        {
+            case 2:
+                GeneratePlayerPfeil();
+                break;
+            case 3:
+                GeneratePlayerwasd();
+                break;
+            case 4:
+                GeneratePlayeruhjk();
+                break;
+
+        }
+    }
+
+    public void LeaveGame()
+    {
+        numPlayers--;
+        switch (numPlayers)
+        {
+            case 1: playerB.SetActive(false);break;
+            case 2: playerC.SetActive(false);break;
+            case 3: playerD.SetActive(false);break;
+
+        }
+    }
+
     void CreatPlayer()
     {
 
