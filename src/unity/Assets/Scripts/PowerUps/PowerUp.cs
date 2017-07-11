@@ -15,7 +15,6 @@ public abstract class PowerUp : MonoBehaviour
 
     public void activate(Player p)
     {
-        Debug.Log(p.name + " collected " + type);
         StartCoroutine(performPowerUp(p));
     }
 
@@ -61,8 +60,6 @@ public abstract class PowerUp : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log("PowerUp is at Cell " + posY + ", " + posX);
 
         int[] res = new int[2];
         res[0] = posY;

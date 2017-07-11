@@ -47,7 +47,6 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                     for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i) 
                     {
                         Player p = GameController.Instance.players[i];
-                        Debug.Log(p.name);
                         int y = p.cell.posY;
                         int x = p.cell.posX;
 

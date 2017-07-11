@@ -8,7 +8,6 @@ public class Target : PowerUp {
 
     public override IEnumerator performPowerUp(Player p)
     {
-        Debug.Log(p + " wins");
         p.points++;
         yield return new WaitForSeconds(1);
     }
