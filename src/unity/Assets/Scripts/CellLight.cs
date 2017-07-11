@@ -74,5 +74,9 @@ public class CellLight : MonoBehaviour {
 
             gameObject.GetComponent<Light>().intensity = currentIntensity;
         }
+                //Wenn gegner spieler mit blick in naehe
+                    // go.intensity = 0.02f
+                    // 
+
     }
 }
