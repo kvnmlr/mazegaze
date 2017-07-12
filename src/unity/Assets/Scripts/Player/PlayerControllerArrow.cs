@@ -18,6 +18,8 @@ public class PlayerControllerArrow : MonoBehaviour {
     {
         if (!Menu.Instance.canvas.enabled)
         {
+
+            
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 transform.position += Vector3.right * speed * Time.deltaTime;
@@ -34,6 +36,7 @@ public class PlayerControllerArrow : MonoBehaviour {
             {
                 transform.position += Vector3.back * speed * Time.deltaTime;
             }
+            
         }
 
        
