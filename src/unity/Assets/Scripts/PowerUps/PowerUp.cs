@@ -32,7 +32,7 @@ public abstract class PowerUp : MonoBehaviour
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
             activate(p);
-            
+            PowerUpManager.Instance.activePowerUps--;
         }
     }
 

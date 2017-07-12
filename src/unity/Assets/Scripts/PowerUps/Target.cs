@@ -8,6 +8,8 @@ public class Target : PowerUp {
 
     public override IEnumerator performPowerUp(Player p)
     {
+        PowerUpManager.Instance.activePowerUps++;
+
         p.points++;
         //other.gameObject.SetActive(false);
         GameController.Instance.setRestart(true);

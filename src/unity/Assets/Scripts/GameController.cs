@@ -82,9 +82,6 @@ public class GameController : Singleton<GameController>
             // adjust camera height
             Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
-            int rd = getRandomCellTarget();
-            Cell celltarget = mazeGenerator.cells[rd].GetComponent<Cell>();
-
             // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target);
 

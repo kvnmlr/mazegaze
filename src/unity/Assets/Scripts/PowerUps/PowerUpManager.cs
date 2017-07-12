@@ -14,14 +14,14 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         Target = 4
     }
 
+    // indicating how many powerups are currently active
+    public int activePowerUps {get;set;}
+
     // time to wait until new powerup spawns
     public float waitTime = 3.0f;
 
     // elapsed time since last powerup spawned
     private float elapsedTime = 0.0f;
-
-    // indicating how many powerups have been spawned
-    private int spawnedPowerups = 0;
 
     public PowerUp spawnPowerUp(PowerUpTypes type)
     {
@@ -57,7 +57,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 
                     // average distance to each cell
                     float average = board[row][column] / (1.0f * MazeGenerator.Instance.numPlayers);
-                    board[row][column] = 0.0f;
+                    board[row][column] *= -0.01f / MazeGenerator.Instance.xSize;
 
                     // sum up difference to average
                     for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
@@ -92,8 +92,13 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         {
             // get a random cell for a powerup
             cell = UnityEngine.Random.Range(1, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
-            return spawnPowerUp(type, MazeGenerator.Instance.cells[cell].GetComponent<Cell>());
 
+            // make sure powerup is not spawned directly on player
+            while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().players.Count > 0)
+            {
+                cell = UnityEngine.Random.Range(1, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
+            }
+            return spawnPowerUp(type, MazeGenerator.Instance.cells[cell].GetComponent<Cell>());
         }
     }
 
@@ -140,20 +145,22 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 	}
 	public void setSpawnedPowerUps(int id)
     {
-        spawnedPowerups = id;
+        activePowerUps = id;
     }
 	// Update is called once per frame
 	void Update () {
+        // have max 1 powerup per 10 cells
+        if (activePowerUps >= MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize / 20)
+        {
+            return;
+        }
+
         elapsedTime += Time.deltaTime;
 
-        /*
-         enable = 0 <=> nichts gespawned
-         enable = 1 <=> Enlightenment gespawned
-         enable = 2 <=> ShowTarget gespawned
-         enable = 3 <=> alles gespawned*/
-        if (spawnedPowerups <= 2 && MazeGenerator.Instance.cells != null && elapsedTime >= waitTime)
+        if (MazeGenerator.Instance.cells != null && elapsedTime >= waitTime)
         {
-            switch (spawnedPowerups)
+            int type = UnityEngine.Random.Range(0, 3);
+            switch (type)
             {
                 case 0:
                     if (elapsedTime >= waitTime)
@@ -178,7 +185,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
             }
             elapsedTime = 0.0f;
             waitTime = UnityEngine.Random.Range(3.0f, 6.0f);
-            spawnedPowerups++;
+            activePowerUps++;
         }
     }
 }
