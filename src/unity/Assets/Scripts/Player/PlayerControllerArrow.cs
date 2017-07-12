@@ -46,27 +46,5 @@ public class PlayerControllerArrow : MonoBehaviour {
             transform.position = new Vector3(temp.x, 0.5f, temp.z);
         }
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Target"))
-        {
-
-            other.gameObject.SetActive(false);
-            GameController.Instance.setRestart(true);
-            if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
-            {
-                Menu.Instance.GameOver();
-            }
-            else
-            {
-                StartCoroutine(Menu.Instance.GetWinText());
-
-                GameController.Instance.startNewRound();
-
-            }
-        }
-    }
-
 }
 

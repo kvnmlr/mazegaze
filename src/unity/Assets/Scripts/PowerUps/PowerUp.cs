@@ -29,9 +29,10 @@ public abstract class PowerUp : MonoBehaviour
             {
                 return;
             }
-            activate(p);
             gameObject.GetComponent<Collider>().enabled = false;
             gameObject.GetComponent<MeshRenderer>().enabled = false;
+            activate(p);
+            
         }
     }
 

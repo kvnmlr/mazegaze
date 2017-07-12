@@ -67,6 +67,7 @@ public class PupilListener : MonoBehaviour
     public string ID = "surface";
     public bool detectPupils = true;
     public bool detectSurfaces = true;
+    private bool newData = false;
 
     Pupil.PupilData3D data_ = new  Pupil.PupilData3D();
 
@@ -147,17 +148,18 @@ public class PupilListener : MonoBehaviour
                         string msgType = msg[0].ConvertToString();
                         var message = MsgPack.Unpacking.UnpackObject(msg[1].ToByteArray());
                         MsgPack.MessagePackObject mmap = message.Value;
-                        Debug.Log(mmap.ToString());
                         if (msgType.Contains("pupil"))
                         {
-                            Debug.Log("PUPIL DETECTED");
+                            // pupil detected
                             lock (thisLock_)
                             {
                                 data_ = JsonUtility.FromJson<Pupil.PupilData3D>(mmap.ToString());
+                                newData = true;                                     
                             }
                         }
                         else if (msgType == "surfaces")
                         {
+                            // surface detected
                             Debug.Log("SURFACE DETECTED");
                         }
                     }
@@ -187,5 +189,20 @@ public class PupilListener : MonoBehaviour
         lock (thisLock_)stop_thread_ = true;
         client_thread_.Join();
         Debug.Log("Quit the thread.");
+    }
+
+    void Update()
+    {
+        lock (thisLock_)
+        {
+            if (newData)
+            {
+                if (GazeController.Instance != null)
+                {
+                    GazeController.Instance.move(data_.norm_pos[0], data_.norm_pos[1]);
+                }
+                newData = false;
+            }
+        }
     }
 }
