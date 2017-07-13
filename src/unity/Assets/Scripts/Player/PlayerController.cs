@@ -39,6 +39,8 @@ public class PlayerController : MonoBehaviour {
 
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
 
+            CeckArea();
+            
             Vector3 temp = transform.position;
 
             if (System.Math.Abs(transform.position.x - mousePos.x) < radius && System.Math.Abs(transform.position.z - mousePos.z) < radius)
@@ -61,6 +63,34 @@ public class PlayerController : MonoBehaviour {
         }
 
     }
+
+    void CeckArea()
+    {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
+        float x = MazeGenerator.Instance.xSize;
+        float y = MazeGenerator.Instance.ySize;
+        float mx = mousePos.x + x/2 - 1.0f;
+        float my = mousePos.z + y/2;
+        GameObject[][] board = MazeGenerator.Instance.toMatrix();
+
+        if(mx >= -0.5 && my >= 0 && mx <= x-1 && my < y)
+        {            
+            //Hier bekommt man die richtige Cell
+            Cell c = board[(int)System.Math.Round((double)mx)][(int)my].GetComponent<Cell>();
+            //PROBLEM kommt hier zustande, es gibt nicht genug lichter in den Zellen. Sogar nur in Cell 00
+            if(c.lights != null)
+            {
+                //check wie viele Lichter wir haben
+                for(int i = 0; i < c.lights.Count; i++)
+                {   //Rufe methode auf die            
+                    c.lights[i].GetComponent<CellLight>().SaveArea(GameController.Instance.players[0]);
+                }
+            }
+            
+        }
+
+    }
+
 
 
 }

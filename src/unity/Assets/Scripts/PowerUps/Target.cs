@@ -11,8 +11,8 @@ public class Target : PowerUp {
         PowerUpManager.Instance.activePowerUps++;
 
         p.points++;
-        //other.gameObject.SetActive(false);
         GameController.Instance.setRestart(true);
+        
         if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
         {
             Menu.Instance.GameOver();
@@ -22,11 +22,14 @@ public class Target : PowerUp {
             StartCoroutine(Menu.Instance.GetWinText());
 
             GameController.Instance.startNewRound();
+            yield return new WaitForSeconds(1);
+            gameObject.GetComponent<Collider>().enabled = true;
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
 
         }
         yield return new WaitForSeconds(1);
-        gameObject.GetComponent<Collider>().enabled = true;
-        gameObject.GetComponent<MeshRenderer>().enabled = true;
+        
+
     }
 
     void Start()

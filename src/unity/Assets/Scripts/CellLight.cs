@@ -74,9 +74,25 @@ public class CellLight : MonoBehaviour {
 
             gameObject.GetComponent<Light>().intensity = currentIntensity;
         }
+
+        
+        
                 //Wenn gegner spieler mit blick in naehe
                     // go.intensity = 0.02f
                     // 
 
     }
+
+
+    public void SaveArea (Player p)
+    {
+        //Wenn anderer Spieler, mach licht fast aus
+        if (!p.name.Equals(player.name))
+        {
+            gameObject.GetComponent<Light>().intensity = 0.02f;
+        }
+       
+    }
+
+    
 }
