@@ -62,10 +62,10 @@ public class Cell : MonoBehaviour {
                 }
             }
 
-            if (hasLight)
-            {
+            //if (hasLight)
+            //{
                 spawnLight(p);
-            }
+            //}
         }
     }
 
