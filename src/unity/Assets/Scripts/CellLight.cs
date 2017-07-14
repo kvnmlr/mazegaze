@@ -13,6 +13,7 @@ public class CellLight : MonoBehaviour {
 
     private float timePassed;
     public float currentIntensity { get; set; }
+    private float breakIntensity;
 
     public void setPlayer(Player player)
     {
@@ -67,29 +68,34 @@ public class CellLight : MonoBehaviour {
             yield return new WaitForSeconds(decreaseRate);
             timePassed += decreaseRate;
             currentIntensity -= intensityInterval;
-            if (currentIntensity < 0.01f)
+            if (currentIntensity < 0.001f)
             {
                 currentIntensity = 0;
             }
-
-            gameObject.GetComponent<Light>().intensity = currentIntensity;
-        }
-
-        
-        
-                //Wenn gegner spieler mit blick in naehe
-                    // go.intensity = 0.02f
-                    // 
-
+            if(breakIntensity > 0)
+            {
+                gameObject.GetComponent<Light>().intensity = breakIntensity;
+                breakIntensity = 0.0f;
+            }
+            else
+            {
+                gameObject.GetComponent<Light>().intensity = currentIntensity;
+            }
+            
+        }                
     }
 
 
     public void SaveArea (Player p)
     {
-        //Wenn anderer Spieler, mach licht fast aus
+        
         if (!p.name.Equals(player.name))
         {
-            gameObject.GetComponent<Light>().intensity = 0.02f;
+            breakIntensity = 0.02f;
+        }
+        else
+        {
+            breakIntensity = 0.0f;
         }
        
     }

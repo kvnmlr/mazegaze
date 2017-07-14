@@ -77,10 +77,10 @@ public class PlayerController : MonoBehaviour {
         {            
             //Hier bekommt man die richtige Cell
             Cell c = board[(int)System.Math.Round((double)mx)][(int)my].GetComponent<Cell>();
-            //PROBLEM kommt hier zustande, es gibt nicht genug lichter in den Zellen. Sogar nur in Cell 00
-            if(c.lights != null)
+            
+            if(c.lights.Count >= 0)
             {
-                //check wie viele Lichter wir haben
+               
                 for(int i = 0; i < c.lights.Count; i++)
                 {   //Rufe methode auf die            
                     c.lights[i].GetComponent<CellLight>().SaveArea(GameController.Instance.players[0]);
