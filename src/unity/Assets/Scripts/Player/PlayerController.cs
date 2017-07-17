@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour {
 
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
 
-            CeckArea();
+            CheckArea();
             
             Vector3 temp = transform.position;
 
@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    void CeckArea()
+    void CheckArea()
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
         float x = MazeGenerator.Instance.xSize;
@@ -73,10 +73,11 @@ public class PlayerController : MonoBehaviour {
         float my = mousePos.z + y/2;
         GameObject[][] board = MazeGenerator.Instance.toMatrix();
 
+        //TODO: groessere Area abdunkeln; schaue nach nachbarn
         if(mx >= -0.5 && my >= 0 && mx <= x-1 && my < y)
         {            
             //Hier bekommt man die richtige Cell
-            Cell c = board[(int)System.Math.Round((double)mx)][(int)my].GetComponent<Cell>();
+            Cell c = board[(int)my][(int)System.Math.Round((double)mx)].GetComponent<Cell>();
             
             if(c.lights.Count >= 0)
             {
