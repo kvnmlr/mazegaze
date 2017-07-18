@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using NetMQ; // for NetMQConfig
 using NetMQ.Sockets;
+using System.Collections.Generic;
 
 namespace Pupil
 {
@@ -54,6 +55,25 @@ namespace Pupil
         public Circle3d circle_3d = new Circle3d();
         public Ellipse ellipese = new Ellipse();
     }
+    [Serializable]
+    public class GazeOnSurface
+    {
+        public bool on_srf;
+        public string topic;
+        public double confidence;
+        public double[] norm_pos = new double[] { 0, 0, 0 };
+    }
+
+    [Serializable]
+    public class SurfaceData3D
+    {
+        public double timestamp;
+        public double uid;
+        public String name;
+        public List<GazeOnSurface> gaze_on_srf = new List<GazeOnSurface>();
+        // TODO m_from_screen
+        // TODO m_to_screen
+    }
 }
 
 public class PupilListener : MonoBehaviour
@@ -69,21 +89,22 @@ public class PupilListener : MonoBehaviour
     public bool detectSurfaces = true;
     private bool newData = false;
 
-    Pupil.PupilData3D data_ = new  Pupil.PupilData3D();
+    Pupil.PupilData3D pupilData = new  Pupil.PupilData3D();
+    Pupil.SurfaceData3D surfaceData = new Pupil.SurfaceData3D();
 
     public void get_transform(ref Vector3 pos, ref Quaternion q)
     {
         lock (thisLock_)
         {   
             pos = new Vector3(
-                        (float)(data_.sphere.center[0]),
-                        (float)(data_.sphere.center[1]),
-                        (float)(data_.sphere.center[2])
+                        (float)(pupilData.sphere.center[0]),
+                        (float)(pupilData.sphere.center[1]),
+                        (float)(pupilData.sphere.center[2])
                         )*0.001f;// in [m]
             q = Quaternion.LookRotation(new Vector3(
-            (float)(data_.circle_3d.normal[0]),
-            (float)(data_.circle_3d.normal[1]),
-            (float)(data_.circle_3d.normal[2])
+            (float)(pupilData.circle_3d.normal[0]),
+            (float)(pupilData.circle_3d.normal[1]),
+            (float)(pupilData.circle_3d.normal[2])
             ));
         }
     }
@@ -146,21 +167,28 @@ public class PupilListener : MonoBehaviour
                     try
                     {
                         string msgType = msg[0].ConvertToString();
+
                         var message = MsgPack.Unpacking.UnpackObject(msg[1].ToByteArray());
+
                         MsgPack.MessagePackObject mmap = message.Value;
                         if (msgType.Contains("pupil"))
                         {
                             // pupil detected
                             lock (thisLock_)
                             {
-                                data_ = JsonUtility.FromJson<Pupil.PupilData3D>(mmap.ToString());
-                                newData = true;                                     
+                                pupilData = JsonUtility.FromJson<Pupil.PupilData3D>(mmap.ToString());
                             }
                         }
-                        else if (msgType == "surfaces")
+                        if (msgType == "surfaces")
                         {
                             // surface detected
-                            Debug.Log("SURFACE DETECTED");
+                            lock (thisLock_)
+                            {
+                                surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
+                                //Debug.Log(message);
+                                //Debug.Log(surfaceData.gaze_on_srf[0].confidence);
+                                newData = true;
+                            }
                         }
                     }
                     catch
@@ -199,7 +227,23 @@ public class PupilListener : MonoBehaviour
             {
                 if (GazeController.Instance != null)
                 {
-                    GazeController.Instance.move(data_.norm_pos[0], data_.norm_pos[1]);
+                    if (surfaceData == null)
+                    {
+                        return;
+                    }
+                    foreach (Pupil.GazeOnSurface gos in surfaceData.gaze_on_srf)
+                    {   
+                        if (gos == null)
+                        {
+                            return;
+                        }
+                        if (gos.norm_pos == null)
+                        {
+                            return;
+                        }
+                        GazeController.Instance.move(surfaceData);
+                    }
+
                 }
                 newData = false;
             }

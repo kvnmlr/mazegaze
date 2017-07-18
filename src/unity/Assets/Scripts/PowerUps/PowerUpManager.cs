@@ -76,7 +76,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                         board[row][column] += diffToAverage;
                     }
                     
-                    board[row][column] += UnityEngine.Random.Range(0,10 * MazeGenerator.Instance.xSize * MazeGenerator.Instance.numPlayers) * 0.1f;
+                    board[row][column] += UnityEngine.Random.Range(0,10 * MazeGenerator.Instance.xSize) * 0.1f;
 
                     if (board[row][column] < bestCellValue)
                     {
