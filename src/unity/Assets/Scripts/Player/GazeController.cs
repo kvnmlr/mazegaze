@@ -7,9 +7,17 @@ public class GazeController : Singleton<GazeController> {
 
     private Rigidbody rb;
 
+    private Vector3 offset;
+    private Vector3 screenPoint;
+    float depth;
+    float radius = 10;
+
+    private float gazeX;
+    private float gazeY;
+
+
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
     }
 
     public void move(Pupil.SurfaceData3D data)
@@ -39,39 +47,49 @@ public class GazeController : Singleton<GazeController> {
             return;
         }
 
-        double gazeX = gaze.norm_pos[0];
-        double gazeY = gaze.norm_pos[1];
+        gazeX = (float)gaze.norm_pos[0];
+        gazeY = (float)gaze.norm_pos[1];
 
         Debug.Log("X: " + gazeX);
         Debug.Log("Y: " + gazeY);
+        move();
 
-        if (gazeX < 0.3f)
-        {
-            moveRight();
-        } else
-        {
-            moveLeft();
+    }
+
+    void move()
+    {
+        rb = GetComponent<Rigidbody>();
+
+        Debug.Log("Update");
+
+            depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
+            int size = MazeGenerator.Instance.xSize;
+
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * gazeX, Screen.height * gazeY, depth));
+
+            //CheckArea();
+
+            Debug.Log("Pos: " + mousePos);
+
+            Vector3 temp = transform.position;
+
+            if (System.Math.Abs(transform.position.x - mousePos.x) < radius && System.Math.Abs(transform.position.z - mousePos.z) < radius)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, mousePos, speed * Time.deltaTime);
+
+            }
+            else if (System.Math.Abs(transform.position.x - mousePos.x) >= radius && System.Math.Abs(transform.position.z - mousePos.z) >= radius)
+            {
+
+                rb.position = transform.position;
+
+            }
+            //TODO schaue nach cell von mitspielern
+            if (transform.position.y > 0.5)
+            {
+                transform.position = new Vector3(temp.x, 0.5f, temp.z);
+            }
+
         }
-    }
-
-    private void moveRight()
-    {
-        transform.position += Vector3.right * speed * Time.deltaTime;
-    }
-
-    private void moveLeft()
-    {
-        transform.position += Vector3.left * speed * Time.deltaTime;
-    }
-
-    private void moveUp()
-    {
-        transform.position += Vector3.forward * speed * Time.deltaTime;
-    }
-
-    private void moveDown()
-    {
-        transform.position += Vector3.back * speed * Time.deltaTime;
-    }
 
 }
