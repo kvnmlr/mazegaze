@@ -13,7 +13,7 @@ public class CellLight : MonoBehaviour {
 
     private float timePassed;
     public float currentIntensity { get; set; }
-    private float breakIntensity;
+    private bool breakIntensity = false;
 
     public void setPlayer(Player player)
     {
@@ -72,16 +72,15 @@ public class CellLight : MonoBehaviour {
             {
                 currentIntensity = 0;
             }
-            if(breakIntensity > 0)
+            if (breakIntensity)
             {
-                gameObject.GetComponent<Light>().intensity = breakIntensity;
-                breakIntensity = 0.0f;
+                gameObject.GetComponent<Light>().intensity = 0.002f;
+                breakIntensity = false;
             }
             else
             {
                 gameObject.GetComponent<Light>().intensity = currentIntensity;
             }
-            
         }                
     }
 
@@ -91,11 +90,11 @@ public class CellLight : MonoBehaviour {
         
         if (!p.name.Equals(player.name))
         {
-            breakIntensity = 0.02f;
+            breakIntensity = true;
         }
         else
         {
-            breakIntensity = 0.0f;
+            breakIntensity = false;
         }
        
     }
