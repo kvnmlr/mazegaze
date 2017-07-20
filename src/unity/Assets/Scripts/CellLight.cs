@@ -76,6 +76,7 @@ public class CellLight : MonoBehaviour {
             {
                 gameObject.GetComponent<Light>().intensity = 0.002f;
                 breakIntensity = false;
+                yield return new WaitForSeconds(1); // loeschen wenn man moechte dass das licht direkt wieder angeht
             }
             else
             {
