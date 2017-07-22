@@ -78,12 +78,21 @@ public class GameController : Singleton<GameController>
 
 
             mazeGenerator.BuildMaze();
+            //PathFinding.Instance.AStar(mazeGenerator.cells[0].GetComponent<Cell>(), mazeGenerator.cells[0].GetComponent<Cell>());
+
+
 
             // adjust camera height
             Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
             // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target);
+
+            Debug.Log("Path to target");
+            foreach (PathFinding.AStarNode asn in PathFinding.Instance.AStar(mazeGenerator.cells[0].GetComponent<Cell>(), powerUpManager.target.cell))
+            {
+                Debug.Log("Go to (" + asn.c.posX + ", " + asn.c.posY + ")");
+            }
 
         }
         else

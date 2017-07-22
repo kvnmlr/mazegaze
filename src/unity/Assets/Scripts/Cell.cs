@@ -15,6 +15,8 @@ public class Cell : MonoBehaviour {
     // determines whether this cell has a light source (to optimize performance)
     public bool hasLight;
 
+    public MazeGenerator.CellProperties properties;
+
     public int posX;
     public int posY;
 	

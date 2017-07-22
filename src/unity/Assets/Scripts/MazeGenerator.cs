@@ -9,8 +9,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     {
         public bool visited;
         public GameObject north;//1
-        public GameObject east;//2
-        public GameObject west;//3
+        public GameObject west;//2
+        public GameObject east;//3
         public GameObject south;//4
 
     }
@@ -390,21 +390,23 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             }
 
             cellProperties[i] = new CellProperties();
-            cellProperties[i].east = allWalls[eastWestProcess];
+            c.GetComponent<Cell>().properties = cellProperties[i];
+
+            cellProperties[i].west = allWalls[eastWestProcess];
             cellProperties[i].south = allWalls[childprocess + (xSize + 1) * ySize];
 
             eastWestProcess++;
             termCount++;
 
             childprocess++;
-            cellProperties[i].west = allWalls[eastWestProcess];
+            cellProperties[i].east = allWalls[eastWestProcess];
             cellProperties[i].north = allWalls[(childprocess + (xSize + 1) * ySize) + xSize - 1];
 
             c.transform.position = cellProperties[i].north.transform.position - new Vector3(0, 0, wallLength / 2);
 
-            cellProperties[i].east.transform.parent = c.transform;
-            cellProperties[i].south.transform.parent = c.transform;
             cellProperties[i].west.transform.parent = c.transform;
+            cellProperties[i].south.transform.parent = c.transform;
+            cellProperties[i].east.transform.parent = c.transform;
             cellProperties[i].north.transform.parent = c.transform;
 
         }
@@ -449,8 +451,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         switch (wallToBreak)
         {
             case 1: cellProperties[currentCell].north.SetActive(false); break;
-            case 2: cellProperties[currentCell].east.SetActive(false); break;
-            case 3: cellProperties[currentCell].west.SetActive(false); break;
+            case 2: cellProperties[currentCell].west.SetActive(false); break;
+            case 3: cellProperties[currentCell].east.SetActive(false); break;
             case 4: cellProperties[currentCell].south.SetActive(false); break;
         }
     }
@@ -533,8 +535,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         for (int i = 0; i < oldXSize * oldYSize; i++)
         {
             cellProperties[i].north.SetActive(true);
-            cellProperties[i].east.SetActive(true); 
             cellProperties[i].west.SetActive(true); 
+            cellProperties[i].east.SetActive(true); 
             cellProperties[i].south.SetActive(true);
             cellProperties[i].visited = false;
             startedBuilding = false;
