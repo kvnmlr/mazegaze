@@ -36,7 +36,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 
             float[][] board = new float[ySize][];
             int index = 0;
-            float bestCellValue = int.MaxValue;
+            float bestCellValue = 0;
             int bestCellY = 0, bestCellX = 0;
 
             for (int row = 0; row < ySize; ++row)
@@ -53,14 +53,17 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                         int diffY = Math.Abs(row - y);
                         int diffX = Math.Abs(column - x);
                         board[row][column] += (diffY + diffX);
+                        List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(p.cell, MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>());
+                        board[row][column] += (path == null) ? int.MaxValue : path.Count;
                     }
 
                     // average distance to each cell
-                    float average = board[row][column] / (1.0f * MazeGenerator.Instance.numPlayers);
-                    board[row][column] *= -0.01f / MazeGenerator.Instance.xSize;
+                    //float average = board[row][column] / (1.0f * MazeGenerator.Instance.numPlayers);
+
+                    //board[row][column] *= -0.01f / MazeGenerator.Instance.xSize;
 
                     // sum up difference to average
-                    for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
+                    /*(for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
                     {
                         Player p = GameController.Instance.players[i];
                         int y = p.cell.posY;
@@ -74,17 +77,37 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                         float diffToAverage = Math.Abs(average - diffTotal);
 
                         board[row][column] += diffToAverage;
-                    }
-                    
+                    }*/
+
                     board[row][column] += UnityEngine.Random.Range(0,10 * MazeGenerator.Instance.xSize) * 0.1f;
 
-                    if (board[row][column] < bestCellValue)
+                    bool possible = true;
+                    if (board[row][column] > bestCellValue)
                     {
-                        bestCellValue = board[row][column];
-                        bestCellY = row;
-                        bestCellX = column;
+                        for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
+                        {
+                            Player p = GameController.Instance.players[i];
+                            List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(p.cell, MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>());
+                            if (path.Count < MazeGenerator.Instance.xSize + 1)
+                            {
+                                // do not use this cell if a user only has to go size * 2 cells to reach it
+                                possible = false;
+                            }
+                        }
+                        if (possible)
+                        {
+                            bestCellValue = board[row][column];
+                            bestCellY = row;
+                            bestCellX = column;
+                        }
+
                     }
                 }
+            }
+            if (bestCellValue == 0)
+            {
+                // did not find a suitable cell, do again
+                return spawnPowerUp(PowerUpTypes.Target);
             }
             return spawnPowerUp(PowerUpTypes.Target,  MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
 
