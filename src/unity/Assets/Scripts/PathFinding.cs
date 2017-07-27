@@ -68,9 +68,13 @@ public class PathFinding : Singleton<PathFinding> {
                 if (open.Contains(n))
                 {
                     AStarNode n1 = open.Find(x => x.c.Equals(n.c));
-                    if (n1.fCost > n.fCost)
+                    if (n1.fCost > n.fCost ||
+                        (n1.fCost == n.fCost && n1.hCost > n.hCost) ||
+                        (n1.fCost == n.fCost && n1.hCost == n.hCost && n1.gCost > n.gCost))
                     {
                         n1.fCost = n.fCost;
+                        n1.gCost = n.gCost;
+                        n1.hCost = n.hCost;
                         n1.parent = n.parent;
                         n1.c = n.c;
                     }
