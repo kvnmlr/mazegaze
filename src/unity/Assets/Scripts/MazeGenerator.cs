@@ -74,6 +74,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     public void BuildMaze()
     {
+        DestroyMaze();
         if (!GameController.Instance.getRestart())
         {
             Maze = new GameObject("Maze");

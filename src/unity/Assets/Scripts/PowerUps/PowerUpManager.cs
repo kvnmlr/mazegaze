@@ -88,7 +88,12 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                         {
                             Player p = GameController.Instance.players[i];
                             List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(p.cell, MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>());
-                            if (path.Count < MazeGenerator.Instance.xSize + 1)
+                            if (path == null)
+                            {
+                                possible = false;
+                                break;
+                            }
+                            if (path.Count < MazeGenerator.Instance.xSize * 2)
                             {
                                 // do not use this cell if a user only has to go size * 2 cells to reach it
                                 possible = false;
@@ -107,7 +112,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
             if (bestCellValue == 0)
             {
                 // did not find a suitable cell, do again
-                return spawnPowerUp(PowerUpTypes.Target);
+                return null;
             }
             return spawnPowerUp(PowerUpTypes.Target,  MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
 

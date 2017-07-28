@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GazeController : Singleton<GazeController> {
+public class GazeController : MonoBehaviour {
     public float speed;
 
     private Rigidbody rb;
@@ -18,6 +18,11 @@ public class GazeController : Singleton<GazeController> {
 
     void Start()
     {
+    }
+
+    public void listenerReady()
+    {
+        Debug.Log("Listener for gaze controller " + gameObject.name + " is ready");
     }
 
     public void move(Pupil.SurfaceData3D data)

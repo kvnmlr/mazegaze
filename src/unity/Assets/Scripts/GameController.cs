@@ -21,6 +21,8 @@ public class GameController : Singleton<GameController>
     private int playedGames = 0;
     private int numGames;
 
+    private int mazeBuildAttempts = 0;
+
     public void setRestart(bool b)
     {
         restart = b;
@@ -71,47 +73,47 @@ public class GameController : Singleton<GameController>
 
     public void startNewRound()
     {
-
+        mazeBuildAttempts++;
         if (playedGames == 0)
         {
             mazeGenerator.target = powerUpManager.target.gameObject;
-
-
             mazeGenerator.BuildMaze();
-            //PathFinding.Instance.AStar(mazeGenerator.cells[0].GetComponent<Cell>(), mazeGenerator.cells[0].GetComponent<Cell>());
-
-
 
             // adjust camera height
             Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
-            // spawnen nun beide Zufaellig Target im Mittlernen Quardant und Enlightenment absolut zufaellig
-            powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target);
+            if (powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target) == null)
+            {
+                startNewRound();
+                return;
+            }
+            Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
+            mazeBuildAttempts = 0;
 
-            Debug.Log("Path to target");
+            /*Debug.Log("Path to target");
             foreach (PathFinding.AStarNode asn in PathFinding.Instance.AStar(mazeGenerator.cells[0].GetComponent<Cell>(), powerUpManager.target.cell))
             {
                 Debug.Log("Go to (" + asn.c.posX + ", " + asn.c.posY + ")");
-            }
-
+            }*/
         }
         else
         {
-            
-
             //mazeGenerator.BuildMaze();
             //Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
-            powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target);
+            if (powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target) == null)
+            {
+                startNewRound();
+                return;
+            }
+            Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
+            mazeBuildAttempts = 0;
+
             powerUpManager.setSpawnedPowerUps(0);
             //TODO: eventuell spawnedPowerUps nicht wieder auf 0 setzen was denken die andern, ich finds eig geil so
-
             
         }
         playedGames++;
-
-
-
     }
 
     

@@ -85,9 +85,11 @@ public class PupilListener : MonoBehaviour
     public string IP = "127.0.0.1";
     public string PORT = "64509";
     public string ID = "surface";
+    public GazeController gazeController;
     public bool detectPupils = true;
     public bool detectSurfaces = true;
     private bool newData = false;
+    private String name;
 
     Pupil.PupilData3D pupilData = new  Pupil.PupilData3D();
     Pupil.SurfaceData3D surfaceData = new Pupil.SurfaceData3D();
@@ -111,8 +113,14 @@ public class PupilListener : MonoBehaviour
 
     void Start()
     {
-        client_thread_ = new Thread(NetMQClient);
-        client_thread_.Start();
+        if (gazeController != null)
+        {
+            client_thread_ = new Thread(NetMQClient);
+            client_thread_.Start();
+            gazeController.listenerReady();
+            this.name = gazeController.gameObject.name;
+        }
+
     }
 
     void NetMQClient()
@@ -125,7 +133,7 @@ public class PupilListener : MonoBehaviour
         NetMQConfig.ContextCreate(true);
         
         string subport="";
-        Debug.Log("Connect to the server: "+ IPHeader + PORT + ".");
+        Debug.Log(name + ": Connect to the server: "+ IPHeader + PORT + ".");
         var requestSocket = new RequestSocket(IPHeader + PORT);
 
         double t = 0;
@@ -193,12 +201,12 @@ public class PupilListener : MonoBehaviour
                     }
                     catch
                     {
-                        Debug.Log("Failed to unpack.");
+                        Debug.Log(name + ": Failed to unpack.");
                     }
                 }
                 else
                 {
-                    Debug.Log("Failed to receive a message.");
+                    Debug.Log(name + ": Failed to receive a message.");
                     Thread.Sleep(1000);
                 }
             }
@@ -206,9 +214,9 @@ public class PupilListener : MonoBehaviour
         }
         else
         {
-            Debug.Log("Failed to connect the server.");
+            Debug.Log(name + ": Failed to connect the server.");
         }
-        Debug.Log("ContextTerminate.");
+        Debug.Log(name + ": ContextTerminate.");
         NetMQConfig.ContextTerminate();
     }
 
@@ -216,7 +224,7 @@ public class PupilListener : MonoBehaviour
     {
         lock (thisLock_)stop_thread_ = true;
         client_thread_.Join();
-        Debug.Log("Quit the thread.");
+        Debug.Log(name + ": Quit the thread.");
     }
 
     void Update()
@@ -225,7 +233,7 @@ public class PupilListener : MonoBehaviour
         {
             if (newData)
             {
-                if (GazeController.Instance != null)
+                if (gazeController != null)
                 {
                     if (surfaceData == null)
                     {
@@ -241,7 +249,7 @@ public class PupilListener : MonoBehaviour
                         {
                             return;
                         }
-                        GazeController.Instance.move(surfaceData);
+                        gazeController.move(surfaceData);
                     }
 
                 }
