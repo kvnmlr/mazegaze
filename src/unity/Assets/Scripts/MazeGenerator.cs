@@ -553,11 +553,14 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         
         DestroyObject(Cells);
         DestroyObject(tempFloor);
+        DestroyImmediate(Maze);
+        DestroyImmediate(WallHolder);
 
         startedBuilding = false;
         visitedCells = 0;
         backingUp = 0;
         wallToBreak = 0;
+        
     }
 
     // Update is called once per frame

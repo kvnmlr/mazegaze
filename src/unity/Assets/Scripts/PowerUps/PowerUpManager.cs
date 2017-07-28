@@ -23,7 +23,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
     // elapsed time since last powerup spawned
     private float elapsedTime = 0.0f;
 
-    public PowerUp spawnPowerUp(PowerUpTypes type)
+    public PowerUp spawnPowerUp(PowerUpTypes type, bool forceSpawn = false, float spawnDifficulty = 2)
     {
         
         int cell = 0;
@@ -93,7 +93,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                                 possible = false;
                                 break;
                             }
-                            if (path.Count < MazeGenerator.Instance.xSize * 2)
+                            if (path.Count < MazeGenerator.Instance.xSize * spawnDifficulty)
                             {
                                 // do not use this cell if a user only has to go size * 2 cells to reach it
                                 possible = false;
@@ -112,7 +112,14 @@ public class PowerUpManager : Singleton<PowerUpManager> {
             if (bestCellValue == 0)
             {
                 // did not find a suitable cell, do again
-                return null;
+                if (forceSpawn)
+                {
+                    return spawnPowerUp(PowerUpTypes.Target, forceSpawn, spawnDifficulty / 2.0f );
+                }
+                else
+                {
+                    return null;
+                }
             }
             return spawnPowerUp(PowerUpTypes.Target,  MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
 

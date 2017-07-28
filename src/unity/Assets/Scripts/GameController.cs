@@ -101,13 +101,7 @@ public class GameController : Singleton<GameController>
             //mazeGenerator.BuildMaze();
             //Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
 
-            if (powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target) == null)
-            {
-                startNewRound();
-                return;
-            }
-            Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
-            mazeBuildAttempts = 0;
+            powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
 
             powerUpManager.setSpawnedPowerUps(0);
             //TODO: eventuell spawnedPowerUps nicht wieder auf 0 setzen was denken die andern, ich finds eig geil so
