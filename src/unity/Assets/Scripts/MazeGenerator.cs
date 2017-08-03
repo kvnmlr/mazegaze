@@ -554,7 +554,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         DestroyObject(Cells);
         DestroyObject(tempFloor);
         DestroyImmediate(Maze);
-        DestroyImmediate(WallHolder);
+        //DestroyImmediate(WallHolder);
 
         startedBuilding = false;
         visitedCells = 0;

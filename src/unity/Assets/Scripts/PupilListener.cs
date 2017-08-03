@@ -133,7 +133,7 @@ public class PupilListener : MonoBehaviour
         NetMQConfig.ContextCreate(true);
         
         string subport="";
-        Debug.Log(name + ": Connect to the server: "+ IPHeader + PORT + ".");
+        Debug.Log(name + ": Connecting to the server: "+ IPHeader + PORT + ".");
         var requestSocket = new RequestSocket(IPHeader + PORT);
 
         double t = 0;
@@ -222,8 +222,8 @@ public class PupilListener : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        lock (thisLock_)stop_thread_ = true;
-        client_thread_.Join();
+        //lock (thisLock_)stop_thread_ = true;
+        //client_thread_.Join();
         Debug.Log(name + ": Quit the thread.");
     }
 
