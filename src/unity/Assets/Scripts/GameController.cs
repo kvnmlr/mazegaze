@@ -10,8 +10,6 @@ public class GameController : Singleton<GameController>
     private MazeGenerator mazeGenerator;
     private PowerUpManager powerUpManager;
     private Menu menu;
-    //public GameObject target;
-    //public GameObject targetLight;
 
     private bool gameover;
     private bool restart;
@@ -89,23 +87,11 @@ public class GameController : Singleton<GameController>
             }
             Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
             mazeBuildAttempts = 0;
-
-            /*Debug.Log("Path to target");
-            foreach (PathFinding.AStarNode asn in PathFinding.Instance.AStar(mazeGenerator.cells[0].GetComponent<Cell>(), powerUpManager.target.cell))
-            {
-                Debug.Log("Go to (" + asn.c.posX + ", " + asn.c.posY + ")");
-            }*/
         }
         else
         {
-            //mazeGenerator.BuildMaze();
-            //Camera.main.transform.position = new Vector3(0, MazeGenerator.Instance.xSize * 4, 0);
-
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
-
-            powerUpManager.setSpawnedPowerUps(0);
-            //TODO: eventuell spawnedPowerUps nicht wieder auf 0 setzen was denken die andern, ich finds eig geil so
-            
+            powerUpManager.setSpawnedPowerUps(0);            
         }
         playedGames++;
     }
@@ -159,23 +145,17 @@ public class GameController : Singleton<GameController>
 
         if (players.Length > 0)
         {
-            //mazeGenerator.targetLight = targetLight;
-            //mazeGenerator.target = target;
             mazeGenerator.playerA = players[0].gameObject;
             mazeGenerator.numPlayers = 1;
         }
         if (players.Length > 1)
         {
-            //mazeGenerator.targetLight = targetLight;
-            //mazeGenerator.target = target;
             mazeGenerator.playerB = players[1].gameObject;
             mazeGenerator.numPlayers = 2;
             Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[1].gameObject.GetComponent<Collider>());
         }
         if (players.Length > 2)
         {
-            //mazeGenerator.targetLight = targetLight;
-            //mazeGenerator.target = target;
             mazeGenerator.playerC = players[2].gameObject;
             mazeGenerator.numPlayers = 3;
             Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[2].gameObject.GetComponent<Collider>());
@@ -184,8 +164,6 @@ public class GameController : Singleton<GameController>
         }
         if (players.Length > 3)
         {
-            //mazeGenerator.targetLight = targetLight;
-            //mazeGenerator.target = target;
             mazeGenerator.playerD = players[3].gameObject;
             mazeGenerator.numPlayers = 4;
             Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[3].gameObject.GetComponent<Collider>());

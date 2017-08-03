@@ -80,6 +80,9 @@ public class PupilListener : MonoBehaviour
 {
 
     Thread client_thread_;
+    Thread client_thread1_;
+    Thread client_thread2_;
+
     private System.Object thisLock_ = new System.Object();
     bool stop_thread_ = false;
     public string IP = "127.0.0.1";
@@ -90,6 +93,7 @@ public class PupilListener : MonoBehaviour
     public bool detectSurfaces = true;
     private bool newData = false;
     private String name;
+    public bool is_connected {get;set;}
 
     Pupil.PupilData3D pupilData = new  Pupil.PupilData3D();
     Pupil.SurfaceData3D surfaceData = new Pupil.SurfaceData3D();
@@ -111,16 +115,19 @@ public class PupilListener : MonoBehaviour
         }
     }
 
-    void Start()
+    public void Listen()
     {
-        if (gazeController != null)
-        {
-            client_thread_ = new Thread(NetMQClient);
-            client_thread_.Start();
-            gazeController.listenerReady();
-            this.name = gazeController.gameObject.name;
-        }
+        this.name = gazeController.gameObject.name;
+        is_connected = false;
+        client_thread_ = new Thread(NetMQClient);
+        client_thread1_ = new Thread(NetMQClient);
+        client_thread2_ = new Thread(NetMQClient);
 
+        client_thread_.Start();
+        client_thread1_.Start();
+        client_thread2_.Start();
+
+        gazeController.listenerReady();
     }
 
     void NetMQClient()
@@ -138,7 +145,6 @@ public class PupilListener : MonoBehaviour
 
         double t = 0;
         const int N = 1000;
-        bool is_connected =false;
         for (int k = 0; k < N; k++)
         {
             var sw = new System.Diagnostics.Stopwatch();
@@ -169,6 +175,7 @@ public class PupilListener : MonoBehaviour
             var msg = new NetMQMessage();
             while (is_connected && stop_thread_ == false)
             {
+                Debug.Log(name);
                 is_connected = subscriberSocket.TryReceiveMultipartMessage(timeout,ref(msg));
                 if (is_connected)
                 {
@@ -192,6 +199,8 @@ public class PupilListener : MonoBehaviour
                             // surface detected
                             lock (thisLock_)
                             {
+                                Debug.Log(mmap.ToString());
+
                                 surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
                                 //Debug.Log(message);
                                 //Debug.Log(surfaceData.gaze_on_srf[0].confidence);
@@ -207,7 +216,7 @@ public class PupilListener : MonoBehaviour
                 else
                 {
                     Debug.Log(name + ": Failed to receive a message.");
-                    Thread.Sleep(1000);
+                    Thread.CurrentThread.Abort();
                 }
             }
             subscriberSocket.Close();
@@ -220,18 +229,17 @@ public class PupilListener : MonoBehaviour
         NetMQConfig.ContextTerminate();
     }
 
-    void OnApplicationQuit()
+    public void StopListen()
     {
-        //lock (thisLock_)stop_thread_ = true;
-        //client_thread_.Join();
+        lock (thisLock_)stop_thread_ = true;
+        this.client_thread_.Join();
         Debug.Log(name + ": Quit the thread.");
+        //DestroyImmediate(gameObject);
     }
 
     void Update()
     {
-        lock (thisLock_)
-        {
-            if (newData)
+            if (newData && is_connected)
             {
                 if (gazeController != null)
                 {
@@ -255,6 +263,5 @@ public class PupilListener : MonoBehaviour
                 }
                 newData = false;
             }
-        }
     }
 }

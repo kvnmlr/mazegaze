@@ -1,0 +1,17 @@
+{
+	"setup_id" : "Testeinstellungen",
+	"pupil_clients" : [
+		{
+			"name" : "Acer",
+			"ip" : "192.168.1.7",
+			"port" : 50020,
+			"detect_surface" : true
+		},
+		{
+			"name" : "Lenovo",
+			"ip" : "192.168.1.3",
+			"port" : 50020,
+			"detect_surface" : true
+		}
+	]
+}
