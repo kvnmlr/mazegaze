@@ -11,29 +11,29 @@ namespace Pupil
     [Serializable]
     public class ProjectedSphere
     {
-        public double[] axes = new double[] {0,0};
+        public double[] axes = new double[] { 0, 0 };
         public double angle;
-        public double[] center = new double[] {0,0};
+        public double[] center = new double[] { 0, 0 };
     }
     [Serializable]
     public class Sphere
     {
         public double radius;
-        public double[] center = new double[] {0,0,0};
+        public double[] center = new double[] { 0, 0, 0 };
     }
     [Serializable]
     public class Circle3d
     {
         public double radius;
-        public double[] center = new double[] {0,0,0};
-        public double[] normal = new double[] {0,0,0};
+        public double[] center = new double[] { 0, 0, 0 };
+        public double[] normal = new double[] { 0, 0, 0 };
     }
     [Serializable]
     public class Ellipse
     {
-        public double[] axes = new double[] {0,0};
+        public double[] axes = new double[] { 0, 0 };
         public double angle;
-        public double[] center = new double[] {0,0};
+        public double[] center = new double[] { 0, 0 };
     }
     [Serializable]
     public class PupilData3D
@@ -80,33 +80,35 @@ public class PupilListener : MonoBehaviour
 {
 
     Thread client_thread_;
-    Thread client_thread1_;
-    Thread client_thread2_;
 
     private System.Object thisLock_ = new System.Object();
     bool stop_thread_ = false;
-    public string IP = "127.0.0.1";
-    public string PORT = "64509";
-    public string ID = "surface";
+
+    public List<SettingsManager.PupilClient> clients = new List<SettingsManager.PupilClient>();
+    public List<bool> connected = new List<bool>();
+    private List<RequestSocket> requestSockets = new List<RequestSocket>();
+    private List<String> IPHeaders = new List<string>();
+    private List<SubscriberSocket> subscriberSockets = new List<SubscriberSocket>();
+
     public GazeController gazeController;
     public bool detectPupils = true;
     public bool detectSurfaces = true;
     private bool newData = false;
-    private String name;
-    public bool is_connected {get;set;}
+    private bool isConnected = true;
 
-    Pupil.PupilData3D pupilData = new  Pupil.PupilData3D();
+
+    Pupil.PupilData3D pupilData = new Pupil.PupilData3D();
     Pupil.SurfaceData3D surfaceData = new Pupil.SurfaceData3D();
 
     public void get_transform(ref Vector3 pos, ref Quaternion q)
     {
         lock (thisLock_)
-        {   
+        {
             pos = new Vector3(
                         (float)(pupilData.sphere.center[0]),
                         (float)(pupilData.sphere.center[1]),
                         (float)(pupilData.sphere.center[2])
-                        )*0.001f;// in [m]
+                        ) * 0.001f;// in [m]
             q = Quaternion.LookRotation(new Vector3(
             (float)(pupilData.circle_3d.normal[0]),
             (float)(pupilData.circle_3d.normal[1]),
@@ -117,67 +119,86 @@ public class PupilListener : MonoBehaviour
 
     public void Listen()
     {
-        this.name = gazeController.gameObject.name;
-        is_connected = false;
+        Debug.Log("PupilListener");
+        //this.name = gazeController.gameObject.name;
+
         client_thread_ = new Thread(NetMQClient);
-        client_thread1_ = new Thread(NetMQClient);
-        client_thread2_ = new Thread(NetMQClient);
 
         client_thread_.Start();
-        client_thread1_.Start();
-        client_thread2_.Start();
 
-        gazeController.listenerReady();
+        //gazeController.listenerReady();
     }
+
 
     void NetMQClient()
     {
-        string IPHeader = ">tcp://" + IP + ":";
         var timeout = new System.TimeSpan(0, 0, 1);
-
         AsyncIO.ForceDotNet.Force();
         NetMQConfig.ManualTerminationTakeOver();
         NetMQConfig.ContextCreate(true);
-        
-        string subport="";
-        Debug.Log(name + ": Connecting to the server: "+ IPHeader + PORT + ".");
-        var requestSocket = new RequestSocket(IPHeader + PORT);
+        string subport;
+        List<string> subports = new List<string>();
 
-        double t = 0;
-        const int N = 1000;
-        for (int k = 0; k < N; k++)
+        int index = 0;
+        foreach (SettingsManager.PupilClient c in clients)
         {
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            requestSocket.SendFrame("SUB_PORT");
-            is_connected = requestSocket.TryReceiveFrameString(timeout, out subport);
-            sw.Stop();
-            t = t+ sw.Elapsed.Milliseconds;
-            if (is_connected == false) break;
-        }
-        requestSocket.Close();
+            string IPHeader = ">tcp://" + c.ip + ":";
+            RequestSocket requestSocket = new RequestSocket(IPHeader + c.port);
+            Debug.Log("Requesting socket for " + IPHeader + ":" + c.port + " (" + c.name + ")");
 
-        if (is_connected)
-        {
-            var subscriberSocket = new SubscriberSocket( IPHeader + subport);
-            if (detectSurfaces)
+            IPHeaders.Add(IPHeader);
+            connected.Add(new bool());
+
+            double t = 0;
+            const int N = 5;
+            for (int k = 0; k < N; k++)
             {
-                subscriberSocket.Subscribe("surface");
+                var sw = new System.Diagnostics.Stopwatch();
+                sw.Start();
+                requestSocket.SendFrame("SUB_PORT");
+                timeout = new System.TimeSpan(0, 0, 1);
+                bool frameReceived = requestSocket.TryReceiveFrameString(timeout, out subport);
+                sw.Stop();
+                t = t + sw.Elapsed.Milliseconds;
+
+                if (!frameReceived)
+                {
+                    Debug.Log("Could not connect to client " + IPHeaders[index] + ":" + clients[index].port + " (" + clients[index].name + ")");
+                    IPHeaders.Remove(IPHeader);
+                    break;
+                }
+                subports.Add(subport);
             }
-            if (detectPupils)
+            requestSocket.Close();
+            index++;
+        }
+
+        isConnected = IPHeaders.Count > 0;
+
+        if (isConnected)
+        {
+            Debug.Log("Connected to " + IPHeaders.Count + " sockets");
+            foreach (String header in IPHeaders)
             {
+                SubscriberSocket subscriberSocket = new SubscriberSocket(header + subports[IPHeaders.IndexOf(header)]);
+                if (clients[IPHeaders.IndexOf(header)].detect_surface)
+                {
+                    subscriberSocket.Subscribe("surface");
+                }
                 subscriberSocket.Subscribe("pupil.");
-            } else
-            {
-                subscriberSocket.Unsubscribe("pupil.");
+                subscriberSockets.Add(subscriberSocket);
             }
 
             var msg = new NetMQMessage();
-            while (is_connected && stop_thread_ == false)
+            int turn = 0;
+            while (isConnected && stop_thread_ == false)
             {
-                Debug.Log(name);
-                is_connected = subscriberSocket.TryReceiveMultipartMessage(timeout,ref(msg));
-                if (is_connected)
+                turn = ++turn % IPHeaders.Count;
+                timeout = new System.TimeSpan(0, 0, 0, 0, 200);
+
+                bool stillAlive = subscriberSockets[turn].TryReceiveMultipartMessage(timeout, ref (msg));
+
+                if (stillAlive && isConnected)
                 {
                     try
                     {
@@ -186,6 +207,7 @@ public class PupilListener : MonoBehaviour
                         var message = MsgPack.Unpacking.UnpackObject(msg[1].ToByteArray());
 
                         MsgPack.MessagePackObject mmap = message.Value;
+                        Debug.Log(mmap.ToString());
                         if (msgType.Contains("pupil"))
                         {
                             // pupil detected
@@ -194,6 +216,7 @@ public class PupilListener : MonoBehaviour
                                 pupilData = JsonUtility.FromJson<Pupil.PupilData3D>(mmap.ToString());
                             }
                         }
+
                         if (msgType == "surfaces")
                         {
                             // surface detected
@@ -210,58 +233,68 @@ public class PupilListener : MonoBehaviour
                     }
                     catch
                     {
-                        Debug.Log(name + ": Failed to unpack.");
+                        Debug.Log(clients[turn].name + ": Failed to unpack.");
                     }
                 }
                 else
                 {
-                    Debug.Log(name + ": Failed to receive a message.");
-                    Thread.CurrentThread.Abort();
+                    Debug.Log(clients[turn].name + ": Failed to receive a message.");
                 }
             }
-            subscriberSocket.Close();
+            foreach (SubscriberSocket s in subscriberSockets)
+            {
+                s.Close();
+            }
+            subscriberSockets.Clear();
         }
         else
         {
-            Debug.Log(name + ": Failed to connect the server.");
+            Debug.Log("Failed to connect to all clients.");
         }
-        Debug.Log(name + ": ContextTerminate.");
+        Debug.Log("ContextTerminate.");
         NetMQConfig.ContextTerminate();
     }
 
-    public void StopListen()
+    void OnApplicationQuit()
     {
-        lock (thisLock_)stop_thread_ = true;
-        this.client_thread_.Join();
-        Debug.Log(name + ": Quit the thread.");
-        //DestroyImmediate(gameObject);
+        //lock (thisLock_)stop_thread_ = true;
+        foreach (SubscriberSocket s in subscriberSockets)
+        {
+            s.Close();
+        }
+        foreach (RequestSocket rs in requestSockets)
+        {
+            rs.Close();
+        }
+        Debug.Log("ContextTerminate.");
+        NetMQConfig.ContextTerminate();
     }
 
     void Update()
     {
-            if (newData && is_connected)
+        if (newData && isConnected)
+        {
+            if (gazeController != null)
             {
-                if (gazeController != null)
+                if (surfaceData == null)
                 {
-                    if (surfaceData == null)
+                    return;
+                }
+                foreach (Pupil.GazeOnSurface gos in surfaceData.gaze_on_srf)
+                {
+                    if (gos == null)
                     {
                         return;
                     }
-                    foreach (Pupil.GazeOnSurface gos in surfaceData.gaze_on_srf)
-                    {   
-                        if (gos == null)
-                        {
-                            return;
-                        }
-                        if (gos.norm_pos == null)
-                        {
-                            return;
-                        }
-                        gazeController.move(surfaceData);
+                    if (gos.norm_pos == null)
+                    {
+                        return;
                     }
-
+                    gazeController.move(surfaceData);
                 }
-                newData = false;
+
             }
+            newData = false;
+        }
     }
 }
