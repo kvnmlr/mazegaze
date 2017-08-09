@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using System;
 using System.Threading;
-using NetMQ; // for NetMQConfig
+using NetMQ;
 using NetMQ.Sockets;
 using System.Collections.Generic;
 
 namespace Pupil
 {
-    // Pupil data typea
     [Serializable]
     public class ProjectedSphere
     {
@@ -63,7 +62,6 @@ namespace Pupil
         public double confidence;
         public double[] norm_pos = new double[] { 0, 0, 0 };
     }
-
     [Serializable]
     public class SurfaceData3D
     {
@@ -71,21 +69,16 @@ namespace Pupil
         public double uid;
         public String name;
         public List<GazeOnSurface> gaze_on_srf = new List<GazeOnSurface>();
-        // TODO m_from_screen
-        // TODO m_to_screen
     }
 }
 
 public class PupilListener : MonoBehaviour
 {
-
     Thread client_thread_;
-
     private System.Object thisLock_ = new System.Object();
     bool stop_thread_ = false;
 
     public List<SettingsManager.PupilClient> clients = new List<SettingsManager.PupilClient>();
-    public List<bool> connected = new List<bool>();
     private List<RequestSocket> requestSockets = new List<RequestSocket>();
     private List<String> IPHeaders = new List<string>();
     private List<SubscriberSocket> subscriberSockets = new List<SubscriberSocket>();
@@ -119,14 +112,8 @@ public class PupilListener : MonoBehaviour
 
     public void Listen()
     {
-        Debug.Log("PupilListener");
-        //this.name = gazeController.gameObject.name;
-
         client_thread_ = new Thread(NetMQClient);
-
         client_thread_.Start();
-
-        //gazeController.listenerReady();
     }
 
 
@@ -136,45 +123,36 @@ public class PupilListener : MonoBehaviour
         AsyncIO.ForceDotNet.Force();
         NetMQConfig.ManualTerminationTakeOver();
         NetMQConfig.ContextCreate(true);
-        string subport;
-        List<string> subports = new List<string>();
 
-        int index = 0;
+        List<string> subports = new List<string>();     // subports for each client connection
+
+        // loop through all clients and try to connect to them
         foreach (SettingsManager.PupilClient c in clients)
         {
+            string subport = "";
             string IPHeader = ">tcp://" + c.ip + ":";
-            RequestSocket requestSocket = new RequestSocket(IPHeader + c.port);
-            Debug.Log("Requesting socket for " + IPHeader + ":" + c.port + " (" + c.name + ")");
-
             IPHeaders.Add(IPHeader);
-            connected.Add(new bool());
 
-            double t = 0;
-            const int N = 5;
-            for (int k = 0; k < N; k++)
+            Debug.Log("Requesting socket for " + IPHeader + ":" + c.port + " (" + c.name + ")");
+            RequestSocket requestSocket = new RequestSocket(IPHeader + c.port);
+
+            bool frameReceived = false;
+            requestSocket.SendFrame("SUB_PORT");
+            timeout = new System.TimeSpan(0, 0, 1);
+            frameReceived = requestSocket.TryReceiveFrameString(timeout, out subport);  // request subport, will be saved in var subport for this client
+            if (frameReceived)
             {
-                var sw = new System.Diagnostics.Stopwatch();
-                sw.Start();
-                requestSocket.SendFrame("SUB_PORT");
-                timeout = new System.TimeSpan(0, 0, 1);
-                bool frameReceived = requestSocket.TryReceiveFrameString(timeout, out subport);
-                sw.Stop();
-                t = t + sw.Elapsed.Milliseconds;
-
-                if (!frameReceived)
-                {
-                    Debug.Log("Could not connect to client " + IPHeaders[index] + ":" + clients[index].port + " (" + clients[index].name + ")");
-                    IPHeaders.Remove(IPHeader);
-                    break;
-                }
                 subports.Add(subport);
+            } else
+            {
+                Debug.Log("Could not connect to client " + IPHeader + ":" + c.port + " (" + c.name + ")");
+                IPHeaders.Remove(IPHeader);     // remove IPHeaders for unavailable clients
             }
             requestSocket.Close();
-            index++;
         }
 
-        isConnected = IPHeaders.Count > 0;
-
+        isConnected = (IPHeaders.Count == clients.Count);   // check if all clients are connected
+        
         if (isConnected)
         {
             Debug.Log("Connected to " + IPHeaders.Count + " sockets");
@@ -190,15 +168,15 @@ public class PupilListener : MonoBehaviour
             }
 
             var msg = new NetMQMessage();
-            int turn = 0;
-            while (isConnected && stop_thread_ == false)
+            int turn = 0;   // used receive a message from each client in turn
+            while (!stop_thread_)
             {
                 turn = ++turn % IPHeaders.Count;
-                timeout = new System.TimeSpan(0, 0, 0, 0, 200);
+                timeout = new System.TimeSpan(0, 0, 0, 0, 200);     // wait 200ms to receive a message
 
                 bool stillAlive = subscriberSockets[turn].TryReceiveMultipartMessage(timeout, ref (msg));
 
-                if (stillAlive && isConnected)
+                if (stillAlive)
                 {
                     try
                     {
@@ -222,11 +200,7 @@ public class PupilListener : MonoBehaviour
                             // surface detected
                             lock (thisLock_)
                             {
-                                Debug.Log(mmap.ToString());
-
                                 surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
-                                //Debug.Log(message);
-                                //Debug.Log(surfaceData.gaze_on_srf[0].confidence);
                                 newData = true;
                             }
                         }
@@ -251,13 +225,12 @@ public class PupilListener : MonoBehaviour
         {
             Debug.Log("Failed to connect to all clients.");
         }
-        Debug.Log("ContextTerminate.");
         NetMQConfig.ContextTerminate();
     }
 
     void OnApplicationQuit()
     {
-        //lock (thisLock_)stop_thread_ = true;
+        lock (thisLock_)stop_thread_ = true;
         foreach (SubscriberSocket s in subscriberSockets)
         {
             s.Close();
@@ -266,8 +239,8 @@ public class PupilListener : MonoBehaviour
         {
             rs.Close();
         }
-        Debug.Log("ContextTerminate.");
         NetMQConfig.ContextTerminate();
+        Debug.Log("Network Threads terminated.");
     }
 
     void Update()
