@@ -53,9 +53,6 @@ public class GameController : Singleton<GameController>
         powerUpManager = PowerUpManager.Instance;
         menu = Menu.Instance;
 
-        //mazeGenerator.xSize = 9;
-        //mazeGenerator.ySize = 9;
-
         setUpPlayers();
 
         if (!useMenu)
