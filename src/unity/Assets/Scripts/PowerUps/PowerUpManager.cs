@@ -35,7 +35,6 @@ public class PowerUpManager : Singleton<PowerUpManager> {
             int xSize = MazeGenerator.Instance.xSize;
 
             float[][] board = new float[ySize][];
-            int index = 0;
             float bestCellValue = 0;
             int bestCellY = 0, bestCellX = 0;
 

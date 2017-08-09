@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-    public string name;
+    public new string name;
     public float timeToDarkness { get; set; }
     public int points { get; set; }
 
@@ -41,16 +41,12 @@ public class Player : MonoBehaviour {
         {
             case PlayerColor.red:
                 return new Color(1, 0, 0, 1);
-                break;
             case PlayerColor.blue:
                 return new Color(0, 0, 1, 1);
-                break;
             case PlayerColor.yellow:
                 return new Color(1, 1, 0, 1);
-                break;
             case PlayerColor.pink:
                 return new Color(1, 0, 1, 1);
-                break;
             default:
                 return new Color(1, 1, 1, 1);
         }
@@ -61,22 +57,16 @@ public class Player : MonoBehaviour {
         {
             case MixColor.violet:
                 return new Color(1, 0, 0.7f, 1);
-                break;
             case MixColor.orange:
                 return new Color(1, 0.5f, 0, 1);
-                break;
             case MixColor.green:
                 return new Color(0, 1, 0, 1);
-                break;
             case MixColor.magenta:
                 return new Color(1, 0, 0.7f, 1);
-                break;
             case MixColor.purple:
                 return new Color(0.7f, 0, 1, 1);
-                break;
             case MixColor.cyan:
                 return new Color(0, 1, 0.5f, 1);
-                break;
             default:
                 return new Color(1, 1, 1, 1);
         }

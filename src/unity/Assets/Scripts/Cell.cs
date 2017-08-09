@@ -48,7 +48,8 @@ public class Cell : MonoBehaviour {
                 p.cell = this;
             }
 
-            for (int i = 0; i < lights.Count; i++)
+            // TODO will always only loop once
+            for (int i = 0; i < lights.Count;)
             {
                 if (lights[i].GetComponent<CellLight>().getPlayer().name.Equals(p.name))
                 {
@@ -63,11 +64,6 @@ public class Cell : MonoBehaviour {
                     return;
                 }
             }
-
-            //if (hasLight)
-            //{
-                spawnLight(p);
-            //}
         }
     }
 

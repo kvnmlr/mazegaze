@@ -2,24 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControllerArrow : MonoBehaviour {
-
-    //PlayerB
+public class PlayerControllerArrow : MonoBehaviour
+{
     public float speed;
-
-    private Rigidbody rb;
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
 
     void FixedUpdate()
     {
         if (!Menu.Instance.canvas.enabled)
-        {
-
-            
+        {           
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 transform.position += Vector3.right * speed * Time.deltaTime;
@@ -38,8 +28,6 @@ public class PlayerControllerArrow : MonoBehaviour {
             }
             
         }
-
-       
     }
     void Update()
     {

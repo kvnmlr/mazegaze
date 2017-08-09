@@ -5,10 +5,11 @@ public class Eye3D : MonoBehaviour
 {
 
     public PupilListener pupil_listener_;
-    Pupil.PupilData3D data_ = new Pupil.PupilData3D();
+    Pupil.PupilData3D data_;
 
     Vector3 pos = new Vector3();
     Quaternion q = new Quaternion();
+
     // Use this for initialization
     void Start()
     {

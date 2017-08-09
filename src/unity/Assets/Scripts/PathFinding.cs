@@ -29,6 +29,10 @@ public class PathFinding : Singleton<PathFinding> {
 
             return this.c.Equals(other.c);
         }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode()*gCost+c.name.GetHashCode();
+        }
     }
 
     public AStarNode startNode;

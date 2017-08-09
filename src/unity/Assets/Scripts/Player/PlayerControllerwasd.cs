@@ -2,21 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControllerwasd : MonoBehaviour {
-
-    //PlayerC
+public class PlayerControllerwasd : MonoBehaviour
+{
     public float speed;
-    private Rigidbody rb;
-    Vector3 pos;
-    // Use this for initialization
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        pos = transform.position;
-    }
-
-    // Update is called once per frame
     void FixedUpdate()
     {
 

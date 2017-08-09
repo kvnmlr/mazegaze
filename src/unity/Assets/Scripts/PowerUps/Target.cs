@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Target : PowerUp {
-
-    int numGame;
-
+public class Target : PowerUp
+{
     public override IEnumerator performPowerUp(Player p)
     {
         PowerUpManager.Instance.activePowerUps++;
@@ -28,19 +26,11 @@ public class Target : PowerUp {
 
         }
         yield return new WaitForSeconds(1);
-        
-
     }
 
     void Start()
     {  
-        numGame = 0;
         this.type = PowerUpManager.PowerUpTypes.Target;
-    }
-
-    void Update()
-    {
-        
     }
 
     public Vector3 TransformpositionRandom()
@@ -51,7 +41,4 @@ public class Target : PowerUp {
         float rdz = Random.Range(-(ySize - 1) / 2, (ySize + 1) / 2);
         return new Vector3(rdx + 0.5f, 0.5f, rdz);
     }
-
-   
-    
 }

@@ -10,7 +10,7 @@ public class SettingsManager : Singleton<SettingsManager> {
     private class Settings
     {
         public List<PupilClient> pupil_clients = new List<PupilClient>();
-        public string setup_id;
+        public string setup_id = "";
     }
 
     [Serializable]

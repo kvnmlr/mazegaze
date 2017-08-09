@@ -9,7 +9,7 @@ public class Menu : Singleton<Menu> {
     private bool optionPlayer = false;
     private bool optionLevel = false;
     private bool optionMainButton = true;
-    private bool optionGameOver = false;
+    //private bool optionGameOver = false;
     private bool optionRound = false;
     private bool optionBreakButton = false;
     private bool optionBreakScreen = false;
@@ -174,16 +174,16 @@ public class Menu : Singleton<Menu> {
 
     public void SimpleLevel() {
 
-        MazeGenerator.Instance.xSize = 9;
-        MazeGenerator.Instance.ySize = 9;
+        MazeGenerator.Instance.xSize = 7;
+        MazeGenerator.Instance.ySize = 7;
         optionLevel = false;
         optionRound = true;
     }
 
     public void MiddleLevel() {
 
-        MazeGenerator.Instance.xSize = 15;
-        MazeGenerator.Instance.ySize = 15;
+        MazeGenerator.Instance.xSize = 11;
+        MazeGenerator.Instance.ySize = 11;
         optionLevel = false;
         optionRound = true;
         //StartGame();
@@ -191,8 +191,8 @@ public class Menu : Singleton<Menu> {
 
     public void HardLevel() {
 
-        MazeGenerator.Instance.xSize = 21;
-        MazeGenerator.Instance.ySize = 21;
+        MazeGenerator.Instance.xSize = 15;
+        MazeGenerator.Instance.ySize = 15;
         optionLevel = false;
         optionRound = true;
         //StartGame();
@@ -227,7 +227,7 @@ public class Menu : Singleton<Menu> {
     //GameOverScreen Button Control
 
     public void BackMainMenu() {
-        optionGameOver = false;
+        //optionGameOver = false;
         optionPlayer = false;
         optionLevel = false;
         optionRound = false;
@@ -298,7 +298,7 @@ public class Menu : Singleton<Menu> {
         optionRound = false;
         optionBreakButton = false;
         optionBreakScreen = false;
-        optionGameOver = true;//TODO implement this
+        //optionGameOver = true;//TODO implement this
         
     }
 
@@ -333,7 +333,7 @@ public class Menu : Singleton<Menu> {
         optionLevel = false;
         optionMainButton = false;
         optionRound = false;
-        optionGameOver = false;
+        //optionGameOver = false;
         yield return new WaitForSeconds(2);
         winText.gameObject.SetActive(false);
         canvas.enabled = false;
