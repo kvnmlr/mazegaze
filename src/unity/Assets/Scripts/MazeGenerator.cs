@@ -74,7 +74,6 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     public void BuildMaze()
     {
-        DestroyMaze();
         if (!GameController.Instance.getRestart())
         {
             Maze = new GameObject("Maze");
@@ -191,6 +190,12 @@ public class MazeGenerator : Singleton<MazeGenerator> {
                 CreatWalls();
                 CreatPlayer();
                 WallHolder.SetActive(false);
+                //TODO: spielstand löschen
+                for(int i = 0; i < GameController.Instance.players.Length; i++)
+                {
+                    GameController.Instance.players[i].points = 0;
+                }
+
 
             }
            
@@ -553,8 +558,6 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         
         DestroyObject(Cells);
         DestroyObject(tempFloor);
-        DestroyImmediate(Maze);
-        //DestroyImmediate(WallHolder);
 
         startedBuilding = false;
         visitedCells = 0;
