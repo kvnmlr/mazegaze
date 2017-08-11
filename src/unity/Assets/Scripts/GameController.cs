@@ -11,7 +11,7 @@ public class GameController : Singleton<GameController>
     private PowerUpManager powerUpManager;
     private Menu menu;
 
-    private bool gameover;
+    //private bool gameover;
     private bool restart;
 
     private bool firstround;
@@ -49,7 +49,7 @@ public class GameController : Singleton<GameController>
 
     void Start()
     {
-        gameover = false;
+        //gameover = false;
         restart = false;
 
         mazeGenerator = MazeGenerator.Instance;
@@ -107,17 +107,17 @@ public class GameController : Singleton<GameController>
 
     public void GameOver()
     {
-        gameover = true;
+        //gameover = true;
     }
 
     private int getRandomCellTarget()
     {
-        double mitteungerundet = (mazeGenerator.xSize / 2);
+        //double mitteungerundet = (mazeGenerator.xSize / 2);
         double mitte = System.Math.Floor((double)(mazeGenerator.xSize / 2));
         double wRand = System.Math.Floor((mazeGenerator.xSize - mitte) / 2);
-        double eRand = System.Math.Ceiling((mazeGenerator.xSize - mitte) / 2);
+        //double eRand = System.Math.Ceiling((mazeGenerator.xSize - mitte) / 2);
         double sRand = wRand;
-        double nRand = eRand;
+        //double nRand = eRand;
         double[] zufall = new double[(int)mitte];
         float RechteGrenze = (float)(sRand * mazeGenerator.xSize + wRand);
         float LinkeGrenze = (float)(sRand * mazeGenerator.xSize + wRand + mitte);

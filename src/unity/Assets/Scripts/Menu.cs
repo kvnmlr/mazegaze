@@ -203,24 +203,28 @@ public class Menu : Singleton<Menu> {
     public void OneRound()
     {
         GameController.Instance.setNumGames(1);
+        optionRound = false;
         StartGame();
     }
 
     public void ThreeRound()
     {
         GameController.Instance.setNumGames(3);
+        optionRound = false;
         StartGame();
     }
 
     public void FiveRound()
     {
         GameController.Instance.setNumGames(5);
+        optionRound = false;
         StartGame();
     }
 
     public void SevenRound()
     {
         GameController.Instance.setNumGames(7);
+        optionRound = false;
         StartGame();
     }
 
