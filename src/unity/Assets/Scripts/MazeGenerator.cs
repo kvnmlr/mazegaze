@@ -383,7 +383,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
             GameObject c = new GameObject("Cell_" + i);
             c.transform.parent = Cells.transform;
-            c.AddComponent<BoxCollider>().size = new Vector3(wallLength, wallLength, wallLength);
+            c.AddComponent<BoxCollider>().size = new Vector3(wallLength * 0.8f, wallLength * 0.8f, wallLength * 0.8f);
             c.GetComponent<BoxCollider>().isTrigger = true;
             c.AddComponent<Cell>().hasLight = switcher;
             cells[i] = c.gameObject;
@@ -553,7 +553,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     }
 
-    private void DestroyMaze()
+    public void DestroyMaze()
     {
         
         DestroyObject(Cells);

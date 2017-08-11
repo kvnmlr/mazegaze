@@ -42,6 +42,7 @@ public class Cell : MonoBehaviour {
             {
                 return;
             }
+
             if (!players.Contains(p))
             {
                 players.Add(p);
@@ -64,6 +65,9 @@ public class Cell : MonoBehaviour {
                     return;
                 }
             }
+            spawnLight(p);
+
+
         }
     }
 

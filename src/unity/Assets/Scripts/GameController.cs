@@ -11,6 +11,7 @@ public class GameController : Singleton<GameController>
     private PowerUpManager powerUpManager;
     private Menu menu;
 
+    private bool gameover;
     private bool restart;
 
     private bool firstround;
@@ -46,12 +47,17 @@ public class GameController : Singleton<GameController>
         return playedGames;
     }
 
-    void Start () {
+    void Start()
+    {
+        gameover = false;
         restart = false;
 
         mazeGenerator = MazeGenerator.Instance;
         powerUpManager = PowerUpManager.Instance;
         menu = Menu.Instance;
+
+        mazeGenerator.xSize = 9;
+        mazeGenerator.ySize = 9;
 
         setUpPlayers();
 
@@ -67,7 +73,7 @@ public class GameController : Singleton<GameController>
     public void startNewRound()
     {
         mazeBuildAttempts++;
-        if (playedGames == 0)
+        if (playedGames == 0 || mazeBuildAttempts > 20)
         {
             mazeGenerator.target = powerUpManager.target.gameObject;
             mazeGenerator.BuildMaze();
@@ -77,52 +83,55 @@ public class GameController : Singleton<GameController>
 
             if (powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target) == null)
             {
+                mazeGenerator.DestroyMaze();
                 startNewRound();
                 return;
             }
+            powerUpManager.setSpawnedPowerUps(0);
             Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
             mazeBuildAttempts = 0;
         }
         else
         {
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
-            powerUpManager.setSpawnedPowerUps(0);            
+            powerUpManager.setSpawnedPowerUps(0);
         }
         playedGames++;
     }
 
-    
+
     private void Update()
     {
-        
+
     }
 
     public void GameOver()
     {
+        gameover = true;
     }
 
     private int getRandomCellTarget()
     {
-        //double mitteungerundet = (mazeGenerator.xSize / 2);
+        double mitteungerundet = (mazeGenerator.xSize / 2);
         double mitte = System.Math.Floor((double)(mazeGenerator.xSize / 2));
         double wRand = System.Math.Floor((mazeGenerator.xSize - mitte) / 2);
-        //double eRand = System.Math.Ceiling((mazeGenerator.xSize - mitte) / 2);
+        double eRand = System.Math.Ceiling((mazeGenerator.xSize - mitte) / 2);
         double sRand = wRand;
-        //double nRand = eRand;
+        double nRand = eRand;
         double[] zufall = new double[(int)mitte];
         float RechteGrenze = (float)(sRand * mazeGenerator.xSize + wRand);
         float LinkeGrenze = (float)(sRand * mazeGenerator.xSize + wRand + mitte);
-        for (int i=1; i <= mitte; i++)
+        for (int i = 1; i <= mitte; i++)
         {
-            
-           
-            float rd = Random.Range(RechteGrenze + (float)mazeGenerator.xSize* (i-1),
-           LinkeGrenze + mazeGenerator.xSize * (i-1));
-            
+
+
+            float rd = Random.Range(RechteGrenze + (float)mazeGenerator.xSize * (i - 1),
+           LinkeGrenze + mazeGenerator.xSize * (i - 1));
+
             zufall[i - 1] = rd;
         }
 
-        int j = Random.Range(0, (int)mitte-1);
+        int j = Random.Range(0, (int)mitte - 1);
         j = (int)zufall[j];
 
 

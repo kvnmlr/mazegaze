@@ -7,7 +7,7 @@
 			"port" : 50404,
 			"surface_name" : "screen",
 			"detect_surface" : true,
-			"initially_active" : true
+			"initially_active" : false
 		},
 		{
 			"name" : "Lenovo",
