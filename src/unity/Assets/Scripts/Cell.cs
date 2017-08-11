@@ -52,7 +52,7 @@ public class Cell : MonoBehaviour {
             // TODO will always only loop once
             for (int i = 0; i < lights.Count;)
             {
-                if (lights[i].GetComponent<CellLight>().getPlayer().name.Equals(p.name))
+                if (lights[i].GetComponent<CellLight>().getPlayers().Contains(p))
                 {
                     // If the player already has a light in this cell, reactivate it
                     lights[i].GetComponent<CellLight>().restart();

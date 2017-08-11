@@ -1,10 +1,13 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CellLight : MonoBehaviour {
     // the player who this light belongs to
-    public Player player { get; set; }
+    public HashSet<Player> players = new HashSet<Player>();
     public bool neutral { get; set; }
+
+    private Player lastVisitedPlayer;
 
     // parameters for the light
     public float initialLightIntesity = 10f;
@@ -22,7 +25,8 @@ public class CellLight : MonoBehaviour {
             neutral = false;
             gameObject.GetComponent<Light>().color = player.cellLightColor;
             timeToDarkness = player.timeToDarkness;
-            this.player = player;
+            lastVisitedPlayer = player;
+            this.players.Add(player);
         }          
     }
     public void setNeutral(float timeToDarkness = 1)
@@ -32,9 +36,9 @@ public class CellLight : MonoBehaviour {
             this.timeToDarkness = timeToDarkness;
     }
 
-    public Player getPlayer()
+    public HashSet<Player> getPlayers()
     {
-        return player;
+        return players;
     }
 
     public void restart()
@@ -45,10 +49,11 @@ public class CellLight : MonoBehaviour {
 
     public void mix(Player.PlayerColor other)
     {
-        Player.PlayerColor color = player.color;
+        Player.PlayerColor color = lastVisitedPlayer.color;
         int mix = (int)color + (int)other;
         Player.MixColor mixColor = (Player.MixColor)mix;
-        gameObject.GetComponent<Light>().color = player.getColor(mixColor);
+        gameObject.GetComponent<Light>().color = lastVisitedPlayer.getColor(mixColor);
+        breakIntensity = false;
     }
 
     void Start()
@@ -71,12 +76,14 @@ public class CellLight : MonoBehaviour {
             if (currentIntensity < 0.001f)
             {
                 currentIntensity = 0;
+                lastVisitedPlayer = null;
+                players = new HashSet<Player>();
             }
             if (breakIntensity)
             {
                 gameObject.GetComponent<Light>().intensity = 0.002f;
                 breakIntensity = false;
-                yield return new WaitForSeconds(1); // loeschen wenn man moechte dass das licht direkt wieder angeht
+                yield return new WaitForSeconds(0.2f); // loeschen wenn man moechte dass das licht direkt wieder angeht
             }
             else
             {
@@ -87,9 +94,8 @@ public class CellLight : MonoBehaviour {
 
 
     public void SaveArea (Player p)
-    {
-        
-        if (!p.name.Equals(player.name))
+    {  
+        if (!players.Contains(p))
         {
             breakIntensity = true;
         }
@@ -97,8 +103,5 @@ public class CellLight : MonoBehaviour {
         {
             breakIntensity = false;
         }
-       
     }
-
-    
 }

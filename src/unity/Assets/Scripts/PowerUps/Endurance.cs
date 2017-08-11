@@ -14,7 +14,7 @@ public class Endurance : PowerUp
         foreach (GameObject c in MazeGenerator.Instance.cells)
         {
             foreach (GameObject cl in c.GetComponent<Cell>().lights) {
-                if (cl.GetComponent<CellLight>().player.Equals(p))
+                if (cl.GetComponent<CellLight>().players.Contains(p))
                 {
                     cl.GetComponent<CellLight>().timeToDarkness = p.timeToDarkness;
                     cl.GetComponent<CellLight>().decreaseRate = cl.GetComponent<CellLight>().decreaseRate * factor;
@@ -29,7 +29,7 @@ public class Endurance : PowerUp
         {
             foreach (GameObject cl in c.GetComponent<Cell>().lights)
             {
-                if (cl.GetComponent<CellLight>().player.Equals(p))
+                if (cl.GetComponent<CellLight>().players.Contains(p))
                 {
                     cl.GetComponent<CellLight>().timeToDarkness = p.timeToDarkness;
                     cl.GetComponent<CellLight>().decreaseRate = cl.GetComponent<CellLight>().decreaseRate / factor;
