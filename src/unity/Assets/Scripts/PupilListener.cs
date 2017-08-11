@@ -88,6 +88,7 @@ public class PupilListener : MonoBehaviour
     public bool detectSurfaces = true;
     private bool newData = false;
     private bool isConnected = true;
+    private int turn = 0;
 
 
     Pupil.PupilData3D pupilData = new Pupil.PupilData3D();
@@ -168,7 +169,7 @@ public class PupilListener : MonoBehaviour
             }
 
             var msg = new NetMQMessage();
-            int turn = 0;   // used receive a message from each client in turn
+            turn = 0;   // used receive a message from each client in turn
             while (!stop_thread_)
             {
                 turn = ++turn % IPHeaders.Count;
@@ -185,7 +186,6 @@ public class PupilListener : MonoBehaviour
                         var message = MsgPack.Unpacking.UnpackObject(msg[1].ToByteArray());
 
                         MsgPack.MessagePackObject mmap = message.Value;
-                        Debug.Log(mmap.ToString());
                         if (msgType.Contains("pupil"))
                         {
                             // pupil detected
@@ -245,9 +245,13 @@ public class PupilListener : MonoBehaviour
 
     void Update()
     {
-        if (newData && isConnected)
+
+
+        if (newData)
         {
-            if (gazeController != null)
+            SettingsManager.PupilClient client = clients.Find((c) => IPHeaders[turn].Contains(c.ip));
+
+            if (client.gaze_controller != null)
             {
                 if (surfaceData == null)
                 {
@@ -263,7 +267,7 @@ public class PupilListener : MonoBehaviour
                     {
                         return;
                     }
-                    gazeController.move(surfaceData);
+                    client.gaze_controller.move(surfaceData);
                 }
 
             }

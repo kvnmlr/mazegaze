@@ -27,6 +27,7 @@ public class GazeController : MonoBehaviour {
 
     public void move(Pupil.SurfaceData3D data)
     {
+        Debug.Log("Move");
         Pupil.GazeOnSurface gaze = new Pupil.GazeOnSurface();
         double maxConfidence = 0;
         foreach(Pupil.GazeOnSurface gos in data.gaze_on_srf)
