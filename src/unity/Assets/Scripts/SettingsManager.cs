@@ -19,7 +19,9 @@ public class SettingsManager : Singleton<SettingsManager> {
         public string name;
         public string ip;
         public string port;
+        public string surface_name;
         public bool detect_surface = true;
+        public bool initially_active = true;
         public GazeController gaze_controller;
     }
 
@@ -64,7 +66,9 @@ public class SettingsManager : Singleton<SettingsManager> {
         listener.AddComponent<PupilListener>();
         PupilListener p = listener.GetComponent<PupilListener>();
         p.detectPupils = true;
-        p.clients = settings.pupil_clients;
+        List<PupilClient> clients = new List<PupilClient>(settings.pupil_clients);
+        clients.RemoveAll((c) => !c.initially_active);
+        p.clients = clients;
 
         int count = 0;
         foreach (PupilClient c in settings.pupil_clients)

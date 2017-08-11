@@ -246,7 +246,6 @@ public class PupilListener : MonoBehaviour
     void Update()
     {
 
-
         if (newData)
         {
             SettingsManager.PupilClient client = clients.Find((c) => IPHeaders[turn].Contains(c.ip));
