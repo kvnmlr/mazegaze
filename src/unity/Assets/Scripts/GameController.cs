@@ -11,7 +11,7 @@ public class GameController : Singleton<GameController>
     private PowerUpManager powerUpManager;
     private Menu menu;
 
-    //private bool gameover;
+    private bool gameover;
     private bool restart;
 
     private bool firstround;
@@ -49,7 +49,7 @@ public class GameController : Singleton<GameController>
 
     void Start()
     {
-        //gameover = false;
+        gameover = false;
         restart = false;
 
         mazeGenerator = MazeGenerator.Instance;

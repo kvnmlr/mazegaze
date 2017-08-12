@@ -9,10 +9,11 @@ public class Menu : Singleton<Menu> {
     private bool optionPlayer = false;
     private bool optionLevel = false;
     private bool optionMainButton = true;
-    //private bool optionGameOver = false;
+    private bool optionGameOver = false;
     private bool optionRound = false;
     private bool optionBreakButton = false;
     private bool optionBreakScreen = false;
+    private bool optionAfterRound = false;
 
     public GameObject mainButtonScreen;
     public GameObject playerScreen;
@@ -21,6 +22,7 @@ public class Menu : Singleton<Menu> {
     public GameObject gameOverScreen;
     public GameObject breakButton;
     public GameObject breakScreen;
+    public GameObject afterRoundScreen;
     public Canvas canvas;
     public Text winText;
 
@@ -31,11 +33,13 @@ public class Menu : Singleton<Menu> {
         CheckPlayerScreen();
         CheckLevelScreen();
         CheckMainButtonScreen();
-        //CheckGameOverScreen();
+        CheckGameOverScreen();
         CheckRoundScreen();
         CheckBreakScreen();
         CheckBreakButton();
 	}
+
+    //Check Screens
 
     void CheckPlayerScreen() {
         if (optionPlayer == true) {
@@ -53,8 +57,17 @@ public class Menu : Singleton<Menu> {
         }
     }
 
-    void CheckRoundScreen()
-    {
+    void CheckAfterRoundScreen(){
+        if (optionAfterRound == true) {
+            afterRoundScreen.SetActive(true);
+        }
+        else
+        {
+            afterRoundScreen.SetActive(false);
+        }
+    }
+
+    void CheckRoundScreen() {
         if(optionRound == true)
         {
             roundScreen.SetActive(true);
@@ -65,8 +78,7 @@ public class Menu : Singleton<Menu> {
         }
     }
 
-    void CheckBreakButton()
-    {
+    void CheckBreakButton() {
         if (optionBreakButton == true)
         {
             breakButton.SetActive(true);
@@ -78,8 +90,7 @@ public class Menu : Singleton<Menu> {
 
     }
 
-    void CheckBreakScreen()
-    {
+    void CheckBreakScreen() {
         if (optionBreakScreen == true)
         {
             breakScreen.SetActive(true);
@@ -91,7 +102,6 @@ public class Menu : Singleton<Menu> {
     }
    
     void CheckMainButtonScreen() {
-
        if (optionMainButton == true)
         {
             mainButtonScreen.SetActive(true);
@@ -102,15 +112,18 @@ public class Menu : Singleton<Menu> {
         }
     }
 
-    //TODO: @Lena: Wenn unkommentiert einen Fehler, weil in Unity kein Object uebergeben
+
     void CheckGameOverScreen() {
-       /* if (optionGameOver == true) {
+        if (optionGameOver == true && GameController.Instance.getPlayedGames() == GameController.Instance.getNumGames()) {
             gameOverScreen.SetActive(true);
+        } else if (optionGameOver == true && GameController.Instance.getPlayedGames() < GameController.Instance.getNumGames()) {
+            afterRoundScreen.SetActive(true);
         } else {
             gameOverScreen.SetActive(false);
-        }*/
+        }
     }
 
+    //Close Options
 
     public void ClosePlayerScreen() {
         optionPlayer = false;
@@ -142,7 +155,6 @@ public class Menu : Singleton<Menu> {
     //Player Button Control
 
     public void OnePlayer() {
-
         MazeGenerator.Instance.numPlayers = 1;
         optionPlayer = false;
         optionLevel = true;
@@ -150,21 +162,18 @@ public class Menu : Singleton<Menu> {
     }
 
     public void TwoPlayer() {
-
         MazeGenerator.Instance.numPlayers = 2;
         optionPlayer = false;
         optionLevel = true;
     }
 
     public void ThreePlayer() {
-
         MazeGenerator.Instance.numPlayers = 3;
         optionPlayer = false;
         optionLevel = true;
     }
 
     public void FourPlayer() {
-
         MazeGenerator.Instance.numPlayers = 4;
         optionPlayer = false;
         optionLevel = true;
@@ -173,7 +182,6 @@ public class Menu : Singleton<Menu> {
     //Level Button Control
 
     public void SimpleLevel() {
-
         MazeGenerator.Instance.xSize = 7;
         MazeGenerator.Instance.ySize = 7;
         optionLevel = false;
@@ -181,62 +189,60 @@ public class Menu : Singleton<Menu> {
     }
 
     public void MiddleLevel() {
-
         MazeGenerator.Instance.xSize = 11;
         MazeGenerator.Instance.ySize = 11;
         optionLevel = false;
         optionRound = true;
-        //StartGame();
     }
 
     public void HardLevel() {
-
         MazeGenerator.Instance.xSize = 15;
         MazeGenerator.Instance.ySize = 15;
         optionLevel = false;
         optionRound = true;
-        //StartGame();
     }
 
     //Round Button Control
 
-    public void OneRound()
-    {
+    public void OneRound() {
         GameController.Instance.setNumGames(1);
         optionRound = false;
         StartGame();
     }
 
-    public void ThreeRound()
-    {
+    public void ThreeRound() {
         GameController.Instance.setNumGames(3);
         optionRound = false;
         StartGame();
     }
 
-    public void FiveRound()
-    {
+    public void FiveRound() {
         GameController.Instance.setNumGames(5);
         optionRound = false;
         StartGame();
     }
 
-    public void SevenRound()
-    {
+    public void SevenRound() {
         GameController.Instance.setNumGames(7);
         optionRound = false;
         StartGame();
     }
 
+    //After RoundScreen Button Control
+
+    public void ContinueGame() {
+        //TODO: implement this
+    }
+
     //GameOverScreen Button Control
 
     public void BackMainMenu() {
-        //optionGameOver = false;
+        optionGameOver = false;
         optionPlayer = false;
         optionLevel = false;
         optionRound = false;
-        optionMainButton = true;
-       
+        optionAfterRound = false;
+        optionMainButton = true;     
     }
     
     //Break Button Control
@@ -275,17 +281,14 @@ public class Menu : Singleton<Menu> {
     }
 
 
-    public void PressBreak()
-    {
+    public void PressBreak() {
         CloseBreakButton();
         optionBreakScreen = true;
     }
 
     //General Start/Quit Functions
 
-
     public void StartGame() {
-
         winText.gameObject.SetActive(false);
         optionBreakButton = true;
         GameController.Instance.startNewRound();
@@ -298,12 +301,11 @@ public class Menu : Singleton<Menu> {
         canvas.enabled = true;
         optionPlayer = false;
         optionLevel = false;
-        optionMainButton = true;
+        optionMainButton = false;
         optionRound = false;
         optionBreakButton = false;
         optionBreakScreen = false;
-        //optionGameOver = true;//TODO implement this
-        
+        optionGameOver = true;//TODO implement this     
     }
 
     //Main Buttons
@@ -328,9 +330,7 @@ public class Menu : Singleton<Menu> {
 
     //WinText
 
-    public IEnumerator GetWinText()
-    {
-  
+    public IEnumerator GetWinText() {
         SetCountText();
         canvas.enabled = true;
         optionPlayer = false;
@@ -343,8 +343,7 @@ public class Menu : Singleton<Menu> {
         canvas.enabled = false;
     }
 
-    void SetCountText()
-    {
+    void SetCountText() {
         winText.gameObject.SetActive(true);
         string text = "";
        
