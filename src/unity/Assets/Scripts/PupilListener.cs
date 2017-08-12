@@ -4,6 +4,7 @@ using System.Threading;
 using NetMQ;
 using NetMQ.Sockets;
 using System.Collections.Generic;
+using System.Net;
 
 namespace Pupil
 {
@@ -78,8 +79,7 @@ public class PupilListener : MonoBehaviour
     private System.Object thisLock_ = new System.Object();
     bool stop_thread_ = false;
 
-    public List<SettingsManager.PupilClient> clients = new List<SettingsManager.PupilClient>();
-    private List<RequestSocket> requestSockets = new List<RequestSocket>();
+    public List<PupilConfiguration.PupilClient> clients = new List<PupilConfiguration.PupilClient>();
     private List<String> IPHeaders = new List<string>();
     private List<SubscriberSocket> subscriberSockets = new List<SubscriberSocket>();
 
@@ -128,35 +128,55 @@ public class PupilListener : MonoBehaviour
         List<string> subports = new List<string>();     // subports for each client connection
 
         // loop through all clients and try to connect to them
-        foreach (SettingsManager.PupilClient c in clients)
+        foreach (PupilConfiguration.PupilClient c in clients)
         {
             string subport = "";
             string IPHeader = ">tcp://" + c.ip + ":";
-            IPHeaders.Add(IPHeader);
-
-            Debug.Log("Requesting socket for " + IPHeader + ":" + c.port + " (" + c.name + ")");
-            RequestSocket requestSocket = new RequestSocket(IPHeader + c.port);
-
             bool frameReceived = false;
-            requestSocket.SendFrame("SUB_PORT");
-            timeout = new System.TimeSpan(0, 0, 1);
-            frameReceived = requestSocket.TryReceiveFrameString(timeout, out subport);  // request subport, will be saved in var subport for this client
-            if (frameReceived)
+
+            Debug.LogFormat("Requesting socket for {0}:{1} ({2})", c.ip, c.port, c.name);
+            RequestSocket requestSocket;
+            try
             {
-                subports.Add(subport);
-            } else
-            {
-                Debug.Log("Could not connect to client " + IPHeader + ":" + c.port + " (" + c.name + ")");
-                IPHeaders.Remove(IPHeader);     // remove IPHeaders for unavailable clients
+                // validate ip header
+                if (!validateIPHeader(c.ip, c.port))
+                {
+                    Debug.LogErrorFormat("{0}:{1} is not a valid ip header for client {2}", c.ip, c.port, c.name);
+                    continue;
+                }
+
+                requestSocket = new RequestSocket(IPHeader + c.port);
+                if (requestSocket != null)
+                {
+                    requestSocket.SendFrame("SUB_PORT");
+                    timeout = new System.TimeSpan(0, 0, 1);
+                    frameReceived = requestSocket.TryReceiveFrameString(timeout, out subport);  // request subport, will be saved in var subport for this client
+
+                    if (frameReceived)
+                    {
+                        subports.Add(subport);
+                        IPHeaders.Add(IPHeader);
+                    }
+                    else
+                    {
+                        Debug.LogErrorFormat("Could not connect to client {0}:{1} ({2}). Make sure address is corect and pupil remote service is running", c.ip, c.port, c.name);
+                    }
+                    requestSocket.Close();
+                }
+
             }
-            requestSocket.Close();
+            catch (Exception e)
+            {
+                Debug.LogErrorFormat("Could not reach to client {0}:{1} ({2}): {4}", c.ip, c.port, c.name, e.ToString());
+            }
+
         }
 
         isConnected = (IPHeaders.Count == clients.Count);   // check if all clients are connected
-        
+
         if (isConnected)
         {
-            Debug.Log("Connected to " + IPHeaders.Count + " sockets");
+            Debug.LogFormat("Connected to {0} sockets", IPHeaders.Count);
             foreach (String header in IPHeaders)
             {
                 SubscriberSocket subscriberSocket = new SubscriberSocket(header + subports[IPHeaders.IndexOf(header)]);
@@ -200,19 +220,15 @@ public class PupilListener : MonoBehaviour
                             // surface detected
                             lock (thisLock_)
                             {
-                                surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
                                 newData = true;
+                                surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
                             }
                         }
                     }
                     catch
                     {
-                        Debug.Log(clients[turn].name + ": Failed to unpack.");
+                        Debug.LogWarningFormat("Failed to deserialize pupil data for client {0}", clients[turn].name);
                     }
-                }
-                else
-                {
-                    Debug.Log(clients[turn].name + ": Failed to receive a message.");
                 }
             }
             foreach (SubscriberSocket s in subscriberSockets)
@@ -223,9 +239,25 @@ public class PupilListener : MonoBehaviour
         }
         else
         {
-            Debug.Log("Failed to connect to all clients.");
+            Debug.LogWarning("Failed to connect to all clients specified in config file");
         }
         NetMQConfig.ContextTerminate();
+    }
+
+    private Boolean validateIPHeader(string ip, string port)
+    {
+        if (ip.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries).Length == 4)
+        {
+            IPAddress ipAddr;
+            if (IPAddress.TryParse(ip, out ipAddr))
+            {
+                if (int.Parse(port) <= 65535)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     void OnApplicationQuit()
@@ -234,10 +266,6 @@ public class PupilListener : MonoBehaviour
         foreach (SubscriberSocket s in subscriberSockets)
         {
             s.Close();
-        }
-        foreach (RequestSocket rs in requestSockets)
-        {
-            rs.Close();
         }
         NetMQConfig.ContextTerminate();
         Debug.Log("Network Threads terminated.");
@@ -248,7 +276,7 @@ public class PupilListener : MonoBehaviour
 
         if (newData)
         {
-            SettingsManager.PupilClient client = clients.Find((c) => IPHeaders[turn].Contains(c.ip));
+            PupilConfiguration.PupilClient client = clients.Find((c) => IPHeaders[turn].Contains(c.ip));
 
             if (client.gaze_controller != null)
             {

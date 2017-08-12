@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class SettingsManager : Singleton<SettingsManager> {
+public class PupilConfiguration : Singleton<PupilConfiguration> {
 
     [Serializable]
     private class Settings
@@ -30,7 +30,7 @@ public class SettingsManager : Singleton<SettingsManager> {
 
     void Start()
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, "settings.json");
+        string filePath = Path.Combine(Application.streamingAssetsPath, "pupil_config.json");
         if (File.Exists(filePath))
         {
             string dataAsJson = File.ReadAllText(filePath);
