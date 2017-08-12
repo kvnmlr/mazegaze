@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
-
-    //PlayerA
+public class PlayerController : MonoBehaviour
+{
     public float speed;
     private Rigidbody rb;
     private Vector3 offset;
@@ -15,7 +14,10 @@ public class PlayerController : MonoBehaviour {
 
     private Cell currentCell;
     private Cell targetCell;
-    
+    private Cell lastMouseCell;
+    private Cell lastCell;
+
+    private Boolean currentCellReached;
 
     void Start () {
         rb = GetComponent<Rigidbody>();
@@ -43,6 +45,14 @@ public class PlayerController : MonoBehaviour {
 
             // Move player
             currentCell = gameObject.GetComponent<Player>().cell;
+            if (!currentCellReached)
+            {
+                if (Vector3.Distance(transform.position, currentCell.transform.position) < 0.01f)
+                {
+                    currentCellReached = true;
+                }
+            }
+
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
 
             float x = MazeGenerator.Instance.xSize;
@@ -60,13 +70,23 @@ public class PlayerController : MonoBehaviour {
             if (pos[1] < MazeGenerator.Instance.xSize && pos[0] < MazeGenerator.Instance.ySize && pos[1] >= 0 && pos[0] >= 0)
             {
                 Cell mouseCell = board[pos[0]][pos[1]].GetComponent<Cell>();
-
-                List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(currentCell, mouseCell);
-                if (path.Count > 0)
+                if ((!mouseCell.Equals(lastMouseCell) ||
+                    (!currentCell.Equals(lastCell))) 
+                    && currentCellReached)
                 {
-                    if (path.Count < 5)
+                    lastMouseCell = mouseCell;
+                    lastCell = currentCell;
+                    currentCellReached = false;
+                    if (PathFinding.Instance.getManhattanDistance(currentCell, mouseCell) < 5)
                     {
-                        targetCell = path[0].c;
+                        List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(currentCell, mouseCell);
+                        if (path.Count > 0)
+                        {
+                            if (path.Count < 5)
+                            {
+                                targetCell = path[0].c;
+                            }
+                        }
                     }
                 }
             }

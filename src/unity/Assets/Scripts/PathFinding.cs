@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class PathFinding : Singleton<PathFinding> {
+public class PathFinding : Singleton<PathFinding>
+{
 
     public class AStarNode
     {
@@ -31,7 +32,7 @@ public class PathFinding : Singleton<PathFinding> {
         }
         public override int GetHashCode()
         {
-            return base.GetHashCode()*gCost+c.name.GetHashCode();
+            return base.GetHashCode() * gCost + c.name.GetHashCode();
         }
     }
 
@@ -55,21 +56,20 @@ public class PathFinding : Singleton<PathFinding> {
 
         open.Add(startNode);
 
-        while(!finished)
+        while (!finished)
         {
             if (open.Count == 0)
             {
-                //Debug.Log("No path found from " + start.name + " to " +end.name);
                 return null;
             }
             AStarNode current = getNodeWithLowestF();
             open.Remove(current);
             closed.Add(current);
 
-            if (current.Equals(endNode)) {
+            if (current.Equals(endNode))
+            {
                 endNode = current;
                 finished = true;
-                //Debug.Log("Path found from " + start.name + " to " + end.name);
                 break;
             }
 
@@ -88,7 +88,7 @@ public class PathFinding : Singleton<PathFinding> {
                 }
 
                 AStarNode n1 = open.Find(x => x.c.Equals(n.c));
-                if (n1.fCost > n.fCost  ||
+                if (n1.fCost > n.fCost ||
                     (n1.fCost == n.fCost && n1.hCost > n.hCost) ||
                     (n1.fCost == n.fCost && n1.hCost == n.hCost && n1.gCost > n.gCost))
                 {
@@ -161,7 +161,7 @@ public class PathFinding : Singleton<PathFinding> {
         }
         if (c.properties.west.activeSelf == false)
         {
-            cells.Add(matrix[c.posY][c.posX -1 ].GetComponent<Cell>());
+            cells.Add(matrix[c.posY][c.posX - 1].GetComponent<Cell>());
         }
         if (c.properties.south.activeSelf == false)
         {
@@ -188,14 +188,4 @@ public class PathFinding : Singleton<PathFinding> {
         }
         return nodes;
     }
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
