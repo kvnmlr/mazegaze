@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed;
+    public float speed = 1;
     private Rigidbody rb;
     private Vector3 offset;
     private Vector3 screenPoint;
@@ -52,9 +52,10 @@ public class PlayerController : MonoBehaviour
                     currentCellReached = true;
                 }
             }
-
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
-
+            //Debug.Log("MouseX: " + mousePos.x);
+            //Debug.Log("MouseY: " + mousePos.z);
+            
             float x = MazeGenerator.Instance.xSize;
             float y = MazeGenerator.Instance.ySize;
             int rangeX = MazeGenerator.Instance.xSize / 7;
@@ -70,6 +71,7 @@ public class PlayerController : MonoBehaviour
             if (pos[1] < MazeGenerator.Instance.xSize && pos[0] < MazeGenerator.Instance.ySize && pos[1] >= 0 && pos[0] >= 0)
             {
                 Cell mouseCell = board[pos[0]][pos[1]].GetComponent<Cell>();
+                Debug.Log("Mouse is at cell: " + mouseCell.name);
                 if ((!mouseCell.Equals(lastMouseCell) ||
                     (!currentCell.Equals(lastCell))) 
                     && currentCellReached)

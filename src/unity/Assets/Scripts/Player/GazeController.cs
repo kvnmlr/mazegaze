@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GazeController : MonoBehaviour {
-    public float speed;
+public class GazeController : MonoBehaviour
+{
+    public float speed = 1;
 
     private Rigidbody rb;
 
@@ -11,6 +13,12 @@ public class GazeController : MonoBehaviour {
     private Vector3 screenPoint;
     float depth;
     float radius = 10;
+
+    private Cell currentCell;
+    private Cell targetCell;
+    private Cell lastMouseCell;
+    private Cell lastCell;
+    private Boolean currentCellReached;
 
     private float gazeX;
     private float gazeY;
@@ -25,12 +33,12 @@ public class GazeController : MonoBehaviour {
         Debug.Log("Listener for gaze controller " + gameObject.name + " is ready");
     }
 
-    public void move(Pupil.SurfaceData3D data)
+    public void move(Pupil.SurfaceData3D data, string surface = "")
     {
-        Debug.Log("Move");
+        //Debug.Log("Move");
         Pupil.GazeOnSurface gaze = new Pupil.GazeOnSurface();
         double maxConfidence = 0;
-        foreach(Pupil.GazeOnSurface gos in data.gaze_on_srf)
+        foreach (Pupil.GazeOnSurface gos in data.gaze_on_srf)
         {
             if (gos.confidence > maxConfidence)
             {
@@ -46,56 +54,131 @@ public class GazeController : MonoBehaviour {
             return;
         }
 
-        if (!data.name.Equals("game_screen"))
+        if (!data.name.Equals(surface))
         {
             // gaze is not on the right surface, don't do anything
-            //Debug.Log("On wrong surface");
+            Debug.Log("On wrong surface");
             return;
         }
 
         gazeX = (float)gaze.norm_pos[0];
         gazeY = (float)gaze.norm_pos[1];
 
-        Debug.Log("X: " + gazeX);
-        Debug.Log("Y: " + gazeY);
-        move();
+        //Debug.Log("X: " + gazeX);
+        //Debug.Log("Y: " + gazeY);
+        //move(gazeX, gazeY);
 
     }
 
-    void move()
+    void Update()
     {
-        rb = GetComponent<Rigidbody>();
-
-        Debug.Log("Update");
-
+        if (!Menu.Instance.canvas.enabled)
+        {
             depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
             int size = MazeGenerator.Instance.xSize;
 
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width * gazeX, Screen.height * gazeY, depth));
-
-            //CheckArea();
-
-            Debug.Log("Pos: " + mousePos);
-
-            Vector3 temp = transform.position;
-
-            if (System.Math.Abs(transform.position.x - mousePos.x) < radius && System.Math.Abs(transform.position.z - mousePos.z) < radius)
+            // Move player
+            currentCell = gameObject.GetComponent<Player>().cell;
+            if (!currentCellReached)
             {
-                transform.position = Vector3.MoveTowards(transform.position, mousePos, speed * Time.deltaTime);
-
-            }
-            else if (System.Math.Abs(transform.position.x - mousePos.x) >= radius && System.Math.Abs(transform.position.z - mousePos.z) >= radius)
-            {
-
-                rb.position = transform.position;
-
-            }
-            //TODO schaue nach cell von mitspielern
-            if (transform.position.y > 0.5)
-            {
-                transform.position = new Vector3(temp.x, 0.5f, temp.z);
+                if (Vector3.Distance(transform.position, currentCell.transform.position) < 0.01f)
+                {
+                    currentCellReached = true;
+                }
             }
 
+            gazeX *= Screen.width;
+            gazeY *= Screen.height;
+
+            Vector3 gazePos = Camera.main.ScreenToWorldPoint(new Vector3(gazeX, gazeY, depth));
+
+            //Debug.Log("GazeX: " + gazePos.x);
+            //Debug.Log("GazeY: " + gazePos.z);
+
+            float x = MazeGenerator.Instance.xSize;
+            float y = MazeGenerator.Instance.ySize;
+            int rangeX = MazeGenerator.Instance.xSize / 7;
+            int rangeY = MazeGenerator.Instance.ySize / 7;
+            float mx = gazePos.x + x / 2 - 1.0f;
+            float my = gazePos.z + y / 2;
+
+            int[] pos = new int[2];
+
+            pos[0] = (int)my;
+            pos[1] = (int)System.Math.Round((double)mx);
+            GameObject[][] board = MazeGenerator.Instance.toMatrix();
+            if (pos[1] < MazeGenerator.Instance.xSize && pos[0] < MazeGenerator.Instance.ySize && pos[1] >= 0 && pos[0] >= 0)
+            {
+                Cell gazeCell = board[pos[0]][pos[1]].GetComponent<Cell>();
+                Debug.Log("Gaze is at cell: " + gazeCell.name);
+                if ((!gazeCell.Equals(lastMouseCell) ||
+                    (!currentCell.Equals(lastCell)))
+                    && currentCellReached)
+                {
+                    Debug.Log(1);
+                    lastMouseCell = gazeCell;
+                    lastCell = currentCell;
+                    currentCellReached = false;
+                    if (PathFinding.Instance.getManhattanDistance(currentCell, gazeCell) < 5)
+                    {
+                        Debug.Log(2);
+                        List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(currentCell, gazeCell);
+                        if (path.Count > 0)
+                        {
+                            Debug.Log(3);
+                            if (path.Count < 5)
+                            {
+                                Debug.Log(4);
+
+                                targetCell = path[0].c;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (targetCell == null)
+            {
+                targetCell = currentCell;
+            }
+
+            Debug.Log("Move to " + targetCell.name);
+            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, speed * Time.deltaTime);
+
+            // Protect area
+            if (Math.Abs(gameObject.GetComponent<Player>().cell.posX - pos[1]) + Math.Abs(gameObject.GetComponent<Player>().cell.posY - pos[0]) < 3)
+            {
+                return;
+            }
+
+            for (int deltaRangeX = rangeX * (-1); deltaRangeX <= rangeX; ++deltaRangeX)
+            {
+                for (int deltaRangeY = rangeY * (-1); deltaRangeY <= rangeY; ++deltaRangeY)
+                {
+                    if (deltaRangeX + pos[1] < 0 || deltaRangeY + pos[0] < 0 || deltaRangeX + pos[1] >= board[0].Length || deltaRangeY + pos[0] >= board.Length)
+                    {
+                        continue;
+                    }
+
+                    Cell c = board[pos[0] + deltaRangeY][pos[1] + deltaRangeX].GetComponent<Cell>();
+                    if (c == null)
+                    {
+                        continue;
+                    }
+                    if (c.lights != null)
+                    {
+                        if (c.lights.Count > 0)
+                        {
+                            for (int i = 0; i < c.lights.Count; i++)
+                            {
+                                c.lights[i].GetComponent<CellLight>().SaveArea(GameController.Instance.players[0]);
+
+                            }
+                        }
+                    }
+                }
+            }
         }
 
+    }
 }

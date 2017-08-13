@@ -58,7 +58,7 @@ namespace Pupil
     [Serializable]
     public class GazeOnSurface
     {
-        public bool on_srf;
+        public bool on_srf = false;
         public string topic;
         public double confidence;
         public double[] norm_pos = new double[] { 0, 0, 0 };
@@ -294,7 +294,7 @@ public class PupilListener : MonoBehaviour
                     {
                         return;
                     }
-                    client.gaze_controller.move(surfaceData);
+                    client.gaze_controller.move(surfaceData, client.surface_name);
                 }
 
             }
