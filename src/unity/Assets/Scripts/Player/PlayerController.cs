@@ -53,8 +53,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
-            //Debug.Log("MouseX: " + mousePos.x);
-            //Debug.Log("MouseY: " + mousePos.z);
             
             float x = MazeGenerator.Instance.xSize;
             float y = MazeGenerator.Instance.ySize;
