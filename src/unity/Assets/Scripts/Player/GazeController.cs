@@ -23,6 +23,9 @@ public class GazeController : MonoBehaviour
     private float gazeX;
     private float gazeY;
 
+    private float goodGazeX;
+    private float goodGazeY;
+
 
     void Start()
     {
@@ -35,7 +38,6 @@ public class GazeController : MonoBehaviour
 
     public void move(Pupil.SurfaceData3D data, string surface = "")
     {
-        //Debug.Log("Move");
         Pupil.GazeOnSurface gaze = new Pupil.GazeOnSurface();
         double maxConfidence = 0;
         foreach (Pupil.GazeOnSurface gos in data.gaze_on_srf)
@@ -47,27 +49,114 @@ public class GazeController : MonoBehaviour
             }
         }
 
-        if (!gaze.on_srf)
+        if (!gaze.on_srf || !data.name.Equals(surface))
         {
-            // gaze is not on the surface, don't do anything
-            //Debug.Log("Not on surface");
-            return;
-        }
-
-        if (!data.name.Equals(surface))
-        {
-            // gaze is not on the right surface, don't do anything
-            Debug.Log("On wrong surface");
             return;
         }
 
         gazeX = (float)gaze.norm_pos[0];
         gazeY = (float)gaze.norm_pos[1];
+    }
 
-        //Debug.Log("X: " + gazeX);
-        //Debug.Log("Y: " + gazeY);
-        //move(gazeX, gazeY);
+    private void protectArea(int[] pos)
+    {
+        GameObject[][] board = MazeGenerator.Instance.toMatrix();
 
+        if (Math.Abs(gameObject.GetComponent<Player>().cell.posX - pos[1]) + Math.Abs(gameObject.GetComponent<Player>().cell.posY - pos[0]) < 3)
+        {
+            return;
+        }
+        int rangeX = MazeGenerator.Instance.xSize / 7;
+        int rangeY = MazeGenerator.Instance.ySize / 7;
+        for (int deltaRangeX = rangeX * (-1); deltaRangeX <= rangeX; ++deltaRangeX)
+        {
+            for (int deltaRangeY = rangeY * (-1); deltaRangeY <= rangeY; ++deltaRangeY)
+            {
+                if (deltaRangeX + pos[1] < 0 || deltaRangeY + pos[0] < 0 || deltaRangeX + pos[1] >= board[0].Length || deltaRangeY + pos[0] >= board.Length)
+                {
+                    continue;
+                }
+
+                Cell c = board[pos[0] + deltaRangeY][pos[1] + deltaRangeX].GetComponent<Cell>();
+                if (c == null)
+                {
+                    continue;
+                }
+                if (c.lights != null)
+                {
+                    if (c.lights.Count > 0)
+                    {
+                        for (int i = 0; i < c.lights.Count; i++)
+                        {
+                            c.lights[i].GetComponent<CellLight>().SaveArea(GameController.Instance.players[0]);
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void findMostProbableCell(int[] pos)
+    {
+        GameObject[][] board = MazeGenerator.Instance.toMatrix();
+
+        int rangeX = 1;
+        int rangeY = 1;
+
+        List<Cell> possibleCells = new List<Cell>();
+
+        for (int deltaRangeX = rangeX * (-1); deltaRangeX <= rangeX; ++deltaRangeX)
+        {
+            for (int deltaRangeY = rangeY * (-1); deltaRangeY <= rangeY; ++deltaRangeY)
+            {
+                if (deltaRangeX * deltaRangeY != 0)
+                {
+                    continue;
+                }
+                if (deltaRangeX + pos[1] < 0 || deltaRangeY + pos[0] < 0 || deltaRangeX + pos[1] >= board[0].Length || deltaRangeY + pos[0] >= board.Length)
+                {
+                    continue;
+                }
+
+                Cell gazeCell = board[pos[0] + deltaRangeY][pos[1] + deltaRangeX].GetComponent<Cell>();
+                if (gazeCell == null)
+                {
+                    continue;
+                }
+                protectArea(new int[] { pos[0] + deltaRangeY, pos[1] + deltaRangeX });
+                if ((!gazeCell.Equals(lastMouseCell) ||
+                    (!currentCell.Equals(lastCell)))
+                    && currentCellReached)
+                {
+                    lastMouseCell = gazeCell;
+                    lastCell = currentCell;
+                    currentCellReached = false;
+                    if (PathFinding.Instance.getManhattanDistance(currentCell, gazeCell) < 5)
+                    {
+                        List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(currentCell, gazeCell);
+                        if (path.Count > 0)
+                        {
+                            if (path.Count < 5)
+                            {
+                                if (Math.Abs(deltaRangeX) + Math.Abs(deltaRangeY) == 0)
+                                {
+                                    targetCell = path[0].c;
+                                    return;
+                                }
+                                possibleCells.Add(path[0].c);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach (Cell c in possibleCells)
+        {
+            targetCell = c;
+            return;
+        }
     }
 
     void Update()
@@ -87,97 +176,41 @@ public class GazeController : MonoBehaviour
                 }
             }
 
-            gazeX *= Screen.width;
-            gazeY *= Screen.height;
+            gazeX = gazeX * Screen.width;
+            gazeY = gazeY * Screen.height;
+            Vector3 gazePos = new Vector3();
 
-            Vector3 gazePos = Camera.main.ScreenToWorldPoint(new Vector3(gazeX, gazeY, depth));
+            if (!(gazeX > 10000 || gazeY > 1000 || gazeX < -10000 || gazeY < -1000))
+            {
+                goodGazeX = gazeX;
+                goodGazeY = gazeY;
+            }
 
-            //Debug.Log("GazeX: " + gazePos.x);
-            //Debug.Log("GazeY: " + gazePos.z);
+            gazePos = Camera.main.ScreenToWorldPoint(new Vector3(goodGazeX, goodGazeY, depth));
+
 
             float x = MazeGenerator.Instance.xSize;
             float y = MazeGenerator.Instance.ySize;
-            int rangeX = MazeGenerator.Instance.xSize / 7;
-            int rangeY = MazeGenerator.Instance.ySize / 7;
+
             float mx = gazePos.x + x / 2 - 1.0f;
             float my = gazePos.z + y / 2;
+            GameObject[][] board = MazeGenerator.Instance.toMatrix();
 
             int[] pos = new int[2];
 
             pos[0] = (int)my;
             pos[1] = (int)System.Math.Round((double)mx);
-            GameObject[][] board = MazeGenerator.Instance.toMatrix();
-            if (pos[1] < MazeGenerator.Instance.xSize && pos[0] < MazeGenerator.Instance.ySize && pos[1] >= 0 && pos[0] >= 0)
-            {
-                Cell gazeCell = board[pos[0]][pos[1]].GetComponent<Cell>();
-                Debug.Log("Gaze is at cell: " + gazeCell.name);
-                if ((!gazeCell.Equals(lastMouseCell) ||
-                    (!currentCell.Equals(lastCell)))
-                    && currentCellReached)
-                {
-                    Debug.Log(1);
-                    lastMouseCell = gazeCell;
-                    lastCell = currentCell;
-                    currentCellReached = false;
-                    if (PathFinding.Instance.getManhattanDistance(currentCell, gazeCell) < 5)
-                    {
-                        Debug.Log(2);
-                        List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(currentCell, gazeCell);
-                        if (path.Count > 0)
-                        {
-                            Debug.Log(3);
-                            if (path.Count < 5)
-                            {
-                                Debug.Log(4);
 
-                                targetCell = path[0].c;
-                            }
-                        }
-                    }
-                }
-            }
+            findMostProbableCell(pos);
 
             if (targetCell == null)
             {
                 targetCell = currentCell;
             }
 
-            Debug.Log("Move to " + targetCell.name);
             transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, speed * Time.deltaTime);
-
-            // Protect area
-            if (Math.Abs(gameObject.GetComponent<Player>().cell.posX - pos[1]) + Math.Abs(gameObject.GetComponent<Player>().cell.posY - pos[0]) < 3)
-            {
-                return;
-            }
-
-            for (int deltaRangeX = rangeX * (-1); deltaRangeX <= rangeX; ++deltaRangeX)
-            {
-                for (int deltaRangeY = rangeY * (-1); deltaRangeY <= rangeY; ++deltaRangeY)
-                {
-                    if (deltaRangeX + pos[1] < 0 || deltaRangeY + pos[0] < 0 || deltaRangeX + pos[1] >= board[0].Length || deltaRangeY + pos[0] >= board.Length)
-                    {
-                        continue;
-                    }
-
-                    Cell c = board[pos[0] + deltaRangeY][pos[1] + deltaRangeX].GetComponent<Cell>();
-                    if (c == null)
-                    {
-                        continue;
-                    }
-                    if (c.lights != null)
-                    {
-                        if (c.lights.Count > 0)
-                        {
-                            for (int i = 0; i < c.lights.Count; i++)
-                            {
-                                c.lights[i].GetComponent<CellLight>().SaveArea(GameController.Instance.players[0]);
-
-                            }
-                        }
-                    }
-                }
-            }
+            
+            
         }
 
     }
