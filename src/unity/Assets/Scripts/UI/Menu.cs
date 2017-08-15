@@ -16,6 +16,7 @@ public class Menu : Singleton<Menu> {
     private bool optionAfterRound = false;
 
     public GameObject mainButtonScreen;
+    public GameObject settingsScreen;
     public GameObject playerScreen;
     public GameObject levelScreen;
     public GameObject roundScreen;
@@ -320,8 +321,10 @@ public class Menu : Singleton<Menu> {
         optionLevel = false;
     }
 
-    public void Settings() {
 
+    public void Settings() {
+        settingsScreen.SetActive(false);
+        settingsScreen.SetActive(true);
     }
 
     public void Help () {

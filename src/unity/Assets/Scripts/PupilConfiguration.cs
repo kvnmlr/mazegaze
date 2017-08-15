@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class PupilConfiguration : Singleton<PupilConfiguration> {
 
+    public PupilListener pupilListener;
+
     [Serializable]
     private class Settings
     {
@@ -23,6 +25,8 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
         public bool detect_surface = true;
         public bool initially_active = true;
         public GazeController gaze_controller;
+        public bool is_connected = false;
+        public bool is_calibrated = false;
     }
 
     private Settings settings;
@@ -62,13 +66,9 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
 
     private void StartListen()
     {
-        GameObject listener = new GameObject("PupilListener");
-        listener.AddComponent<PupilListener>();
-        PupilListener p = listener.GetComponent<PupilListener>();
-        p.detectPupils = true;
         List<PupilClient> clients = new List<PupilClient>(settings.pupil_clients);
-        clients.RemoveAll((c) => !c.initially_active);
-        p.clients = clients;
+        //clients.RemoveAll((c) => !c.initially_active);
+        pupilListener.clients = clients;
 
         int count = 0;
         foreach (PupilClient c in settings.pupil_clients)
@@ -80,6 +80,6 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
             ++count;
         }
 
-        p.Listen();
+        pupilListener.Listen();
     }
 }

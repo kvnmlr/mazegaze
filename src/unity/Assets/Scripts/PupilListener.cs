@@ -73,19 +73,17 @@ namespace Pupil
     }
 }
 
-public class PupilListener : MonoBehaviour
+public class PupilListener : Singleton<PupilListener>
 {
     Thread client_thread_;
     private System.Object thisLock_ = new System.Object();
     bool stop_thread_ = false;
 
     public List<PupilConfiguration.PupilClient> clients = new List<PupilConfiguration.PupilClient>();
-    private List<String> IPHeaders = new List<string>();
+
+    public List<String> IPHeaders = new List<string>();
     private List<SubscriberSocket> subscriberSockets = new List<SubscriberSocket>();
 
-    public GazeController gazeController;
-    public bool detectPupils = true;
-    public bool detectSurfaces = true;
     private bool newData = false;
     private bool isConnected = true;
     private int turn = 0;
@@ -113,7 +111,11 @@ public class PupilListener : MonoBehaviour
 
     public void Listen()
     {
+        IPHeaders = new List<string>();
+        subscriberSockets = new List<SubscriberSocket>();
         client_thread_ = new Thread(NetMQClient);
+        turn = 0;
+
         client_thread_.Start();
     }
 
@@ -154,11 +156,26 @@ public class PupilListener : MonoBehaviour
 
                     if (frameReceived)
                     {
-                        subports.Add(subport);
-                        IPHeaders.Add(IPHeader);
+                        if (c.initially_active)
+                        {
+                            subports.Add(subport);
+                            IPHeaders.Add(IPHeader);
+                            c.is_connected = true;
+                        } else
+                        {
+                            string failHeader = "";
+                            subports.Add(failHeader);
+                            IPHeaders.Add(failHeader);
+                            c.is_connected = false;
+                            Debug.LogWarningFormat("Skipped connection to client {0}:{1} ({2})", c.ip, c.port, c.name);
+                        }
                     }
                     else
                     {
+                        string failHeader = "";
+                        subports.Add(failHeader);
+                        IPHeaders.Add(failHeader);
+                        c.is_connected = false;
                         Debug.LogErrorFormat("Could not connect to client {0}:{1} ({2}). Make sure address is corect and pupil remote service is running", c.ip, c.port, c.name);
                     }
                     requestSocket.Close();
@@ -172,13 +189,18 @@ public class PupilListener : MonoBehaviour
 
         }
 
-        isConnected = (IPHeaders.Count == clients.Count);   // check if all clients are connected
+        isConnected = true; // (IPHeaders.Count == clients.Count);   // check if all clients are connected
 
         if (isConnected)
         {
             Debug.LogFormat("Connected to {0} sockets", IPHeaders.Count);
             foreach (String header in IPHeaders)
             {
+                if (header.Equals(""))
+                {
+                    subscriberSockets.Add(new SubscriberSocket());
+                    continue;
+                }
                 SubscriberSocket subscriberSocket = new SubscriberSocket(header + subports[IPHeaders.IndexOf(header)]);
                 if (clients[IPHeaders.IndexOf(header)].detect_surface)
                 {
@@ -193,6 +215,10 @@ public class PupilListener : MonoBehaviour
             while (!stop_thread_)
             {
                 turn = ++turn % IPHeaders.Count;
+                if (IPHeaders[turn].Equals("") || clients[turn].is_connected == false)
+                {
+                    continue;
+                }
                 timeout = new System.TimeSpan(0, 0, 0, 0, 200);     // wait 200ms to receive a message
 
                 bool stillAlive = subscriberSockets[turn].TryReceiveMultipartMessage(timeout, ref (msg));
@@ -236,6 +262,7 @@ public class PupilListener : MonoBehaviour
             {
                 s.Close();
             }
+            
             subscriberSockets.Clear();
         }
         else
@@ -261,15 +288,26 @@ public class PupilListener : MonoBehaviour
         return false;
     }
 
-    void OnApplicationQuit()
+    public void Reconnect()
     {
-        lock (thisLock_)stop_thread_ = true;
-        foreach (SubscriberSocket s in subscriberSockets)
+        Disconnect();
+        Listen();
+    }
+
+    private void Disconnect()
+    {
+        lock (thisLock_) stop_thread_ = true;
+        foreach (SubscriberSocket s in subscriberSockets.ToArray())
         {
             s.Close();
         }
         NetMQConfig.ContextTerminate();
         Debug.Log("Network Threads terminated.");
+    }
+
+    void OnApplicationQuit()
+    {
+        Disconnect();
     }
 
     void Update()
