@@ -13,7 +13,7 @@ public class Menu : Singleton<Menu> {
     private bool optionRound = false;
     private bool optionBreakButton = false;
     private bool optionBreakScreen = false;
-    private bool optionAfterRound = false;
+    private bool optionWinText = false;
 
     public GameObject mainButtonScreen;
     public GameObject settingsScreen;
@@ -23,7 +23,6 @@ public class Menu : Singleton<Menu> {
     public GameObject gameOverScreen;
     public GameObject breakButton;
     public GameObject breakScreen;
-    public GameObject afterRoundScreen;
     public Canvas canvas;
     public Text winText;
 
@@ -38,6 +37,7 @@ public class Menu : Singleton<Menu> {
         CheckRoundScreen();
         CheckBreakScreen();
         CheckBreakButton();
+        CheckWinText();
 	}
 
     //Check Screens
@@ -58,69 +58,54 @@ public class Menu : Singleton<Menu> {
         }
     }
 
-    void CheckAfterRoundScreen(){
-        if (optionAfterRound == true) {
-            afterRoundScreen.SetActive(true);
-        }
-        else
-        {
-            afterRoundScreen.SetActive(false);
-        }
-    }
 
     void CheckRoundScreen() {
-        if(optionRound == true)
-        {
+        if(optionRound == true) {
             roundScreen.SetActive(true);
-        }
-        else
-        {
+        } else {
             roundScreen.SetActive(false);
         }
     }
 
     void CheckBreakButton() {
-        if (optionBreakButton == true)
-        {
+        if (optionBreakButton == true) {
             breakButton.SetActive(true);
-        }
-        else
-        {
+        } else {
             breakButton.SetActive(false);
         }
 
     }
 
     void CheckBreakScreen() {
-        if (optionBreakScreen == true)
-        {
+        if (optionBreakScreen == true) {
             breakScreen.SetActive(true);
-        }
-        else
-        {
+        } else {
             breakScreen.SetActive(false);
         }
     }
    
     void CheckMainButtonScreen() {
-       if (optionMainButton == true)
-        {
+       if (optionMainButton == true) {
             mainButtonScreen.SetActive(true);
-        }
-        else
-        {
+        } else {
             mainButtonScreen.SetActive(false);
         }
     }
 
 
     void CheckGameOverScreen() {
-        if (optionGameOver == true && GameController.Instance.getPlayedGames() == GameController.Instance.getNumGames()) {
+        if (optionGameOver == true) {
             gameOverScreen.SetActive(true);
-        } else if (optionGameOver == true && GameController.Instance.getPlayedGames() < GameController.Instance.getNumGames()) {
-            afterRoundScreen.SetActive(true);
         } else {
             gameOverScreen.SetActive(false);
+        }
+    }
+
+    void CheckWinText() {
+        if (optionWinText == true) {
+            winText.gameObject.SetActive(true);
+        } else {
+            winText.gameObject.SetActive(false);
         }
     }
 
@@ -136,20 +121,17 @@ public class Menu : Singleton<Menu> {
         optionPlayer = true;
     }
 
-    public void CloseRoundScreen()
-    {
+    public void CloseRoundScreen() {
         optionRound = false;
         optionLevel = true;
     }
 
-    public void CloseBreakButton()
-    {
+    public void CloseBreakButton() {
         optionBreakButton = false;
         optionBreakScreen = true;
     }
 
-    public void CloseBreakScreen()
-    {
+    public void CloseBreakScreen() {
         optionBreakScreen = false;
     }
 
@@ -159,7 +141,6 @@ public class Menu : Singleton<Menu> {
         MazeGenerator.Instance.numPlayers = 1;
         optionPlayer = false;
         optionLevel = true;
-
     }
 
     public void TwoPlayer() {
@@ -242,8 +223,8 @@ public class Menu : Singleton<Menu> {
         optionPlayer = false;
         optionLevel = false;
         optionRound = false;
-        optionAfterRound = false;
-        optionMainButton = true;     
+        optionMainButton = true;
+        optionWinText = false;
     }
     
     //Break Button Control
@@ -290,15 +271,15 @@ public class Menu : Singleton<Menu> {
     //General Start/Quit Functions
 
     public void StartGame() {
-        winText.gameObject.SetActive(false);
+        optionWinText = false;
         optionBreakButton = true;
         GameController.Instance.startNewRound();
         canvas.enabled = false;
        
     }
 
-    public void GameOver() {
-        SetCountText();
+    public void GameOver(Player p) {
+        SetCountText(p);
         canvas.enabled = true;
         optionPlayer = false;
         optionLevel = false;
@@ -331,47 +312,137 @@ public class Menu : Singleton<Menu> {
 
     }
 
+
     //WinText
 
-    public IEnumerator GetWinText() {
-        SetCountText();
+    public IEnumerator GetWinText(Player p) {
+        SetCountText(p);
         canvas.enabled = true;
         optionPlayer = false;
         optionLevel = false;
         optionMainButton = false;
         optionRound = false;
-        //optionGameOver = false;
-        yield return new WaitForSeconds(2);
-        winText.gameObject.SetActive(false);
+        optionGameOver = false;
+        yield return new WaitForSeconds(3);
+        optionWinText = false;
         canvas.enabled = false;
     }
 
-    void SetCountText() {
-        winText.gameObject.SetActive(true);
-        string text = "";
-       
+    void SetCountText(Player p) {
+        optionWinText = true;
+
+        string win = "Player " + p.name + " wins round " + GameController.Instance.getPlayedGames();
+
+        string round = "";
+        if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames()) {
+            string gameover = "GAME OVER - Round " + GameController.Instance.getPlayedGames() + "/" + GameController.Instance.getNumGames();
+            string winner = "";
+            if (isWinner() == true) {
+                winner = "Winner of the match: " + Getwinner().name;
+            } else {
+                winner = "Draw";
+            }
+            round = gameover + "\n" + winner;
+        } else {
+            round = "Round " + GameController.Instance.getPlayedGames() + "/" + GameController.Instance.getNumGames(); 
+        }
+
+        string text = "";  
         switch (MazeGenerator.Instance.numPlayers)
         {
             case 1:
-                text = "PlayerA: " + GameController.Instance.players[0].points;
+                text = "Player A: " + GameController.Instance.players[0].points;
                 break;
             case 2:
-                text = "PlayerA: "  + GameController.Instance.players[0].points + " PlayerB: " + GameController.Instance.players[1].points;
+                text = "Player A: "  + GameController.Instance.players[0].points + " Player B: " + GameController.Instance.players[1].points;
                 break;
             case 3:
-                text = "PlayerA: " + GameController.Instance.players[0].points +
-                    " PlayerB: " + GameController.Instance.players[1].points +
-                    " PlayerC: " + GameController.Instance.players[2].points;
+                text = "Player A: " + GameController.Instance.players[0].points +
+                    " Player B: " + GameController.Instance.players[1].points +
+                    " Player C: " + GameController.Instance.players[2].points;
                 break;
             case 4:
-                text = "PlayerA: " + GameController.Instance.players[0].points +
-                    " PlayerB: " + GameController.Instance.players[1].points +
-                    " PlayerC: " + GameController.Instance.players[2].points +
-                    " PlayerD: " + GameController.Instance.players[3].points;
+                text = "Player A: " + GameController.Instance.players[0].points +
+                    " Player B: " + GameController.Instance.players[1].points +
+                    " Player C: " + GameController.Instance.players[2].points +
+                    " Player D: " + GameController.Instance.players[3].points;
                 break;
 
         }
        
-        winText.text = text;
+        winText.text =  win + "\n" + round + "\n" + "Scores:    "  + text;
+    }
+
+
+
+    Player Getwinner() {
+        switch (MazeGenerator.Instance.numPlayers) {
+            case 1:
+                return GameController.Instance.players[0];
+            case 2:
+                if (GameController.Instance.players[0].points > GameController.Instance.players[1].points) {
+                    return GameController.Instance.players[0];
+                } else  {
+                    return GameController.Instance.players[1];
+                }
+            case 3:
+                if (GameController.Instance.players[0].points > GameController.Instance.players[1].points && GameController.Instance.players[0].points > GameController.Instance.players[2].points)
+                {
+                    return GameController.Instance.players[0];
+                }
+                else if (GameController.Instance.players[1].points > GameController.Instance.players[0].points && GameController.Instance.players[1].points > GameController.Instance.players[2].points)
+                {
+                    return GameController.Instance.players[1];
+                } else
+                {
+                    return GameController.Instance.players[2];
+                }
+            case 4:
+                if (GameController.Instance.players[0].points > GameController.Instance.players[1].points && GameController.Instance.players[0].points > GameController.Instance.players[2].points && GameController.Instance.players[0].points > GameController.Instance.players[3].points)
+                {
+                    return GameController.Instance.players[0];
+                }
+                else if (GameController.Instance.players[1].points > GameController.Instance.players[0].points && GameController.Instance.players[1].points > GameController.Instance.players[2].points && GameController.Instance.players[1].points > GameController.Instance.players[3].points)
+                {
+                    return GameController.Instance.players[1];
+                }
+                else if (GameController.Instance.players[2].points > GameController.Instance.players[0].points && GameController.Instance.players[2].points > GameController.Instance.players[1].points && GameController.Instance.players[2].points > GameController.Instance.players[3].points)
+                {
+                    return GameController.Instance.players[2];
+                } else
+                {
+                    return GameController.Instance.players[3];
+                }
+        }
+        return GameController.Instance.players[1];
+    }
+
+    bool isWinner()  {
+        switch (MazeGenerator.Instance.numPlayers) {
+            case 1:
+                return true;
+            case 2:
+                if (GameController.Instance.players[0].points != GameController.Instance.players[1].points){
+                    return true;
+                } else  {
+                    return false;
+                }
+            case 3:
+                if (GameController.Instance.players[0].points != GameController.Instance.players[1].points && GameController.Instance.players[0].points != GameController.Instance.players[2].points && GameController.Instance.players[1].points != GameController.Instance.players[2].points) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case 4:
+                if (GameController.Instance.players[0].points != GameController.Instance.players[1].points && GameController.Instance.players[0].points != GameController.Instance.players[2].points && GameController.Instance.players[0].points != GameController.Instance.players[3].points && GameController.Instance.players[1].points != GameController.Instance.players[2].points && GameController.Instance.players[1].points != GameController.Instance.players[3].points && GameController.Instance.players[2].points != GameController.Instance.players[3].points)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+        }
+        return true;
     }
 }

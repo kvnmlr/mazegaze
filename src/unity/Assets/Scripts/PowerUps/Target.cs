@@ -13,14 +13,14 @@ public class Target : PowerUp
         
         if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
         {
-            Menu.Instance.GameOver();
+            Menu.Instance.GameOver(p);
         }
         else
         {
-            StartCoroutine(Menu.Instance.GetWinText());
+            StartCoroutine(Menu.Instance.GetWinText(p));
 
             GameController.Instance.startNewRound();
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3);
             gameObject.GetComponent<Collider>().enabled = true;
             gameObject.GetComponent<MeshRenderer>().enabled = true;
 
