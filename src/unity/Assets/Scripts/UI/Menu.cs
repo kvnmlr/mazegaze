@@ -92,7 +92,6 @@ public class Menu : Singleton<Menu> {
         }
     }
 
-
     void CheckGameOverScreen() {
         if (optionGameOver == true) {
             gameOverScreen.SetActive(true);
@@ -210,12 +209,6 @@ public class Menu : Singleton<Menu> {
         StartGame();
     }
 
-    //After RoundScreen Button Control
-
-    public void ContinueGame() {
-        //TODO: implement this
-    }
-
     //GameOverScreen Button Control
 
     public void BackMainMenu() {
@@ -287,7 +280,12 @@ public class Menu : Singleton<Menu> {
         optionRound = false;
         optionBreakButton = false;
         optionBreakScreen = false;
-        optionGameOver = true;//TODO implement this     
+        optionGameOver = true;
+        //Reset points
+        GameController.Instance.players[0].points = 0;
+        GameController.Instance.players[1].points = 0;
+        GameController.Instance.players[2].points = 0;
+        GameController.Instance.players[3].points = 0;
     }
 
     //Main Buttons
