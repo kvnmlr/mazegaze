@@ -39,6 +39,7 @@ public class Endurance : PowerUp
                 }
             }
         }
+        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_POSITIVE_POWERUP);
         gameObject.SetActive(false);
 
     }

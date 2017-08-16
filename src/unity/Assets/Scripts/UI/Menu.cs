@@ -58,7 +58,6 @@ public class Menu : Singleton<Menu> {
         }
     }
 
-
     void CheckRoundScreen() {
         if(optionRound == true) {
             roundScreen.SetActive(true);
@@ -111,50 +110,59 @@ public class Menu : Singleton<Menu> {
     //Close Options
 
     public void ClosePlayerScreen() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionPlayer = false;
         optionMainButton = true;
     }
 
     public void CloseLevelScreen() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionLevel = false;
         optionPlayer = true;
     }
 
     public void CloseRoundScreen() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionRound = false;
         optionLevel = true;
     }
 
     public void CloseBreakButton() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionBreakButton = false;
         optionBreakScreen = true;
     }
 
     public void CloseBreakScreen() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionBreakScreen = false;
     }
 
     //Player Button Control
 
     public void OnePlayer() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         MazeGenerator.Instance.numPlayers = 1;
         optionPlayer = false;
         optionLevel = true;
     }
 
     public void TwoPlayer() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         MazeGenerator.Instance.numPlayers = 2;
         optionPlayer = false;
         optionLevel = true;
     }
 
     public void ThreePlayer() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         MazeGenerator.Instance.numPlayers = 3;
         optionPlayer = false;
         optionLevel = true;
     }
 
     public void FourPlayer() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         MazeGenerator.Instance.numPlayers = 4;
         optionPlayer = false;
         optionLevel = true;
@@ -163,6 +171,7 @@ public class Menu : Singleton<Menu> {
     //Level Button Control
 
     public void SimpleLevel() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         MazeGenerator.Instance.xSize = 7;
         MazeGenerator.Instance.ySize = 7;
         optionLevel = false;
@@ -170,6 +179,7 @@ public class Menu : Singleton<Menu> {
     }
 
     public void MiddleLevel() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         MazeGenerator.Instance.xSize = 11;
         MazeGenerator.Instance.ySize = 11;
         optionLevel = false;
@@ -177,6 +187,7 @@ public class Menu : Singleton<Menu> {
     }
 
     public void HardLevel() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         MazeGenerator.Instance.xSize = 15;
         MazeGenerator.Instance.ySize = 15;
         optionLevel = false;
@@ -186,24 +197,28 @@ public class Menu : Singleton<Menu> {
     //Round Button Control
 
     public void OneRound() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         GameController.Instance.setNumGames(1);
         optionRound = false;
         StartGame();
     }
 
     public void ThreeRound() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         GameController.Instance.setNumGames(3);
         optionRound = false;
         StartGame();
     }
 
     public void FiveRound() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         GameController.Instance.setNumGames(5);
         optionRound = false;
         StartGame();
     }
 
     public void SevenRound() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         GameController.Instance.setNumGames(7);
         optionRound = false;
         StartGame();
@@ -224,6 +239,7 @@ public class Menu : Singleton<Menu> {
     
     public void GoOnButton()
     {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         CloseBreakScreen();
         canvas.enabled = false;
     }
@@ -257,6 +273,7 @@ public class Menu : Singleton<Menu> {
 
 
     public void PressBreak() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         CloseBreakButton();
         optionBreakScreen = true;
     }
@@ -264,6 +281,7 @@ public class Menu : Singleton<Menu> {
     //General Start/Quit Functions
 
     public void StartGame() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionWinText = false;
         optionBreakButton = true;
         GameController.Instance.startNewRound();
@@ -291,10 +309,12 @@ public class Menu : Singleton<Menu> {
     //Main Buttons
 
     public void QuitGame() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         Application.Quit();
     }
 
     public void Play() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionMainButton = false;
         optionPlayer = true;
         optionLevel = false;
@@ -302,12 +322,13 @@ public class Menu : Singleton<Menu> {
 
 
     public void Settings() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         settingsScreen.SetActive(false);
         settingsScreen.SetActive(true);
     }
 
     public void Help () {
-
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
     }
 
 

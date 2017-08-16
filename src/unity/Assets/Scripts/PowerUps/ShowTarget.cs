@@ -7,6 +7,7 @@ public class ShowTarget : PowerUp {
     public override IEnumerator performPowerUp(Player p)
     {
         PowerUpManager.Instance.target.cell.spawnLight(p, true);
+        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_POSITIVE_POWERUP);
         gameObject.SetActive(false);
         yield return new WaitForSeconds(0);
     }

@@ -10,7 +10,8 @@ public class Target : PowerUp
 
         p.points++;
         GameController.Instance.setRestart(true);
-        
+        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_TARGET);
+
         if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
         {
             Menu.Instance.GameOver(p);

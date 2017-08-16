@@ -20,6 +20,7 @@ public abstract class PowerUp : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+
         this.cell = transform.parent.gameObject.GetComponent<Cell>();
         if (other.gameObject.GetComponent<Player>() != null)
         {
