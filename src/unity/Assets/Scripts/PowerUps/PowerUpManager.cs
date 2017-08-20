@@ -11,7 +11,10 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         Enlightenment = 1,
         ShowTarget = 2,
         Endurance = 3,
-        Target = 4
+        Darkness = 4,
+        Dim = 5,
+        Slowing = 6,
+        Target = 7,
     }
 
     // indicating how many powerups are currently active
@@ -127,8 +130,8 @@ public class PowerUpManager : Singleton<PowerUpManager> {
             // get a random cell for a powerup
             cell = UnityEngine.Random.Range(1, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
 
-            // make sure powerup is not spawned directly on player
-            while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().players.Count > 0)
+            // make sure powerup is not spawned directly on player or other powerup
+            while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().players.Count > 0 || MazeGenerator.Instance.cells[cell].GetComponent<PowerUp>() != null)
             {
                 cell = UnityEngine.Random.Range(1, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
             }
@@ -174,15 +177,12 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         return null;
     }
 
-	// Use this for initialization
-	void Start () {
-	}
 	public void setSpawnedPowerUps(int id)
     {
         activePowerUps = id;
     }
-	// Update is called once per frame
-	void Update () {
+
+    void Update () {
         // have max 1 powerup per 10 cells
         if (activePowerUps >= MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize / 20)
         {
@@ -193,6 +193,10 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 
         if (MazeGenerator.Instance.cells != null && elapsedTime >= waitTime)
         {
+            // todo only for debugging
+            spawnPowerUp(PowerUpManager.PowerUpTypes.Darkness);
+            /*
+
             int type = UnityEngine.Random.Range(0, 3);
             switch (type)
             {
@@ -216,7 +220,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                         spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance);
                     }
                     break;
-            }
+            }*/
             elapsedTime = 0.0f;
             waitTime = UnityEngine.Random.Range(3.0f, 6.0f);
             activePowerUps++;
