@@ -15,6 +15,8 @@ public class Target : PowerUp
         if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
         {
             Menu.Instance.GameOver(p);
+            AudioManager.Instance.stop();
+            AudioManager.Instance.play(AudioManager.SOUNDS.MENU);
         }
         else
         {

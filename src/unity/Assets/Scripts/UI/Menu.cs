@@ -303,6 +303,8 @@ public class Menu : Singleton<Menu> {
         optionBreakButton = true;
         GameController.Instance.startNewRound();
         canvas.enabled = false;
+        AudioManager.Instance.stop();
+        AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK);
        
     }
 

@@ -7,7 +7,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip collectPositivePowerup;
     public AudioClip collectNegativePowerup;
     public AudioClip collectTarget;
-    public AudioClip roundFinished;
+    public AudioClip menu;
+    public AudioClip backtrack;
 
     public AudioClip nativeFadeInClip;
     public AudioClip nativeFadeOutClip;
@@ -21,7 +22,8 @@ public class AudioManager : MonoBehaviour
         COLLECT_POSITIVE_POWERUP,
         COLLECT_NEGATIVE_POWERUP,
         COLLECT_TARGET,
-        ROUND_FINISHED,
+        MENU,
+        BACKTRACK,
 
         NATIVE_FADE_IN,
         NATIVE_FADE_OUT,
@@ -70,10 +72,14 @@ public class AudioManager : MonoBehaviour
             case SOUNDS.COLLECT_TARGET:
                 mSource.PlayOneShot(collectTarget);
                 break;
-            case SOUNDS.ROUND_FINISHED:
-                mSource.PlayOneShot(roundFinished);
+            case SOUNDS.MENU:
+                mSource.PlayOneShot(menu);
+                //TODO: schleife!!! Also Song hört nach 7 min auf
                 break;
-
+            case SOUNDS.BACKTRACK:
+                mSource.PlayOneShot(backtrack, 0.2f);
+                //TODO: schleife!!! Also Song hört nach 5 min auf
+                break;
             case SOUNDS.NATIVE_FADE_IN:
                 mSource.PlayOneShot(nativeFadeInClip);
                 break;
@@ -90,5 +96,18 @@ public class AudioManager : MonoBehaviour
                 mSource.PlayOneShot(nativeSelectClip);
                 break;
         }
+    }
+
+    public void stop()
+    {
+        if (mSource == null)
+        {
+            return ;
+        }
+            if (mSource.isPlaying)
+            {
+                mSource.Stop();
+            }
+         
     }
 }

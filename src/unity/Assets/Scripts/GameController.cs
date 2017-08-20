@@ -49,6 +49,7 @@ public class GameController : Singleton<GameController>
 
     void Start()
     {
+        AudioManager.Instance.play(AudioManager.SOUNDS.MENU);
         gameover = false;
         restart = false;
 
