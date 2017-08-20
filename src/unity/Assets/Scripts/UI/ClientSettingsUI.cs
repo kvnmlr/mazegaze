@@ -41,11 +41,13 @@ public class ClientSettingsUI : MonoBehaviour
             {
                 connectionStatus.color = new Color(1, 1, 1);
                 connect.GetComponentInChildren<Text>().text = "Disconnect";
+                calibrate.interactable = true;
             }
             else
             {
                 connectionStatus.color = new Color(0.1f, 0.1f, 0.1f);
                 connect.GetComponentInChildren<Text>().text = "Connect";
+                calibrate.interactable = false;
             }
 
             if (client.is_calibrated)
@@ -76,6 +78,11 @@ public class ClientSettingsUI : MonoBehaviour
         cover.gameObject.SetActive(true);
 
         StartCoroutine(Reconnect());
+    }
+
+    public void ClickCalibration()
+    {
+        PupilListener.Instance.StartCalibration(client);
     }
 
     IEnumerator Reconnect()

@@ -6,9 +6,7 @@
             "port": "49565",
             "surface_name": "oo",
             "detect_surface": true,
-            "initially_active": false,
-            "is_connected": false,
-            "is_calibrated": false
+            "initially_active": true
         },
         {
             "name": "Acer",
@@ -16,9 +14,7 @@
             "port": "50404",
             "surface_name": "screen",
             "detect_surface": true,
-            "initially_active": true,
-            "is_connected": false,
-            "is_calibrated": false
+            "initially_active": true
         }
     ],
     "setup_id": "Testeinstellungen"

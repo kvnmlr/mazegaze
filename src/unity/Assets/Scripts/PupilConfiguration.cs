@@ -26,8 +26,8 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
         public bool detect_surface = true;
         public bool initially_active = true;
         public GazeController gaze_controller { get; set; }
-        public bool is_connected = false;
-        public bool is_calibrated = false;
+        public bool is_connected { get; set; }
+        public bool is_calibrated { get; set; }
     }
 
     private Settings settings;

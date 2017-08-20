@@ -5,6 +5,8 @@ using NetMQ;
 using NetMQ.Sockets;
 using System.Collections.Generic;
 using System.Net;
+using MsgPack.Serialization;
+using System.IO;
 
 namespace Pupil
 {
@@ -88,6 +90,7 @@ public class PupilListener : Singleton<PupilListener>
     private bool newData = false;
     private bool isConnected = true;
     private int turn = 0;
+    private TimeSpan timeout = new System.TimeSpan(0, 0, 1);
 
 
     Pupil.PupilData3D pupilData = new Pupil.PupilData3D();
@@ -124,7 +127,6 @@ public class PupilListener : Singleton<PupilListener>
 
     void NetMQClient()
     {
-        var timeout = new System.TimeSpan(0, 0, 1);
         AsyncIO.ForceDotNet.Force();
         NetMQConfig.ManualTerminationTakeOver();
         NetMQConfig.ContextCreate(true);
@@ -163,7 +165,11 @@ public class PupilListener : Singleton<PupilListener>
                             subports.Add(subport);
                             IPHeaders.Add(IPHeader);
                             c.is_connected = true;
-                        } else
+
+                            // set up the pupil client software
+                            // sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "eye_process.should_start.0" }, { "eye_id", 0 } });
+                        }
+                        else
                         {
                             string failHeader = "";
                             subports.Add(failHeader);
@@ -311,6 +317,56 @@ public class PupilListener : Singleton<PupilListener>
 
         NetMQConfig.ContextTerminate();
         Debug.Log("Network Threads terminated.");
+    }
+
+    public void StartCalibration(PupilConfiguration.PupilClient client)
+    {
+        Debug.Log("Starting Calibration for client " + client.name);
+        if (!(clients.Contains(client) && client.is_connected))
+        {
+            Debug.LogWarningFormat("Client {0}:{1} ({2}) can't be calibrated because it is not connected", client.ip, client.port, client.name);
+            return;
+        }
+        RequestSocket requestSocket = requestSockets[clients.IndexOf(client)];
+        if (requestSocket == null)
+        {
+            Debug.LogError("Error trying to get request socket");
+            return;
+        }
+        sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "eye_process.should_start.0" }, { "eye_id", 0 } });
+    }
+
+    NetMQMessage sendRequest(RequestSocket socket, Dictionary<string, object> data)
+    {
+        NetMQMessage m = new NetMQMessage();
+        m.Append("notify." + data["subject"]);
+
+        using (var byteStream = new MemoryStream())
+        {
+            var ctx = new SerializationContext();
+            ctx.CompatibilityOptions.PackerCompatibilityOptions = MsgPack.PackerCompatibilityOptions.None;
+            var ser = MessagePackSerializer.Get<object>(ctx);
+            ser.Pack(byteStream, data);
+            m.Append(byteStream.ToArray());
+        }
+
+        socket.SendMultipartMessage(m);
+        //timeout = new System.TimeSpan(0, 0, 0, 0, 200);
+        //socket.TrySendMultipartMessage(timeout, m);
+
+        NetMQMessage recievedMsg;
+        recievedMsg = socket.ReceiveMultipartMessage();
+
+        string msgType = recievedMsg[0].ConvertToString();
+        Debug.Log("type: " + msgType);
+        if (recievedMsg.FrameCount > 1)
+        {
+            MsgPack.UnpackingResult<MsgPack.MessagePackObject> message = MsgPack.Unpacking.UnpackObject(recievedMsg[1].ToByteArray());
+            MsgPack.MessagePackObject mmap = message.Value;
+            Debug.Log("message: " + mmap.ToString());
+        }
+
+        return recievedMsg;
     }
 
     void OnApplicationQuit()
