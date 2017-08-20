@@ -194,7 +194,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         if (MazeGenerator.Instance.cells != null && elapsedTime >= waitTime)
         {
             // todo only for debugging
-            spawnPowerUp(PowerUpManager.PowerUpTypes.Darkness);
+            spawnPowerUp(PowerUpManager.PowerUpTypes.Dim);
             /*
 
             int type = UnityEngine.Random.Range(0, 3);
