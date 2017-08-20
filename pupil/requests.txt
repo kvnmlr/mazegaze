@@ -1,0 +1,18 @@
+__Requests:__
+Star hmd calibration plugin:
+_sendRequestMessage ( new Dictionary<string,object> {{"subject","start_plugin"},{"name","HMD_Calibration"}});
+
+Start calibration:
+_sendRequestMessage ( new Dictionary<string,object> {{"subject","calibration.should_start"},{"hmd_video_frame_size",new float[]{1000,1000}},{"outlier_threshold",35}});
+
+Stop calibration:
+_sendRequestMessage ( new Dictionary<string,object> {{"subject","calibration.should_stop"}});
+
+Start eye camera:
+_sendRequestMessage (new Dictionary<string,object> {{"subject","eye_process.should_start.0"},{"eye_id",0}});
+
+Stop eye camera:
+_sendRequestMessage (new Dictionary<string,object> { { "subject","service_process.should_stop" }, { "eye_id",0 } });
+
+?:
+_sendRequestMessage (new Dictionary<string,object> {{"subject","calibration.add_ref_data"},{"ref_data",_CalibrationPoints}});
