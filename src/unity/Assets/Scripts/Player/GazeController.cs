@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class GazeController : MonoBehaviour
 {
-    public float speed = 1;
-
     private Rigidbody rb;
 
     private Vector3 offset;
@@ -25,11 +23,6 @@ public class GazeController : MonoBehaviour
 
     private float goodGazeX;
     private float goodGazeY;
-
-
-    void Start()
-    {
-    }
 
     public void listenerReady()
     {
@@ -208,10 +201,7 @@ public class GazeController : MonoBehaviour
                 targetCell = currentCell;
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, speed * Time.deltaTime);
-            
-            
+            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);         
         }
-
     }
 }

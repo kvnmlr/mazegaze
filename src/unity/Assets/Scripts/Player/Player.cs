@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
     public new string name;
     public float timeToDarkness { get; set; }
     public int points { get; set; }
+    public float speed = 1;
 
     // the cell in which this player currently is
     public Cell cell { get; set; }

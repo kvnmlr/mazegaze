@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class PlayerControllerArrow : MonoBehaviour
 {
-    public float speed;
-
     void FixedUpdate()
     {
         if (!Menu.Instance.canvas.enabled)
         {           
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                transform.position += Vector3.right * speed * Time.deltaTime;
+                transform.position += Vector3.right * gameObject.GetComponent<Player>().speed * Time.deltaTime;
             }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                transform.position += Vector3.left * speed * Time.deltaTime;
+                transform.position += Vector3.left * gameObject.GetComponent<Player>().speed * Time.deltaTime;
             }
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                transform.position += Vector3.forward * speed * Time.deltaTime;
+                transform.position += Vector3.forward * gameObject.GetComponent<Player>().speed * Time.deltaTime;
             }
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                transform.position += Vector3.back * speed * Time.deltaTime;
+                transform.position += Vector3.back * gameObject.GetComponent<Player>().speed * Time.deltaTime;
             }
             
         }

@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpManager : Singleton<PowerUpManager> {
+public class PowerUpManager : Singleton<PowerUpManager>
+{
     public PowerUp[] powerUps;
     public PowerUp target;
     public enum PowerUpTypes
@@ -18,7 +19,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
     }
 
     // indicating how many powerups are currently active
-    public int activePowerUps {get;set;}
+    public int activePowerUps { get; set; }
 
     // time to wait until new powerup spawns
     public float waitTime = 3.0f;
@@ -28,7 +29,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 
     public PowerUp spawnPowerUp(PowerUpTypes type, bool forceSpawn = false, float spawnDifficulty = 2)
     {
-        
+
         int cell = 0;
         if (type.Equals(PowerUpTypes.Target))
         {
@@ -46,7 +47,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                 board[row] = new float[xSize];
                 for (int column = 0; column < xSize; ++column)
                 {
-                    for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i) 
+                    for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
                     {
                         Player p = GameController.Instance.players[i];
                         int y = p.cell.posY;
@@ -81,7 +82,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                         board[row][column] += diffToAverage;
                     }*/
 
-                    board[row][column] += UnityEngine.Random.Range(0,10 * MazeGenerator.Instance.xSize) * 0.1f;
+                    board[row][column] += UnityEngine.Random.Range(0, 10 * MazeGenerator.Instance.xSize) * 0.1f;
 
                     bool possible = true;
                     if (board[row][column] > bestCellValue)
@@ -116,16 +117,17 @@ public class PowerUpManager : Singleton<PowerUpManager> {
                 // did not find a suitable cell, do again
                 if (forceSpawn)
                 {
-                    return spawnPowerUp(PowerUpTypes.Target, forceSpawn, spawnDifficulty / 2.0f );
+                    return spawnPowerUp(PowerUpTypes.Target, forceSpawn, spawnDifficulty / 2.0f);
                 }
                 else
                 {
                     return null;
                 }
             }
-            return spawnPowerUp(PowerUpTypes.Target,  MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
+            return spawnPowerUp(PowerUpTypes.Target, MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
 
-        } else
+        }
+        else
         {
             // get a random cell for a powerup
             cell = UnityEngine.Random.Range(1, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
@@ -139,7 +141,7 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         }
     }
 
-    public PowerUp spawnPowerUp (PowerUpTypes type, Cell cell)
+    public PowerUp spawnPowerUp(PowerUpTypes type, Cell cell)
     {
         if (type.Equals(PowerUpTypes.Target))
         {
@@ -177,13 +179,14 @@ public class PowerUpManager : Singleton<PowerUpManager> {
         return null;
     }
 
-	public void setSpawnedPowerUps(int id)
+    public void setSpawnedPowerUps(int id)
     {
         activePowerUps = id;
     }
 
-    void Update () {
-        // have max 1 powerup per 10 cells
+    void Update()
+    {
+        // have max 1 powerup per 20 cells
         if (activePowerUps >= MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize / 20)
         {
             return;
@@ -193,36 +196,29 @@ public class PowerUpManager : Singleton<PowerUpManager> {
 
         if (MazeGenerator.Instance.cells != null && elapsedTime >= waitTime)
         {
-            // todo only for debugging
-            spawnPowerUp(PowerUpManager.PowerUpTypes.Dim);
-            /*
-
-            int type = UnityEngine.Random.Range(0, 3);
+            int type = UnityEngine.Random.Range(0, 6);
             switch (type)
             {
                 case 0:
-                    if (elapsedTime >= waitTime)
-                    {
-
-                        spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment);
-                    }
+                    spawnPowerUp(PowerUpManager.PowerUpTypes.Enlightenment);
                     break;
                 case 1:
-                    if (elapsedTime >= waitTime)
-                    {
-
-                        spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget);
-                    }
+                    spawnPowerUp(PowerUpManager.PowerUpTypes.ShowTarget);
                     break;
                 case 2:
-                    if (elapsedTime >= waitTime)
-                    {
-                        spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance);
-                    }
+                    spawnPowerUp(PowerUpManager.PowerUpTypes.Endurance);
                     break;
-            }*/
+                case 3:
+                    spawnPowerUp(PowerUpManager.PowerUpTypes.Darkness);
+                    break;
+                case 4:
+                    spawnPowerUp(PowerUpManager.PowerUpTypes.Dim);
+                    break;
+                case 5:
+                    spawnPowerUp(PowerUpManager.PowerUpTypes.Slowing);
+                    break;
+            }
             elapsedTime = 0.0f;
-            waitTime = UnityEngine.Random.Range(3.0f, 6.0f);
             activePowerUps++;
         }
     }

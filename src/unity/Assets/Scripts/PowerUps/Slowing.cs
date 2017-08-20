@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dim : PowerUp {
+public class Slowing : PowerUp {
 
     private float duration = 0;
     public override IEnumerator performPowerUp(Player p)
@@ -12,16 +12,14 @@ public class Dim : PowerUp {
         {
             if (!player.Equals(p))
             {
-                player.timeToDarkness *= 0.8f;
+                player.speed *= 0.9f;
             }
         }
-       
         yield return new WaitForSeconds(duration);
-
     }
 
     void Start()
     {
-        this.type = PowerUpManager.PowerUpTypes.Dim;
+        this.type = PowerUpManager.PowerUpTypes.Slowing;
     }
 }
