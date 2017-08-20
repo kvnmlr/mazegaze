@@ -69,7 +69,6 @@ public class PlayerController : MonoBehaviour
             if (pos[1] < MazeGenerator.Instance.xSize && pos[0] < MazeGenerator.Instance.ySize && pos[1] >= 0 && pos[0] >= 0)
             {
                 Cell mouseCell = board[pos[0]][pos[1]].GetComponent<Cell>();
-                Debug.Log("Mouse is at cell: " + mouseCell.name);
                 if ((!mouseCell.Equals(lastMouseCell) ||
                     (!currentCell.Equals(lastCell))) 
                     && currentCellReached)

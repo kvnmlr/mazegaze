@@ -18,6 +18,11 @@ public class ClientSettingsUI : MonoBehaviour
 
     private PupilConfiguration.PupilClient client;
 
+    void OnDisable()
+    {
+        PupilConfiguration.Instance.SaveSettings();            
+    }
+
     void OnEnable()
     {
         if (clientIndex < PupilListener.Instance.clients.Count && clientIndex >= 0)

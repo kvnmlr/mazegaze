@@ -108,6 +108,13 @@ public class Menu : Singleton<Menu> {
     }
 
     //Close Options
+    public void CloseSettingsScreen()
+    {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
+        settingsScreen.SetActive(false);
+        optionPlayer = false;
+        optionMainButton = true;
+    }
 
     public void ClosePlayerScreen() {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);

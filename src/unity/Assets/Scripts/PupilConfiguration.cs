@@ -7,6 +7,7 @@ using UnityEngine;
 public class PupilConfiguration : Singleton<PupilConfiguration> {
 
     public PupilListener pupilListener;
+    public string pupilConfigFilePath;
 
     [Serializable]
     private class Settings
@@ -24,7 +25,7 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
         public string surface_name;
         public bool detect_surface = true;
         public bool initially_active = true;
-        public GazeController gaze_controller;
+        public GazeController gaze_controller { get; set; }
         public bool is_connected = false;
         public bool is_calibrated = false;
     }
@@ -34,10 +35,10 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
 
     void Start()
     {
-        string filePath = Path.Combine(Application.streamingAssetsPath, "pupil_config.json");
-        if (File.Exists(filePath))
+        pupilConfigFilePath = Path.Combine(Application.streamingAssetsPath, "pupil_config.json");
+        if (File.Exists(pupilConfigFilePath))
         {
-            string dataAsJson = File.ReadAllText(filePath);
+            string dataAsJson = File.ReadAllText(pupilConfigFilePath);
             settings = JsonUtility.FromJson<Settings>(dataAsJson);
             Debug.Log(settings.setup_id + " have been loaded");
 
@@ -62,6 +63,13 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
             //p.StopListen();
             yield return new WaitForSeconds(3);
         }
+    }
+
+    public void SaveSettings()
+    {
+        String dataAsJson = JsonUtility.ToJson(settings, true);
+        File.WriteAllText(pupilConfigFilePath, dataAsJson);
+
     }
 
     private void StartListen()

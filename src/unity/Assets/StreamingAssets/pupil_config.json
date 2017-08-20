@@ -1,21 +1,25 @@
 {
-	"setup_id" : "Testeinstellungen",
-	"pupil_clients" : [
-		{
-			"name" : "Lenovo",
-			"ip" : "192.168.1.3",
-			"port" : 49565,
-			"surface_name" : "screen",
-			"detect_surface" : true,
-			"initially_active" : true
-		},
-		{
-			"name" : "Acer",
-			"ip" : "192.168.1.7",
-			"port" : 50404,
-			"surface_name" : "screen",
-			"detect_surface" : true,
-			"initially_active" : false
-		}
-	]
+    "pupil_clients": [
+        {
+            "name": "Lenovo",
+            "ip": "192.168.1.3",
+            "port": "49565",
+            "surface_name": "oo",
+            "detect_surface": true,
+            "initially_active": false,
+            "is_connected": false,
+            "is_calibrated": false
+        },
+        {
+            "name": "Acer",
+            "ip": "192.168.1.7",
+            "port": "50404",
+            "surface_name": "screen",
+            "detect_surface": true,
+            "initially_active": true,
+            "is_connected": false,
+            "is_calibrated": false
+        }
+    ],
+    "setup_id": "Testeinstellungen"
 }

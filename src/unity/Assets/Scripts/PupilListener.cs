@@ -83,6 +83,7 @@ public class PupilListener : Singleton<PupilListener>
 
     public List<String> IPHeaders = new List<string>();
     private List<SubscriberSocket> subscriberSockets = new List<SubscriberSocket>();
+    private List<RequestSocket> requestSockets = new List<RequestSocket>();
 
     private bool newData = false;
     private bool isConnected = true;
@@ -113,6 +114,7 @@ public class PupilListener : Singleton<PupilListener>
     {
         IPHeaders = new List<string>();
         subscriberSockets = new List<SubscriberSocket>();
+        requestSockets = new List<RequestSocket>();
         client_thread_ = new Thread(NetMQClient);
         turn = 0;
 
@@ -178,7 +180,8 @@ public class PupilListener : Singleton<PupilListener>
                         c.is_connected = false;
                         Debug.LogErrorFormat("Could not connect to client {0}:{1} ({2}). Make sure address is corect and pupil remote service is running", c.ip, c.port, c.name);
                     }
-                    requestSocket.Close();
+                    requestSockets.Add(requestSocket);
+                    //requestSocket.Close();
                 }
 
             }
@@ -301,6 +304,11 @@ public class PupilListener : Singleton<PupilListener>
         {
             s.Close();
         }
+        foreach (RequestSocket s in requestSockets)
+        {
+            s.Close();
+        }
+
         NetMQConfig.ContextTerminate();
         Debug.Log("Network Threads terminated.");
     }
