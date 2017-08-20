@@ -240,6 +240,16 @@ public class Menu : Singleton<Menu> {
         optionRound = false;
         optionMainButton = true;
         optionWinText = false;
+        optionBreakButton = false;
+        optionBreakScreen = false;
+
+    }
+
+    public void RestartGame() {
+        //TODO: implement 
+        optionGameOver = false;
+        
+        StartGame();
     }
     
     //Break Button Control
@@ -320,13 +330,13 @@ public class Menu : Singleton<Menu> {
         Application.Quit();
     }
 
-    public void Play() {
+    public void Play()
+    {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionMainButton = false;
         optionPlayer = true;
         optionLevel = false;
     }
-
 
     public void Settings() {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
