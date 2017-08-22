@@ -21,9 +21,18 @@ public class Target : PowerUp
         else
         {
             StartCoroutine(Menu.Instance.GetWinText(p));
-
             GameController.Instance.startNewRound();
             yield return new WaitForSeconds(3);
+            if (GameController.Instance.getPlayedGames() == 4)
+            {
+                AudioManager.Instance.stop();
+                AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK2);
+            }
+            else if (GameController.Instance.getPlayedGames() == 6)
+            {
+                AudioManager.Instance.stop();
+                AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK3);
+            }
             gameObject.GetComponent<Collider>().enabled = true;
             gameObject.GetComponent<MeshRenderer>().enabled = true;
 

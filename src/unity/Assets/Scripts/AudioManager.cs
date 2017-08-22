@@ -8,7 +8,9 @@ public class AudioManager : MonoBehaviour
     public AudioClip collectNegativePowerup;
     public AudioClip collectTarget;
     public AudioClip menu;
-    public AudioClip backtrack;
+    public AudioClip backtrack1;
+    public AudioClip backtrack2;
+    public AudioClip backtrack3;
 
     public AudioClip nativeFadeInClip;
     public AudioClip nativeFadeOutClip;
@@ -23,7 +25,9 @@ public class AudioManager : MonoBehaviour
         COLLECT_NEGATIVE_POWERUP,
         COLLECT_TARGET,
         MENU,
-        BACKTRACK,
+        BACKTRACK1,
+        BACKTRACK2,
+        BACKTRACK3,
 
         NATIVE_FADE_IN,
         NATIVE_FADE_OUT,
@@ -33,6 +37,7 @@ public class AudioManager : MonoBehaviour
     }
 
     private AudioSource mSource;
+    private AudioSource mLoopSource;
     private static AudioManager _Instance;
 
     public static AudioManager Instance
@@ -49,7 +54,13 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
+        mLoopSource = (GetComponent<AudioSource>() == null) ? gameObject.AddComponent<AudioSource>() : GetComponent<AudioSource>();
         mSource = (GetComponent<AudioSource>() == null) ? gameObject.AddComponent<AudioSource>() : GetComponent<AudioSource>();
+        mLoopSource.loop = true;
+        mLoopSource.volume = 0.15f;
+        mLoopSource.playOnAwake = true;
+        
+
     }
 
     public void play(SOUNDS sound)
@@ -67,18 +78,26 @@ public class AudioManager : MonoBehaviour
                 mSource.PlayOneShot(collectPositivePowerup);
                 break;
             case SOUNDS.COLLECT_NEGATIVE_POWERUP:
-                mSource.PlayOneShot(collectNegativePowerup);
+                mSource.PlayOneShot(collectNegativePowerup,0.2f);
                 break;
             case SOUNDS.COLLECT_TARGET:
                 mSource.PlayOneShot(collectTarget);
                 break;
             case SOUNDS.MENU:
-                mSource.PlayOneShot(menu);
-                //TODO: schleife!!! Also Song hört nach 7 min auf
+                mLoopSource.clip = menu;
+                mLoopSource.Play();
                 break;
-            case SOUNDS.BACKTRACK:
-                mSource.PlayOneShot(backtrack, 0.2f);
-                //TODO: schleife!!! Also Song hört nach 5 min auf
+            case SOUNDS.BACKTRACK1:
+                mLoopSource.clip = backtrack1;
+                mLoopSource.Play();
+                break;
+            case SOUNDS.BACKTRACK2:
+                mLoopSource.clip = backtrack2;
+                mLoopSource.Play();
+                break;
+            case SOUNDS.BACKTRACK3:
+                mLoopSource.clip = backtrack3;
+                mLoopSource.Play();
                 break;
             case SOUNDS.NATIVE_FADE_IN:
                 mSource.PlayOneShot(nativeFadeInClip);
@@ -104,9 +123,9 @@ public class AudioManager : MonoBehaviour
         {
             return ;
         }
-            if (mSource.isPlaying)
+            if (mLoopSource.isPlaying)
             {
-                mSource.Stop();
+                mLoopSource.Stop();
             }
          
     }

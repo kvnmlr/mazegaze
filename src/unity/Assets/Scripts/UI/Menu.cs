@@ -234,6 +234,7 @@ public class Menu : Singleton<Menu> {
     //GameOverScreen Button Control
 
     public void BackMainMenu() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionGameOver = false;
         optionPlayer = false;
         optionLevel = false;
@@ -248,9 +249,11 @@ public class Menu : Singleton<Menu> {
             MazeGenerator.Instance.LeaveGame();
         }
 
+
     }
 
     public void RestartGame() {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionGameOver = false;
         int numPlayers = MazeGenerator.Instance.numPlayers;
         while (MazeGenerator.Instance.numPlayers > 0)
@@ -314,7 +317,7 @@ public class Menu : Singleton<Menu> {
         GameController.Instance.startNewRound();
         canvas.enabled = false;
         AudioManager.Instance.stop();
-        AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK);
+        AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK1);
        
     }
 

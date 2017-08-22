@@ -7,6 +7,7 @@ public class Dim : PowerUp {
     private float duration = 0;
     public override IEnumerator performPowerUp(Player p)
     {
+        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_NEGATIVE_POWERUP);
         Debug.Log("perform on " + p.name);
         foreach (Player player in GameController.Instance.players)
         {

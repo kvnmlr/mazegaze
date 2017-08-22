@@ -7,6 +7,7 @@ public class Darkness : PowerUp
     private float duration = 0;
     public override IEnumerator performPowerUp(Player p)
     {
+        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_NEGATIVE_POWERUP);
         GameObject[][] board = MazeGenerator.Instance.toMatrix();
         for (int row = 0; row < MazeGenerator.Instance.ySize; ++row)
         {
