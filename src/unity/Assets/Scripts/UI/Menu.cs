@@ -243,6 +243,11 @@ public class Menu : Singleton<Menu> {
         optionBreakButton = false;
         optionBreakScreen = false;
 
+        while (MazeGenerator.Instance.numPlayers > 0)
+        {
+            MazeGenerator.Instance.LeaveGame();
+        }
+
     }
 
     public void RestartGame() {
