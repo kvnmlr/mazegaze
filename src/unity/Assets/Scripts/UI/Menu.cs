@@ -251,9 +251,14 @@ public class Menu : Singleton<Menu> {
     }
 
     public void RestartGame() {
-        //TODO: implement 
         optionGameOver = false;
-        
+        int numPlayers = MazeGenerator.Instance.numPlayers;
+        while (MazeGenerator.Instance.numPlayers > 0)
+        {
+            MazeGenerator.Instance.LeaveGame();
+        }
+        MazeGenerator.Instance.numPlayers = numPlayers;
+        GameController.Instance.setNumGames(GameController.Instance.getNumGames());
         StartGame();
     }
     
