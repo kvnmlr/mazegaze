@@ -47,6 +47,8 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     private List<int> lastCells;
     private int backingUp = 0;
     private int wallToBreak = 0;
+    private int secondWallToBreak = 0;
+
     private CellProperties start;
     private GameObject tempFloor;
 
@@ -461,6 +463,13 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             case 3: cellProperties[currentCell].east.SetActive(false); break;
             case 4: cellProperties[currentCell].south.SetActive(false); break;
         }
+        switch (secondWallToBreak)
+        {
+            case 1: cellProperties[currentCell].north.SetActive(false); break;
+            case 2: cellProperties[currentCell].west.SetActive(false); break;
+            case 3: cellProperties[currentCell].east.SetActive(false); break;
+            case 4: cellProperties[currentCell].south.SetActive(false); break;
+        }
     }
 
     private void GiveMeNeighbour()
@@ -524,6 +533,16 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             int theChosenOne = Random.Range(0, length);
             currentNeighbour = neighbour[theChosenOne];
             wallToBreak = connectingWalls[theChosenOne];
+
+            int theChosenOne2 = Random.Range(0, length * 2);
+            theChosenOne2 = theChosenOne;       // not breaking second wall, delete this line to break 2 walls
+
+            if (theChosenOne2 < connectingWalls.Length)
+            {
+                secondWallToBreak = connectingWalls[theChosenOne2];
+                Debug.Log("Second Wall to break " + secondWallToBreak + " for " + currentCell);
+            }
+            Debug.Log("Wall to break " + wallToBreak + " for " + currentCell);
         }
         else
         {

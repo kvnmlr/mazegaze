@@ -143,11 +143,11 @@ public class PowerUpManager : Singleton<PowerUpManager>
             target.gameObject.GetComponent<MeshRenderer>().enabled = true;
 
             // let target light up
-            GameObject g = new GameObject();
+            /*GameObject g = new GameObject();
             g.AddComponent<ShowTarget>();
             g.GetComponent<ShowTarget>().type = PowerUpTypes.ShowTarget;
             g.GetComponent<ShowTarget>().activate(GameController.Instance.players[0]);
-            Destroy(g.GetComponent<ShowTarget>());
+            Destroy(g.GetComponent<ShowTarget>());*/
             return target.GetComponent<Target>();
         }
 
