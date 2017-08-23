@@ -27,7 +27,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
     // elapsed time since last powerup spawned
     private float elapsedTime = 0.0f;
 
-    public PowerUp spawnPowerUp(PowerUpTypes type, bool forceSpawn = false, float spawnDifficulty = 2)
+    public PowerUp spawnPowerUp(PowerUpTypes type, bool forceSpawn = false, float spawnDifficulty = 1.0f)
     {
 
         int cell = 0;
@@ -38,81 +38,69 @@ public class PowerUpManager : Singleton<PowerUpManager>
             int ySize = MazeGenerator.Instance.ySize;
             int xSize = MazeGenerator.Instance.xSize;
 
-            float[][] board = new float[ySize][];
-            float bestCellValue = 0;
+            float[][][] board = new float[ySize][][];
+            float bestCellValue = int.MaxValue;
             int bestCellY = 0, bestCellX = 0;
 
             for (int row = 0; row < ySize; ++row)
             {
-                board[row] = new float[xSize];
+                board[row] = new float[xSize][];
                 for (int column = 0; column < xSize; ++column)
                 {
+                    board[row][column] = new float[MazeGenerator.Instance.numPlayers];
+
                     for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
                     {
-                        Player p = GameController.Instance.players[i];
-                        int y = p.cell.posY;
-                        int x = p.cell.posX;
 
-                        int diffY = Math.Abs(row - y);
-                        int diffX = Math.Abs(column - x);
-                        board[row][column] += (diffY + diffX);
+                        Player p = GameController.Instance.players[i];
+
                         List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(p.cell, MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>());
-                        board[row][column] += (path == null) ? int.MaxValue : path.Count;
+                        board[row][column][i] = (path == null) ? int.MaxValue : path.Count;
                     }
 
                     // average distance to each cell
-                    //float average = board[row][column] / (1.0f * MazeGenerator.Instance.numPlayers);
-
-                    //board[row][column] *= -0.01f / MazeGenerator.Instance.xSize;
+                    float total = 0;
+                    for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
+                    {
+                        total += board[row][column][i];
+                    }
+                    float average = total / (MazeGenerator.Instance.numPlayers);
 
                     // sum up difference to average
-                    /*(for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
+                    float deltaVal = 0;                 // indicating the fairness of the cell, 0 being best
+                    for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
                     {
-                        Player p = GameController.Instance.players[i];
-                        int y = p.cell.posY;
-                        int x = p.cell.posX;
+                        float pathLength = board[row][column][i];
+                        float diffToAverage = Math.Abs(average - pathLength);
 
-                        int diffY = Math.Abs(row - y);
-                        int diffX = Math.Abs(column - x);
-
-                        int diffTotal = diffX + diffY;
-
-                        float diffToAverage = Math.Abs(average - diffTotal);
-
-                        board[row][column] += diffToAverage;
-                    }*/
-
-                    board[row][column] += UnityEngine.Random.Range(0, 10 * MazeGenerator.Instance.xSize) * 0.1f;
+                        deltaVal += diffToAverage;
+                    }
 
                     bool possible = true;
-                    if (board[row][column] > bestCellValue)
+                    if (deltaVal < bestCellValue)
                     {
                         for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
                         {
-                            Player p = GameController.Instance.players[i];
-                            List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(p.cell, MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>());
-                            if (path == null)
+                            if (board[row][column][i] < MazeGenerator.Instance.xSize * spawnDifficulty)
                             {
+                                // do not use this cell if a user only has to go size * n cells to reach it
                                 possible = false;
-                                break;
                             }
-                            if (path.Count < MazeGenerator.Instance.xSize * spawnDifficulty)
+                            if (deltaVal / average > 0.2f * MazeGenerator.Instance.numPlayers && !forceSpawn)
                             {
-                                // do not use this cell if a user only has to go size * 2 cells to reach it
                                 possible = false;
                             }
                         }
                         if (possible)
                         {
-                            bestCellValue = board[row][column];
+                            bestCellValue = deltaVal;
                             bestCellY = row;
                             bestCellX = column;
                         }
-
                     }
                 }
             }
-            if (bestCellValue == 0)
+            if (bestCellValue == int.MaxValue)
             {
                 // did not find a suitable cell, do again
                 if (forceSpawn)
@@ -124,8 +112,8 @@ public class PowerUpManager : Singleton<PowerUpManager>
                     return null;
                 }
             }
+            Debug.Log("Target fairness: " + bestCellValue);
             return spawnPowerUp(PowerUpTypes.Target, MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
-
         }
         else
         {
