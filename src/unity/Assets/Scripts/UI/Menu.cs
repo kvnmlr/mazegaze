@@ -379,49 +379,51 @@ public class Menu : Singleton<Menu> {
         canvas.enabled = false;
     }
 
-    void SetCountText(Player p) {
+    void SetCountText(Player p)
+    {
         optionWinText = true;
 
-        string win = "Player " + p.name + " wins round " + GameController.Instance.getPlayedGames();
+        string win = p.name + " collected target!";
 
         string round = "";
-        if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames()) {
-            string gameover = "GAME OVER - Round " + GameController.Instance.getPlayedGames() + "/" + GameController.Instance.getNumGames();
+        string text = "";
+
+        if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
+        {
             string winner = "";
-            if (isWinner() == true) {
+            if (isWinner() == true)
+            {
                 winner = "Winner of the match: " + Getwinner().name;
-            } else {
+            }
+            else
+            {
                 winner = "Draw";
             }
-            round = gameover + "\n" + winner;
-        } else {
-            round = "Round " + GameController.Instance.getPlayedGames() + "/" + GameController.Instance.getNumGames(); 
+            round = "GAME OVER  -   " + winner;
+
+            switch (MazeGenerator.Instance.numPlayers)
+            {
+                case 1:
+                    text = "Scores:    " + GameController.Instance.players[0].name + ": " + GameController.Instance.players[0].points;
+                    break;
+                case 2:
+                    text = "Scores:    " + GameController.Instance.players[0].name + ": " + GameController.Instance.players[0].points + "  " + GameController.Instance.players[1].name + ": " + GameController.Instance.players[1].points;
+                    break;
+                case 3:
+                    text = "Scores:    " + GameController.Instance.players[0].name + ": " + GameController.Instance.players[0].points +
+                        "  " + GameController.Instance.players[1].name + ": " + GameController.Instance.players[1].points +
+                        "  " + GameController.Instance.players[2].name + ": " + GameController.Instance.players[2].points;
+                    break;
+                case 4:
+                    text = "Scores:    " + GameController.Instance.players[0].name + ": " + GameController.Instance.players[0].points +
+                        "  " + GameController.Instance.players[1].name + ": " + GameController.Instance.players[1].points +
+                        "  " + GameController.Instance.players[2].name + ": " + GameController.Instance.players[2].points +
+                        "  " + GameController.Instance.players[3].name + ": " + GameController.Instance.players[3].points;
+                    break;
+            }
         }
 
-        string text = "";  
-        switch (MazeGenerator.Instance.numPlayers)
-        {
-            case 1:
-                text = "Player A: " + GameController.Instance.players[0].points;
-                break;
-            case 2:
-                text = "Player A: "  + GameController.Instance.players[0].points + " Player B: " + GameController.Instance.players[1].points;
-                break;
-            case 3:
-                text = "Player A: " + GameController.Instance.players[0].points +
-                    " Player B: " + GameController.Instance.players[1].points +
-                    " Player C: " + GameController.Instance.players[2].points;
-                break;
-            case 4:
-                text = "Player A: " + GameController.Instance.players[0].points +
-                    " Player B: " + GameController.Instance.players[1].points +
-                    " Player C: " + GameController.Instance.players[2].points +
-                    " Player D: " + GameController.Instance.players[3].points;
-                break;
-
-        }
-       
-        winText.text =  win + "\n" + round + "\n" + "Scores:    "  + text;
+        winText.text = win + "\n" + round + "\n" + text;
     }
 
 
