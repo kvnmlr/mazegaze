@@ -14,6 +14,8 @@ public class Menu : Singleton<Menu> {
     private bool optionBreakButton = false;
     private bool optionBreakScreen = false;
     private bool optionWinText = false;
+    private bool optionRanking = false;
+    private bool optionRoundText = false;
 
     public GameObject mainButtonScreen;
     public GameObject settingsScreen;
@@ -25,6 +27,10 @@ public class Menu : Singleton<Menu> {
     public GameObject breakScreen;
     public Canvas canvas;
     public Text winText;
+    public Canvas canvasranking;
+    public Text rankingText;
+    public Canvas canvasround;
+    public Text roundText;
 
     void Start () {
     }
@@ -38,6 +44,8 @@ public class Menu : Singleton<Menu> {
         CheckBreakScreen();
         CheckBreakButton();
         CheckWinText();
+        CheckRoundText();
+        CheckRanking();
 	}
 
     //Check Screens
@@ -104,6 +112,31 @@ public class Menu : Singleton<Menu> {
             winText.gameObject.SetActive(true);
         } else {
             winText.gameObject.SetActive(false);
+        }
+    }
+
+    void CheckRoundText()
+    {
+        if (optionRoundText == true)
+        {
+            roundText.gameObject.SetActive(true);
+        }
+        else
+        {
+            roundText.gameObject.SetActive(false);
+        }
+        roundText.text = "Round " + GameController.Instance.getPlayedGames() + "/" + GameController.Instance.getNumGames();
+    }
+
+    void CheckRanking()
+    {
+        if (optionRanking == true)
+        {
+            rankingText.gameObject.SetActive(true);
+        }
+        else
+        {
+            rankingText.gameObject.SetActive(false);
         }
     }
 
@@ -316,6 +349,8 @@ public class Menu : Singleton<Menu> {
         optionBreakButton = true;
         GameController.Instance.startNewRound();
         canvas.enabled = false;
+        optionRoundText = true;
+        optionRanking = true;
         AudioManager.Instance.stop();
         AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK1);
        
@@ -330,6 +365,9 @@ public class Menu : Singleton<Menu> {
         optionRound = false;
         optionBreakButton = false;
         optionBreakScreen = false;
+        optionRoundText = false;
+        optionRanking = false;
+        optionWinText = true;
         optionGameOver = true;
         //Reset points
         GameController.Instance.players[0].points = 0;
