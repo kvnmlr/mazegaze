@@ -10,7 +10,7 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
     public string pupilConfigFilePath;
 
     [Serializable]
-    private class Settings
+    public class Settings
     {
         public List<PupilClient> pupil_clients = new List<PupilClient>();
         public string setup_id = "";
@@ -30,7 +30,7 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
         public bool is_calibrated { get; set; }
     }
 
-    private Settings settings;
+    public Settings settings;
     private List<PupilListener> listeners = new List<PupilListener>();
 
     void Start()

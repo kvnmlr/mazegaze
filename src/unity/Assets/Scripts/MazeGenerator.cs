@@ -540,9 +540,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
             if (theChosenOne2 < connectingWalls.Length)
             {
                 secondWallToBreak = connectingWalls[theChosenOne2];
-                Debug.Log("Second Wall to break " + secondWallToBreak + " for " + currentCell);
             }
-            Debug.Log("Wall to break " + wallToBreak + " for " + currentCell);
         }
         else
         {

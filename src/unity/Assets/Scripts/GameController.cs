@@ -6,6 +6,7 @@ public class GameController : Singleton<GameController>
 {
     public bool useMenu = false;
     public Player[] players;
+    public Player[] joined;
 
     private MazeGenerator mazeGenerator;
     private PowerUpManager powerUpManager;
@@ -60,6 +61,7 @@ public class GameController : Singleton<GameController>
         mazeGenerator.xSize = 9;
         mazeGenerator.ySize = 9;
 
+        joined = new Player[players.Length];
         setUpPlayers();
 
         if (!useMenu)
@@ -71,8 +73,86 @@ public class GameController : Singleton<GameController>
         }
     }
 
-    public void startNewRound()
+    private void startCalibration(PupilConfiguration.PupilClient client, bool startRound = false)
     {
+        client.is_calibrated = true;
+        if (startRound)
+        {
+            setUpNewRound();
+        }
+    }
+
+    public void startPlayerAssignment()
+    {
+        Menu.Instance.joinScreen.SetActive(true);
+        //playersAssigned();
+    }
+
+    public void assignMousePlayer()
+    {
+        assignPlayer(players[0], 0);
+    }
+    public void assignKeyboardPlayer()
+    {
+        assignPlayer(players[1], 1);
+    }
+    public void assignPlayer(Player player, int position)
+    {
+        Debug.Log(player.name + " joined the round");
+        joined[position] = player;
+        int numJoined = 0;
+        foreach (Player p in joined)
+        {
+            if (p != null)
+            {
+                numJoined++;
+            }
+        }
+        if (numJoined == MazeGenerator.Instance.numPlayers)
+        {
+            playersAssigned();
+        }
+    }
+
+    public void playersAssigned()
+    {
+        Debug.Log("All players joined");
+        Menu.Instance.joinScreen.SetActive(false);
+        startNewRound();
+    }
+
+    public void setUpNewRound()
+    {
+        // check if player need calibration
+        foreach (Player p in players)
+        {
+            if (p.gameObject.GetComponent<GazeController>() != null)
+            {
+                // this is a gaze controlled player
+                PupilConfiguration.PupilClient client = PupilConfiguration.Instance.settings.pupil_clients.Find((x) => x.name.Equals(p.name));
+                if (client == null)
+                {
+                    Debug.LogWarning("Did not find client with name " + p.name + " in pupil settings");
+                } else
+                {
+                    if (!client.is_calibrated)
+                    {
+                        Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
+                        startCalibration(client, true);
+                        return;
+                    } else
+                    {
+                        Debug.Log(client.name + " is calibrated and ready to play");
+                    }
+                }
+            }
+        }
+
+        startPlayerAssignment();
+    }
+
+    public void startNewRound() { 
+
         mazeBuildAttempts++;
         if (playedGames == 0 || mazeBuildAttempts > 20)
         {
@@ -85,7 +165,7 @@ public class GameController : Singleton<GameController>
             if (powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target) == null)
             {
                 mazeGenerator.DestroyMaze();
-                startNewRound();
+                setUpNewRound();
                 return;
             }
             powerUpManager.setSpawnedPowerUps(0);

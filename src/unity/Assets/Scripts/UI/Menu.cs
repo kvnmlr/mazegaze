@@ -27,6 +27,7 @@ public class Menu : Singleton<Menu> {
     public GameObject gameOverScreen;
     public GameObject breakButton;
     public GameObject breakScreen;
+    public GameObject joinScreen;
     public Canvas canvas;
     public Text winText;
     public Canvas canvasranking;
@@ -370,7 +371,7 @@ public class Menu : Singleton<Menu> {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionWinText = false;
         optionBreakButton = true;
-        GameController.Instance.startNewRound();
+        GameController.Instance.setUpNewRound();
         canvas.enabled = false;
         optionRoundText = true;
         optionRanking = true;
