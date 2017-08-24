@@ -17,6 +17,8 @@ public class Menu : Singleton<Menu> {
     private bool optionRanking = false;
     private bool optionRoundText = false;
 
+    private bool breakgameover;
+
     public GameObject mainButtonScreen;
     public GameObject settingsScreen;
     public GameObject playerScreen;
@@ -138,6 +140,7 @@ public class Menu : Singleton<Menu> {
         {
             rankingText.gameObject.SetActive(false);
         }
+        computeRanking();
     }
 
     //Close Options
@@ -284,8 +287,22 @@ public class Menu : Singleton<Menu> {
             MazeGenerator.Instance.LeaveGame();
         }
 
-        optionGameOver = true;
+        //Wenn vom BreakScreen Button getätigt wurde
+        if (breakgameover == true)
+        {
+            //Punkte zurücksetzen
+            GameController.Instance.players[0].points = 0;
+            GameController.Instance.players[1].points = 0;
+            GameController.Instance.players[2].points = 0;
+            GameController.Instance.players[3].points = 0;
+            //andere Musik
+            AudioManager.Instance.stop();
+            AudioManager.Instance.play(AudioManager.SOUNDS.MENU);
+            //
+            GameController.Instance.setRestart(true);
+        }
 
+        breakgameover = false;
     }
 
     public void RestartGame() {
@@ -309,6 +326,7 @@ public class Menu : Singleton<Menu> {
         CloseBreakScreen();
         canvas.enabled = false;
         optionBreakButton = true;
+        breakgameover = false;
     }
 
     public void LeaveGame()
@@ -343,6 +361,7 @@ public class Menu : Singleton<Menu> {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         CloseBreakButton();
         optionBreakScreen = true;
+        breakgameover = true;
     }
 
     //General Start/Quit Functions
@@ -406,6 +425,45 @@ public class Menu : Singleton<Menu> {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
     }
 
+    //Ranking
+
+     public void computeRanking()
+    {
+        int numPlayers = MazeGenerator.Instance.numPlayers;
+        Player[] a = new Player[numPlayers];
+
+        System.Array.Copy(GameController.Instance.players, a, 1);
+        
+
+        for (int i = 0; i < numPlayers; i++)
+        {
+            a[i] = GameController.Instance.players[i];
+        }
+
+       for (int i = numPlayers; i > 1; i--)
+        {
+            for (int j = 0; j < i-1; j++)
+            {
+                if (a[j].points > a[j+1].points)
+                {
+                    Player help = a[j];
+                    a[j] = a[j + 1];
+                    a[j + 1] = help;
+                }
+            }
+        }
+
+        string text = "RANKING:";
+        for (int i = 0; i < numPlayers; i++)
+        {
+            text = text + "\n" + a[i].name + "  " + a[i].points;
+        }
+
+        rankingText.text = text;
+
+
+    }
+
 
     //WinText
 
@@ -467,6 +525,7 @@ public class Menu : Singleton<Menu> {
         }
 
         winText.text = win + "\n" + round + "\n" + text;
+        computeRanking();
     }
 
 
