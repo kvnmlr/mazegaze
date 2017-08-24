@@ -5,8 +5,12 @@ using UnityEngine;
 public class Dim : PowerUp {
 
     private float duration = 0;
+    public ParticleSystem badEffect;
+
     public override IEnumerator performPowerUp(Player p)
     {
+        badEffect.transform.position = gameObject.transform.position;
+        badEffect.Play(true);
         AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_NEGATIVE_POWERUP);
         Debug.Log("perform on " + p.name);
         foreach (Player player in GameController.Instance.players)

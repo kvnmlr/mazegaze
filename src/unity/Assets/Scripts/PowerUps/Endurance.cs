@@ -7,9 +7,12 @@ public class Endurance : PowerUp
 {
     public float factor = 2;
     public float duration = 5;
+    public ParticleSystem goodEffect;
 
     public override IEnumerator performPowerUp(Player p)
     {
+        goodEffect.transform.position = gameObject.transform.position;
+        goodEffect.Play(true);
         p.timeToDarkness = p.timeToDarkness * factor;
         foreach (GameObject c in MazeGenerator.Instance.cells)
         {
