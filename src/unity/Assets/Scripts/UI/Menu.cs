@@ -100,7 +100,7 @@ public class Menu : Singleton<Menu> {
     }
 
     void CheckGameOverScreen() {
-        if (optionGameOver == true) {
+        if (optionGameOver == true && optionMainButton == false) {
             gameOverScreen.SetActive(true);
         } else {
             gameOverScreen.SetActive(false);
@@ -276,12 +276,15 @@ public class Menu : Singleton<Menu> {
         optionWinText = false;
         optionBreakButton = false;
         optionBreakScreen = false;
+        optionRanking = false;
+        optionRoundText = false;
 
         while (MazeGenerator.Instance.numPlayers > 0)
         {
             MazeGenerator.Instance.LeaveGame();
         }
 
+        optionGameOver = true;
 
     }
 
@@ -305,6 +308,7 @@ public class Menu : Singleton<Menu> {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         CloseBreakScreen();
         canvas.enabled = false;
+        optionBreakButton = true;
     }
 
     public void LeaveGame()
@@ -389,6 +393,7 @@ public class Menu : Singleton<Menu> {
         optionMainButton = false;
         optionPlayer = true;
         optionLevel = false;
+        optionGameOver = false;
     }
 
     public void Settings() {
