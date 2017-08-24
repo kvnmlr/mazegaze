@@ -432,28 +432,15 @@ public class Menu : Singleton<Menu> {
         int numPlayers = MazeGenerator.Instance.numPlayers;
         Player[] a = new Player[numPlayers];
 
-        System.Array.Copy(GameController.Instance.players, a, 1);
-        
-
         for (int i = 0; i < numPlayers; i++)
         {
             a[i] = GameController.Instance.players[i];
         }
 
-       for (int i = numPlayers; i > 1; i--)
-        {
-            for (int j = 0; j < i-1; j++)
-            {
-                if (a[j].points > a[j+1].points)
-                {
-                    Player help = a[j];
-                    a[j] = a[j + 1];
-                    a[j + 1] = help;
-                }
-            }
-        }
+       
 
         string text = "RANKING:";
+
         for (int i = 0; i < numPlayers; i++)
         {
             text = text + "\n" + a[i].name + "  " + a[i].points;
