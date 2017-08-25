@@ -103,35 +103,35 @@ public class MazeGenerator : Singleton<MazeGenerator> {
                             //erzeuge einen neuen B oder C oder D
                             if (oldNumPlayers == 1)
                             {
-                                GeneratePlayerPfeil();
+                                GenerateTopLeft();
                             }
                             else if (oldNumPlayers == 2)
                             {
-                                GeneratePlayerwasd();
+                                GenerateTopRight();
                             }
                             else
                             {
-                                GeneratePlayeruhjk();
+                                GenerateTopBottomRight();
                             }
                             break;
                         case 2:
                             //erzeuge 2 neue B && C oder C && D
                             if (oldNumPlayers == 1 && numPlayers == 3)
                             {
-                                GeneratePlayerPfeil();
-                                GeneratePlayerwasd();
+                                GenerateTopLeft();
+                                GenerateTopRight();
                             }
                             else
                             {
-                                GeneratePlayerwasd();
-                                GeneratePlayeruhjk();
+                                GenerateTopRight();
+                                GenerateTopBottomRight();
                             }                            
                             break;
                         case 3:
                             //erzeuge 3 neue B && C && D
-                            GeneratePlayerPfeil();
-                            GeneratePlayerwasd();
-                            GeneratePlayeruhjk();
+                            GenerateTopLeft();
+                            GenerateTopRight();
+                            GenerateTopBottomRight();
                             break;
                     }
                 }
@@ -215,13 +215,13 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         switch (numPlayers)
         {
             case 2:
-                GeneratePlayerPfeil();
+                GenerateTopLeft();
                 break;
             case 3:
-                GeneratePlayerwasd();
+                GenerateTopRight();
                 break;
             case 4:
-                GeneratePlayeruhjk();
+                GenerateTopBottomRight();
                 break;
 
         }
@@ -241,32 +241,18 @@ public class MazeGenerator : Singleton<MazeGenerator> {
 
     void CreatPlayer()
     {
-
-        switch (numPlayers)
-        {
-            case 1:
-                GeneratePlayerMouse(); 
-                break;
-            case 2:
-                GeneratePlayerMouse();
-                GeneratePlayerPfeil();
-                break;
-            case 3:
-                GeneratePlayerMouse();
-                GeneratePlayerPfeil();
-                GeneratePlayerwasd();
-                break;
-            case 4:
-                GeneratePlayerMouse();
-                GeneratePlayerPfeil();
-                GeneratePlayerwasd();
-                GeneratePlayeruhjk();
-                break;
-        }
+        GenerateBottomLeft();
+        GenerateTopLeft();
+        GenerateTopRight();
+        GenerateTopBottomRight();
     }
 
-    void GeneratePlayerMouse()
+    void GenerateBottomLeft()
     {
+        if (playerA == null)
+        {
+            return;
+        }
         playerA.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
         playerA.transform.position = toMatrix()[0][0].transform.position;
         playerA.gameObject.GetComponent<Player>().cell = toMatrix()[0][0].GetComponent<Cell>();
@@ -274,8 +260,12 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         playerA.SetActive(true);
     }
 
-    void GeneratePlayerPfeil()
+    void GenerateTopLeft()
     {
+        if (playerB == null)
+        {
+            return;
+        }
         playerB.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
         playerB.transform.position = toMatrix()[ySize-1][0].transform.position;
         playerB.gameObject.GetComponent<Player>().cell = toMatrix()[ySize - 1][0].GetComponent<Cell>();
@@ -283,8 +273,12 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         playerB.SetActive(true);
     }
 
-    void GeneratePlayerwasd()
+    void GenerateTopRight()
     {
+        if (playerC == null)
+        {
+            return;
+        }
         playerC.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
         playerC.transform.position = toMatrix()[0][xSize-1].transform.position;
         playerC.gameObject.GetComponent<Player>().cell = toMatrix()[0][xSize - 1].GetComponent<Cell>();
@@ -292,8 +286,12 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         playerC.SetActive(true);
     }
 
-    void GeneratePlayeruhjk()
+    void GenerateTopBottomRight()
     {
+        if (playerD == null)
+        {
+            return;
+        }
         playerD.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
         playerD.transform.position = toMatrix()[ySize-1][xSize-1].transform.position;
         playerD.gameObject.GetComponent<Player>().cell = toMatrix()[ySize - 1][xSize - 1].GetComponent<Cell>();

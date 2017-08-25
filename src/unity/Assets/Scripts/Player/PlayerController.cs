@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
 
             // Move player
             currentCell = gameObject.GetComponent<Player>().cell;
-            if (!currentCellReached)
+            if (!currentCellReached && currentCell != null)
             {
                 if (Vector3.Distance(transform.position, currentCell.transform.position) < 0.01f)
                 {

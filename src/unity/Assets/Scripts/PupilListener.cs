@@ -255,7 +255,6 @@ public class PupilListener : Singleton<PupilListener>
                             // surface detected
                             lock (thisLock_)
                             {
-                                Debug.Log(clients[turn].name + ": surface detected");
                                 newData = true;
                                 surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
                             }

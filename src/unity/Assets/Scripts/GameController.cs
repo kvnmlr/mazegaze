@@ -5,8 +5,8 @@ using UnityEngine;
 public class GameController : Singleton<GameController>
 {
     public bool useMenu = false;
+    public Dictionary<Player, int> joinedPlayersToPosition = new Dictionary<Player, int>();
     public Player[] players;
-    public Player[] joined;
 
     private MazeGenerator mazeGenerator;
     private PowerUpManager powerUpManager;
@@ -61,11 +61,11 @@ public class GameController : Singleton<GameController>
         mazeGenerator.xSize = 9;
         mazeGenerator.ySize = 9;
 
-        joined = new Player[players.Length];
-        setUpPlayers();
+        joinedPlayersToPosition = new Dictionary<Player, int>();
 
         if (!useMenu)
         {
+            setUpPlayers();
             mazeGenerator.numPlayers = 4;
             mazeGenerator.xSize = 7;
             mazeGenerator.ySize = 7;
@@ -75,7 +75,7 @@ public class GameController : Singleton<GameController>
 
     private void startCalibration(PupilConfiguration.PupilClient client, bool startRound = false)
     {
-        client.is_calibrated = true;
+        client.is_calibrated = true;        // TODO replace with correct calibration
         if (startRound)
         {
             setUpNewRound();
@@ -85,30 +85,23 @@ public class GameController : Singleton<GameController>
     public void startPlayerAssignment()
     {
         Menu.Instance.joinScreen.SetActive(true);
-        //playersAssigned();
     }
 
     public void assignMousePlayer()
     {
-        assignPlayer(players[0], 0);
+        assignPlayer(players[0], 1);
     }
     public void assignKeyboardPlayer()
     {
-        assignPlayer(players[1], 1);
+        assignPlayer(players[1], 2);
     }
     public void assignPlayer(Player player, int position)
     {
-        Debug.Log(player.name + " joined the round");
-        joined[position] = player;
-        int numJoined = 0;
-        foreach (Player p in joined)
+        if (!joinedPlayersToPosition.ContainsKey(player))
         {
-            if (p != null)
-            {
-                numJoined++;
-            }
+            joinedPlayersToPosition.Add(player, position);
         }
-        if (numJoined == MazeGenerator.Instance.numPlayers)
+        if (joinedPlayersToPosition.Keys.Count == MazeGenerator.Instance.numPlayers)
         {
             playersAssigned();
         }
@@ -151,7 +144,8 @@ public class GameController : Singleton<GameController>
         startPlayerAssignment();
     }
 
-    public void startNewRound() { 
+    public void startNewRound() {
+        setUpPlayers();
 
         mazeBuildAttempts++;
         if (playedGames == 0 || mazeBuildAttempts > 20)
@@ -193,12 +187,9 @@ public class GameController : Singleton<GameController>
 
     private int getRandomCellTarget()
     {
-        //double mitteungerundet = (mazeGenerator.xSize / 2);
         double mitte = System.Math.Floor((double)(mazeGenerator.xSize / 2));
         double wRand = System.Math.Floor((mazeGenerator.xSize - mitte) / 2);
-        //double eRand = System.Math.Ceiling((mazeGenerator.xSize - mitte) / 2);
         double sRand = wRand;
-        //double nRand = eRand;
         double[] zufall = new double[(int)mitte];
         float RechteGrenze = (float)(sRand * mazeGenerator.xSize + wRand);
         float LinkeGrenze = (float)(sRand * mazeGenerator.xSize + wRand + mitte);
@@ -215,45 +206,52 @@ public class GameController : Singleton<GameController>
         int j = Random.Range(0, (int)mitte - 1);
         j = (int)zufall[j];
 
-
-
         return j;
     }
 
     private void setUpPlayers()
     {
-        if (players.Length > 4)
+        Debug.Log("Set up " + joinedPlayersToPosition.Keys.Count + " players");
+        mazeGenerator.numPlayers = 0;
+        mazeGenerator.playerA = null;
+        mazeGenerator.playerB = null;
+        mazeGenerator.playerC = null;
+        mazeGenerator.playerD = null;
+
+        foreach (Player p in joinedPlayersToPosition.Keys)
         {
-            Debug.Log("The maximum number of players is 4");
+            MazeGenerator.Instance.numPlayers++;
+            int pos;
+            joinedPlayersToPosition.TryGetValue(p, out pos);
+            switch (pos) {
+                case 1:
+                    mazeGenerator.playerA = p.gameObject;
+                    break;
+                case 2:
+                    mazeGenerator.playerB = p.gameObject;
+                    break;
+                case 3:
+                    mazeGenerator.playerC = p.gameObject;
+                    break;
+                case 4:
+                    mazeGenerator.playerD = p.gameObject;
+                    break;
+                default:
+                    Debug.Log("Invalid position value for player " + p.name + "(" + pos + ")");
+                    break;
+            }
         }
 
-        if (players.Length > 0)
+        foreach(Player p1 in joinedPlayersToPosition.Keys)
         {
-            mazeGenerator.playerA = players[0].gameObject;
-            mazeGenerator.numPlayers = 1;
-        }
-        if (players.Length > 1)
-        {
-            mazeGenerator.playerB = players[1].gameObject;
-            mazeGenerator.numPlayers = 2;
-            Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[1].gameObject.GetComponent<Collider>());
-        }
-        if (players.Length > 2)
-        {
-            mazeGenerator.playerC = players[2].gameObject;
-            mazeGenerator.numPlayers = 3;
-            Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[2].gameObject.GetComponent<Collider>());
-            Physics.IgnoreCollision(players[1].gameObject.GetComponent<Collider>(), players[2].gameObject.GetComponent<Collider>());
-
-        }
-        if (players.Length > 3)
-        {
-            mazeGenerator.playerD = players[3].gameObject;
-            mazeGenerator.numPlayers = 4;
-            Physics.IgnoreCollision(players[0].gameObject.GetComponent<Collider>(), players[3].gameObject.GetComponent<Collider>());
-            Physics.IgnoreCollision(players[1].gameObject.GetComponent<Collider>(), players[3].gameObject.GetComponent<Collider>());
-            Physics.IgnoreCollision(players[2].gameObject.GetComponent<Collider>(), players[3].gameObject.GetComponent<Collider>());
-
+            foreach (Player p2 in joinedPlayersToPosition.Keys)
+            {
+                if (p1.Equals(p2))
+                {
+                    continue;
+                }
+                Physics.IgnoreCollision(p1.gameObject.GetComponent<Collider>(), p2.gameObject.GetComponent<Collider>());
+            }
         }
     }
 

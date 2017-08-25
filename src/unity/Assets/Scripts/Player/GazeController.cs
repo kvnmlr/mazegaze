@@ -21,8 +21,10 @@ public class GazeController : MonoBehaviour
     private float gazeX;
     private float gazeY;
 
-    private float goodGazeX;
-    private float goodGazeY;
+    public float goodGazeX { get; set; }
+    public float goodGazeY { get; set; }
+
+    public Boolean gazeOnSurface { get; set; }
 
     public void listenerReady()
     {
@@ -44,9 +46,11 @@ public class GazeController : MonoBehaviour
 
         if (!gaze.on_srf || !data.name.Equals(surface))
         {
+            gazeOnSurface = false;
             return;
         }
 
+        gazeOnSurface = true;
         gazeX = (float)gaze.norm_pos[0];
         gazeY = (float)gaze.norm_pos[1];
     }
@@ -161,7 +165,7 @@ public class GazeController : MonoBehaviour
 
             // Move player
             currentCell = gameObject.GetComponent<Player>().cell;
-            if (!currentCellReached)
+            if (!currentCellReached && currentCell != null)
             {
                 if (Vector3.Distance(transform.position, currentCell.transform.position) < 0.01f)
                 {
