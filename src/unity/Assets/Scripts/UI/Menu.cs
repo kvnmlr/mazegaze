@@ -17,7 +17,7 @@ public class Menu : Singleton<Menu> {
     private bool optionRanking = false;
     private bool optionRoundText = false;
 
-    private bool breakgameover;
+    private bool breakgameover = false;
 
     public GameObject mainButtonScreen;
     public GameObject settingsScreen;
@@ -283,27 +283,26 @@ public class Menu : Singleton<Menu> {
         optionRanking = false;
         optionRoundText = false;
 
-        while (MazeGenerator.Instance.numPlayers > 0)
-        {
-            MazeGenerator.Instance.LeaveGame();
-        }
-
         //Wenn vom BreakScreen Button getätigt wurde
         if (breakgameover == true)
         {
             //Punkte zurücksetzen
-            GameController.Instance.players[0].points = 0;
-            GameController.Instance.players[1].points = 0;
-            GameController.Instance.players[2].points = 0;
-            GameController.Instance.players[3].points = 0;
+            for (int i = 0; i < MazeGenerator.Instance.numPlayers; i++)
+            {
+                GameController.Instance.players[i].points = 0;
+            }
             //andere Musik
             AudioManager.Instance.stop();
             AudioManager.Instance.play(AudioManager.SOUNDS.MENU);
             //
             GameController.Instance.setRestart(true);
+            breakgameover = false;
         }
 
-        breakgameover = false;
+        while (MazeGenerator.Instance.numPlayers > 0)
+        {
+            MazeGenerator.Instance.LeaveGame();
+        }
     }
 
     public void RestartGame() {
@@ -352,9 +351,7 @@ public class Menu : Singleton<Menu> {
         else
         {
             MazeGenerator.Instance.AddPlayer();
-            canvas.enabled = false;
         }
-
     }
 
 
@@ -363,6 +360,7 @@ public class Menu : Singleton<Menu> {
         CloseBreakButton();
         optionBreakScreen = true;
         breakgameover = true;
+        canvas.enabled = true;
     }
 
     //General Start/Quit Functions
