@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : Singleton<GameController>
 {
+    public GameObject cursor;
     public bool useMenu = false;
     public Dictionary<Player, int> joinedPlayersToPosition = new Dictionary<Player, int>();
     public Player[] players;
@@ -60,9 +61,6 @@ public class GameController : Singleton<GameController>
 
         mazeGenerator.xSize = 9;
         mazeGenerator.ySize = 9;
-
-        joinedPlayersToPosition = new Dictionary<Player, int>();
-
         if (!useMenu)
         {
             setUpPlayers();
@@ -84,6 +82,7 @@ public class GameController : Singleton<GameController>
 
     public void startPlayerAssignment()
     {
+        joinedPlayersToPosition = new Dictionary<Player, int>();
         Menu.Instance.joinScreen.SetActive(true);
     }
 

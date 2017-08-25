@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GazeController : MonoBehaviour
 {
+    public GameObject cursor;
     private Rigidbody rb;
 
     private Vector3 offset;
@@ -184,7 +185,7 @@ public class GazeController : MonoBehaviour
             }
 
             gazePos = Camera.main.ScreenToWorldPoint(new Vector3(goodGazeX, goodGazeY, depth));
-
+            cursor.gameObject.transform.position = gazePos;
 
             float x = MazeGenerator.Instance.xSize;
             float y = MazeGenerator.Instance.ySize;
