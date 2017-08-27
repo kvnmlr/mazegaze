@@ -1,6 +1,25 @@
 \BOOKMARK [1][-]{section.3}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.5}{Graphics}{}% 2
-\BOOKMARK [1][-]{section.8}{References and Citations}{}% 3
-\BOOKMARK [1][-]{section.11}{Figures/Captions}{}% 4
-\BOOKMARK [1][-]{section.14}{Quotations}{}% 5
-\BOOKMARK [1][-]{section.16}{Language, Style, and Content}{}% 6
+\BOOKMARK [2][-]{subsection.5}{Motivation}{section.3}% 2
+\BOOKMARK [2][-]{subsection.7}{Goal}{section.3}% 3
+\BOOKMARK [2][-]{subsection.9}{Outline}{section.3}% 4
+\BOOKMARK [1][-]{section.11}{Related Work}{}% 5
+\BOOKMARK [2][-]{subsection.13}{Gaze Input Performance}{section.11}% 6
+\BOOKMARK [2][-]{subsection.15}{Mouse Against Gaze Input}{section.11}% 7
+\BOOKMARK [2][-]{subsection.17}{Immersive Game Controll Using Gaze}{section.11}% 8
+\BOOKMARK [2][-]{subsection.19}{Pursuit Calibration}{section.11}% 9
+\BOOKMARK [1][-]{section.21}{Requirements and Design}{}% 10
+\BOOKMARK [2][-]{subsection.23}{Design Decisions}{section.21}% 11
+\BOOKMARK [2][-]{subsection.25}{Agile Development Approach}{section.21}% 12
+\BOOKMARK [2][-]{subsection.27}{Formal Requirements}{section.21}% 13
+\BOOKMARK [1][-]{section.29}{Implementation}{}% 14
+\BOOKMARK [2][-]{subsection.31}{Hardware}{section.29}% 15
+\BOOKMARK [2][-]{subsection.33}{Software}{section.29}% 16
+\BOOKMARK [3][-]{subsubsection.35}{Maze Generator}{subsection.33}% 17
+\BOOKMARK [3][-]{subsubsection.37}{...}{subsection.33}% 18
+\BOOKMARK [1][-]{section.39}{Evaluation}{}% 19
+\BOOKMARK [2][-]{subsection.41}{Performance}{section.39}% 20
+\BOOKMARK [2][-]{subsection.43}{User-Experience}{section.39}% 21
+\BOOKMARK [1][-]{section.45}{Conclusion}{}% 22
+\BOOKMARK [2][-]{subsection.47}{Résume}{section.45}% 23
+\BOOKMARK [2][-]{subsection.49}{Future Work}{section.45}% 24
+\BOOKMARK [1][-]{section.51}{TOTAL: 8 pages}{}% 25

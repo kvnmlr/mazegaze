@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210) (preloaded format=pdflatex 2017.1.28)  19 AUG 2017 14:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210) (preloaded format=pdflatex 2017.1.28)  27 AUG 2017 23:52
 entering extended mode
 **./proceedings.tex
 (proceedings.tex
@@ -1106,103 +1106,50 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 127.
 
-<figures/sigchi-logo.png, id=31, 241.8636pt x 55.407pt>
-File: figures/sigchi-logo.png Graphic file (type png)
+No file proceedings.bbl.
 
-<use figures/sigchi-logo.png>
-Package pdftex.def Info: figures/sigchi-logo.png used on input line 140.
-(pdftex.def)             Requested size: 219.58264pt x 50.3029pt.
-LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 150.
+Package balance Warning: You have called \balance in second column
+(balance)                Columns might not be balanced.
 
-
-LaTeX Warning: Citation `acm_categories' on page \thepage  undefined on input l
-ine 150.
-
-
-LaTeX Warning: Citation `ethics' on page \thepage  undefined on input line 150.
-
-
-
-LaTeX Warning: Citation `Klemmer:2002:WSC:503376.503378' on page \thepage  unde
-fined on input line 150.
-
-
-LaTeX Warning: Citation `acm_categories' on page \thepage  undefined on input l
-ine 162.
-
-
-LaTeX Warning: Citation `cavender:writing' on page \thepage  undefined on input
- line 162.
-
-
-LaTeX Warning: Citation `CHINOSAUR:venue' on page \thepage  undefined on input 
-line 162.
-
-
-LaTeX Warning: Citation `psy:gangnam' on page \thepage  undefined on input line
- 162.
-
-<figures/map.png, id=35, 1023.825pt x 484.81125pt>
-File: figures/map.png Graphic file (type png)
- <use figures/map.png>
-Package pdftex.def Info: figures/map.png used on input line 197.
-(pdftex.def)             Requested size: 426.96915pt x 202.18419pt.
-LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 202.
-LaTeX Font Info:    Font shape `U/ccicons/m/n' will be
-(Font)              scaled to size 8.0pt on input line 202.
-LaTeX Font Info:    Try loading font information for T1+txr on input line 243.
-
-(F:\Programme\Miktek\texmfs\install\tex\latex\txfonts\t1txr.fd
-File: t1txr.fd 2000/12/15 v3.1
-)
-LaTeX Font Info:    Try loading font information for TS1+txr on input line 243.
-
-
-(F:\Programme\Miktek\texmfs\install\tex\latex\txfonts\ts1txr.fd
-File: ts1txr.fd 2000/12/15 v3.1
-) [1{F:/Programme/Miktek/texmfs/data/pdftex/config/pdftex.map}
+[1{F:/Programme/Miktek/texmfs/data/pdftex/config/pdftex.map}
 
 
 Non-PDF special ignored!
 
- <./figures/sigchi-logo.png>]
-
-LaTeX Warning: Citation `Schwartz:1995:GBF' on page \thepage  undefined on inpu
-t line 251.
-
-No file proceedings.bbl.
-[2 <./figures/map.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 270.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 270.
+]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 205.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 205.
  (proceedings.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 270.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 270.
-Package rerunfilecheck Info: File `proceedings.out' has not changed.
-(rerunfilecheck)             Checksum: A1D3BC3A17F84B5978D2CA38F183C72E;317.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 270.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 205.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 205.
+
+
+Package rerunfilecheck Warning: File `proceedings.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `proceedings.out':
+(rerunfilecheck)             Before: 73C0201084055CD2A7EE66EF8BE059DF;1529
+(rerunfilecheck)             After:  541ADC794ACFBC0152A4BEBB01E2FF7B;1533.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 205.
  ) 
 Here is how much of TeX's memory you used:
- 19616 strings out of 495232
- 359353 string characters out of 3181595
- 446635 words of memory out of 3000000
- 22367 multiletter control sequences out of 15000+200000
- 79773 words of font info for 164 fonts, out of 3000000 for 9000
+ 19490 strings out of 495232
+ 357836 string characters out of 3181595
+ 443099 words of memory out of 3000000
+ 22291 multiletter control sequences out of 15000+200000
+ 63280 words of font info for 111 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 62i,10n,56p,554b,571s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 62i,10n,56p,424b,571s stack positions out of 5000i,500n,10000p,200000b,50000s
 {F:/Programme/Miktek/texmfs/install/fonts/enc/dvips/base/8r.enc}<F:/Programme
-/Miktek/texmfs/install/fonts/type1/public/ccicons/ccicons.pfb><F:/Programme/Mik
-tek/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb><F:/Programme/Mikt
-ek/texmfs/install/fonts/type1/public/txfonts/rtcxr.pfb><F:/Programme/Miktek/tex
-mfs/install/fonts/type1/public/txfonts/t1xbtt.pfb><F:/Programme/Miktek/texmfs/i
-nstall/fonts/type1/urw/helvetic/uhvb8a.pfb><F:/Programme/Miktek/texmfs/install/
-fonts/type1/urw/times/utmb8a.pfb><F:/Programme/Miktek/texmfs/install/fonts/type
-1/urw/times/utmr8a.pfb><F:/Programme/Miktek/texmfs/install/fonts/type1/urw/time
-s/utmri8a.pfb>
-Output written on proceedings.pdf (2 pages, 445113 bytes).
+/Miktek/texmfs/install/fonts/type1/public/txfonts/t1xbtt.pfb><F:/Programme/Mikt
+ek/texmfs/install/fonts/type1/urw/helvetic/uhvb8a.pfb><F:/Programme/Miktek/texm
+fs/install/fonts/type1/urw/helvetic/uhvro8a.pfb><F:/Programme/Miktek/texmfs/ins
+tall/fonts/type1/urw/times/utmb8a.pfb><F:/Programme/Miktek/texmfs/install/fonts
+/type1/urw/times/utmr8a.pfb>
+Output written on proceedings.pdf (1 page, 61689 bytes).
 PDF statistics:
- 99 PDF objects out of 1000 (max. 8388607)
- 19 named destinations out of 1000 (max. 500000)
- 30279 words of extra memory for PDF output out of 35830 (max. 10000000)
+ 174 PDF objects out of 1000 (max. 8388607)
+ 53 named destinations out of 1000 (max. 500000)
+ 18645 words of extra memory for PDF output out of 20736 (max. 10000000)
 
