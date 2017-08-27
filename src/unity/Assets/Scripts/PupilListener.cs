@@ -216,6 +216,13 @@ public class PupilListener : Singleton<PupilListener>
                     subscriberSocket.Subscribe("surface");
                 }
                 subscriberSocket.Subscribe("pupil.");
+                subscriberSocket.Subscribe("notify.");
+                subscriberSocket.Subscribe("calibration.");
+                subscriberSocket.Subscribe("logging.info");
+                subscriberSocket.Subscribe("calibration_routines.calibrate");
+                //subscriberSocket.Subscribe("frame.");
+                //subscriberSocket.Subscribe("gaze.");
+
                 subscriberSockets.Add(subscriberSocket);
             }
 
@@ -223,6 +230,7 @@ public class PupilListener : Singleton<PupilListener>
             turn = 0;   // used receive a message from each client in turn
             while (!stop_thread_)
             {
+
                 turn = ++turn % IPHeaders.Count;
                 if (IPHeaders[turn].Equals("") || clients[turn].is_connected == false)
                 {
@@ -237,7 +245,6 @@ public class PupilListener : Singleton<PupilListener>
                     try
                     {
                         string msgType = msg[0].ConvertToString();
-
                         var message = MsgPack.Unpacking.UnpackObject(msg[1].ToByteArray());
 
                         MsgPack.MessagePackObject mmap = message.Value;
@@ -249,6 +256,12 @@ public class PupilListener : Singleton<PupilListener>
                                 pupilData = JsonUtility.FromJson<Pupil.PupilData3D>(mmap.ToString());
                             }
                         }
+                        if (msgType.Contains("frame"))
+                        {
+                        }
+                        if (msgType.Contains("gaze"))
+                        {
+                        }
 
                         if (msgType == "surfaces")
                         {
@@ -258,6 +271,34 @@ public class PupilListener : Singleton<PupilListener>
                                 newData = true;
                                 surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
                             }
+                        }
+
+                        if (msgType.Equals("notify.calibration.started"))
+                        {
+                            Debug.LogFormat("Calibration for client {0} started: {1}", clients[turn].name, mmap.ToString());
+                        }
+
+                        if (msgType.Equals("notify.calibration.failed"))
+                        {
+                            Debug.LogFormat("Calibration for client {0} failed", clients[turn].name);
+                        }
+
+                        if (msgType.Equals("notify.calibration.successful"))
+                        {
+                            Debug.LogFormat("Calibration for client {0} successful", clients[turn].name);
+                        }
+
+                        if (msgType.Equals("notify.calibration.calibration_data"))
+                        {
+                            Debug.LogFormat("New calibration data for client {0}: {1}", clients[turn].name, mmap.ToString());
+                        }
+                        if (msgType.Equals("logging.info"))
+                        {
+                            Debug.LogFormat("logging info for client {0}: {1}", clients[turn].name, mmap.ToString());
+                        }
+                        if (msgType.Equals("calibration_routines.calibrate"))
+                        {
+                            Debug.LogFormat("Calibration info for client {0}: {1}", clients[turn].name, mmap.ToString());
                         }
                     }
                     catch
@@ -332,7 +373,10 @@ public class PupilListener : Singleton<PupilListener>
             Debug.LogError("Error trying to get request socket");
             return;
         }
-        sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "eye_process.should_start.0" }, { "eye_id", 0 } });
+        //sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "eye_process.should_start.0" }, { "eye_id", 0 } });
+        sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "calibration.should_start" }, { "marker_size", "1.50" }, { "sample_duration", "50" } });
+
+        Calibration.Instance.StartCalibration();
     }
 
     NetMQMessage sendRequest(RequestSocket socket, Dictionary<string, object> data)
@@ -357,7 +401,6 @@ public class PupilListener : Singleton<PupilListener>
         recievedMsg = socket.ReceiveMultipartMessage();
 
         string msgType = recievedMsg[0].ConvertToString();
-        Debug.Log("type: " + msgType);
         if (recievedMsg.FrameCount > 1)
         {
             MsgPack.UnpackingResult<MsgPack.MessagePackObject> message = MsgPack.Unpacking.UnpackObject(recievedMsg[1].ToByteArray());

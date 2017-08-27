@@ -81,11 +81,11 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
         int count = 0;
         foreach (PupilClient c in settings.pupil_clients)
         {
-            if (count+1 >= GameController.Instance.players.Length)      // TODO +2 anpassen
+            if (count+2 >= GameController.Instance.players.Length)      // TODO +2 anpassen
             {
                 break;
             }
-            GameObject player = GameController.Instance.players[count + 1].gameObject;        // TODO +2 because A and B are non-gaze players
+            GameObject player = GameController.Instance.players[count + 2].gameObject;        // TODO +2 because A and B are non-gaze players
             player.AddComponent<GazeController>();
             player.GetComponent<Player>().name = c.name;
             c.gaze_controller = player.GetComponent<GazeController>();

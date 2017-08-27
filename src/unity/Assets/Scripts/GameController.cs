@@ -73,6 +73,7 @@ public class GameController : Singleton<GameController>
 
     private void startCalibration(PupilConfiguration.PupilClient client, bool startRound = false)
     {
+        PupilListener.Instance.StartCalibration(client);
         client.is_calibrated = true;        // TODO replace with correct calibration
         if (startRound)
         {
@@ -129,12 +130,12 @@ public class GameController : Singleton<GameController>
                 {
                     if (!client.is_calibrated)
                     {
-                        Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
+                        //Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
                         startCalibration(client, true);
                         return;
                     } else
                     {
-                        Debug.Log(client.name + " is calibrated and ready to play");
+                        //Debug.Log(client.name + " is calibrated and ready to play");
                     }
                 }
             }
