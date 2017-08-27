@@ -42,13 +42,13 @@ public class Player : MonoBehaviour {
         switch (c)
         {
             case PlayerColor.red:
-                return new Color(1, 0, 0, 1);
+                return new Color(1, 0.2f, 0, 1);
             case PlayerColor.blue:
-                return new Color(0, 0, 1, 1);
+                return new Color(0.1f, 0.3f, 1, 1);
             case PlayerColor.yellow:
-                return new Color(1, 1, 0, 1);
+                return new Color(0.9f, 1, 0.1f, 1);
             case PlayerColor.pink:
-                return new Color(1, 0, 1, 1);
+                return new Color(0.9f, 0.3f, 1, 1);
             default:
                 return new Color(1, 1, 1, 1);
         }
