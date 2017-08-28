@@ -128,6 +128,7 @@ public class GameController : Singleton<GameController>
                     Debug.LogWarning("Did not find client with name " + p.name + " in pupil settings");
                 } else
                 {
+                    client.is_calibrated = true;
                     if (!client.is_calibrated)
                     {
                         //Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
