@@ -10,8 +10,8 @@
         },
         {
             "name": "Acer",
-            "ip": "192.168.1.7",
-            "port": "50404",
+            "ip": "10.9.32.199",
+            "port": "50020",
             "surface_name": "screen",
             "detect_surface": true,
             "initially_active": true
