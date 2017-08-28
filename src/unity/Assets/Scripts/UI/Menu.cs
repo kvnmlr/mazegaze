@@ -426,7 +426,7 @@ public class Menu : Singleton<Menu> {
 
     //Ranking
 
-     public void computeRanking()
+    public Player[] computeRanking()
     {
         int numPlayers = MazeGenerator.Instance.numPlayers;
         Player[] a = new Player[numPlayers];
@@ -436,7 +436,17 @@ public class Menu : Singleton<Menu> {
             a[i] = GameController.Instance.players[i];
         }
 
-       
+        for (int i = 1; i < numPlayers; i++)
+        {
+            Player p = a[i];
+            int j = i;
+            while (j > 0 && a[j - 1].points < p.points)
+            {
+                a[j] = a[j - 1];
+                j--;
+            }
+            a[j] = p;
+        }
 
         string text = "RANKING:";
 
@@ -447,7 +457,7 @@ public class Menu : Singleton<Menu> {
 
         rankingText.text = text;
 
-
+        return a;
     }
 
 
@@ -488,24 +498,26 @@ public class Menu : Singleton<Menu> {
             }
             round = "GAME OVER  -   " + winner;
 
+            Player[] ranking = computeRanking();
+
             switch (MazeGenerator.Instance.numPlayers)
             {
                 case 1:
-                    text = "Scores:    " + GameController.Instance.players[0].name + ": " + GameController.Instance.players[0].points;
+                    text = "Scores:    " + ranking[0].name + ": " + ranking[0].points;
                     break;
                 case 2:
-                    text = "Scores:    " + GameController.Instance.players[0].name + ": " + GameController.Instance.players[0].points + "  " + GameController.Instance.players[1].name + ": " + GameController.Instance.players[1].points;
+                    text = "Scores:    " + ranking[0].name + ": " + ranking[0].points + "  " + ranking[1].name + ": " + ranking[1].points;
                     break;
                 case 3:
-                    text = "Scores:    " + GameController.Instance.players[0].name + ": " + GameController.Instance.players[0].points +
-                        "  " + GameController.Instance.players[1].name + ": " + GameController.Instance.players[1].points +
-                        "  " + GameController.Instance.players[2].name + ": " + GameController.Instance.players[2].points;
+                    text = "Scores:    " + ranking[0].name + ": " + ranking[0].points +
+                        "  " + ranking[1].name + ": " + ranking[1].points +
+                        "  " + ranking[2].name + ": " + ranking[2].points;
                     break;
                 case 4:
-                    text = "Scores:    " + GameController.Instance.players[0].name + ": " + GameController.Instance.players[0].points +
-                        "  " + GameController.Instance.players[1].name + ": " + GameController.Instance.players[1].points +
-                        "  " + GameController.Instance.players[2].name + ": " + GameController.Instance.players[2].points +
-                        "  " + GameController.Instance.players[3].name + ": " + GameController.Instance.players[3].points;
+                    text = "Scores:    " + ranking[0].name + ": " + ranking[0].points +
+                        "  " + ranking[1].name + ": " + ranking[1].points +
+                        "  " + ranking[2].name + ": " + ranking[2].points +
+                        "  " + ranking[3].name + ": " + ranking[3].points;
                     break;
             }
         }
