@@ -26,6 +26,7 @@ public class GazeController : MonoBehaviour
     public float goodGazeY { get; set; }
 
     public Boolean gazeOnSurface { get; set; }
+    private float gazeLeftSurface;
 
     public void listenerReady()
     {
@@ -47,8 +48,18 @@ public class GazeController : MonoBehaviour
 
         if (!gaze.on_srf || !data.name.Equals(surface))
         {
+            if (gazeOnSurface == true)
+            {
+                gazeLeftSurface = Time.time;
+            }
             gazeOnSurface = false;
             return;
+        } else
+        {
+            if (GameController.Instance.joinedPlayersToPosition.Keys.Count < MazeGenerator.Instance.numPlayers)
+            {
+                Debug.Log("He wants to join!");
+            }
         }
 
         gazeOnSurface = true;
@@ -159,6 +170,18 @@ public class GazeController : MonoBehaviour
 
     void Update()
     {
+        if (!gazeOnSurface)
+        {
+            if (Time.time - gazeLeftSurface > 5)
+            {
+                // Player did not look at maze for more than 5 consequtive seconds, kick him out of the game
+                Player player = gameObject.GetComponent<Player>();
+                Debug.Log("Kicking player " + player.name + " out of the game (inactive)");
+                GameController.Instance.joinedPlayersToPosition.Remove(player);
+                gameObject.SetActive(false);
+            }
+        }
+
         if (!Menu.Instance.canvas.enabled)
         {
             depth = MazeGenerator.Instance.xSize * 4 - 0.5f;

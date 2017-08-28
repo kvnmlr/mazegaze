@@ -43,7 +43,7 @@ public class PathFinding : Singleton<PathFinding>
 
     public List<AStarNode> AStar(Cell start, Cell end)
     {
-        if (start == end)
+        if (start.Equals(end))
         {
             return new List<AStarNode>();
         }
@@ -141,6 +141,10 @@ public class PathFinding : Singleton<PathFinding>
 
     public int getManhattanDistance(Cell c1, Cell c2)
     {
+        if (c1 == null || c2 == null)
+        {
+            return int.MaxValue;
+        }
         int dX = c1.posX - c2.posX;
         dX = Mathf.Abs(dX);
 

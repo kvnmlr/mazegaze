@@ -56,19 +56,26 @@ public class MazeGenerator : Singleton<MazeGenerator> {
     {
         GameObject[][] board = new GameObject[ySize][];
         int index = 0;
+        //Debug.Log(cells.Length);
+        //Debug.Log(ySize);
+        //Debug.Log(xSize);
         for (int row = 0; row <ySize; ++row)
         {
             board[row] = new GameObject[xSize];
             for(int column = 0; column < xSize; ++column)
             {
+                if (index >= cells.Length)
+                {
+                    //throw new System.Exception("tried to convert too many cells to matrix (" + index + ")");
+                    continue;
+                }
+                //Debug.Log("Len" + cells.Length);
+                //Debug.Log("inde: " + index);
                 board[row][column] = cells[index];
                 cells[index].GetComponent<Cell>().posY = row;
                 cells[index].GetComponent<Cell>().posX = column;
                 index++;
-                if (index > cells.Length)
-                {
-                    throw new System.Exception("tried to convert too many cells to matrix");
-                }
+                
             }
         }
         return board;
@@ -365,6 +372,7 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         int children = WallHolder.transform.childCount;
         GameObject[] allWalls = new GameObject[children];
         cellProperties = new CellProperties[xSize * ySize];
+        Debug.Log("Create cells array of size " + xSize * ySize);
         cells = new GameObject[xSize * ySize];
         int eastWestProcess = 0;
         int childprocess = 0;

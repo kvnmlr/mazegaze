@@ -184,7 +184,7 @@ public class PupilListener : Singleton<PupilListener>
                         subports.Add(failHeader);
                         IPHeaders.Add(failHeader);
                         c.is_connected = false;
-                        Debug.LogErrorFormat("Could not connect to client {0}:{1} ({2}). Make sure address is corect and pupil remote service is running", c.ip, c.port, c.name);
+                        Debug.LogWarningFormat("Could not connect to client {0}:{1} ({2}). Make sure address is corect and pupil remote service is running", c.ip, c.port, c.name);
                     }
                     requestSockets.Add(requestSocket);
                     //requestSocket.Close();
@@ -193,7 +193,7 @@ public class PupilListener : Singleton<PupilListener>
             }
             catch (Exception e)
             {
-                Debug.LogErrorFormat("Could not reach to client {0}:{1} ({2}): {4}", c.ip, c.port, c.name, e.ToString());
+                Debug.LogWarningFormat("Could not reach to client {0}:{1} ({2}): {4}", c.ip, c.port, c.name, e.ToString());
             }
 
         }
@@ -275,30 +275,30 @@ public class PupilListener : Singleton<PupilListener>
 
                         if (msgType.Equals("notify.calibration.started"))
                         {
-                            Debug.LogFormat("Calibration for client {0} started: {1}", clients[turn].name, mmap.ToString());
+                            //Debug.LogFormat("Calibration for client {0} started: {1}", clients[turn].name, mmap.ToString());
                         }
 
                         if (msgType.Equals("notify.calibration.failed"))
                         {
-                            Debug.LogFormat("Calibration for client {0} failed", clients[turn].name);
+                            //Debug.LogFormat("Calibration for client {0} failed", clients[turn].name);
                         }
 
                         if (msgType.Equals("notify.calibration.successful"))
                         {
-                            Debug.LogFormat("Calibration for client {0} successful", clients[turn].name);
+                            //Debug.LogFormat("Calibration for client {0} successful", clients[turn].name);
                         }
 
                         if (msgType.Equals("notify.calibration.calibration_data"))
                         {
-                            Debug.LogFormat("New calibration data for client {0}: {1}", clients[turn].name, mmap.ToString());
+                           // Debug.LogFormat("New calibration data for client {0}: {1}", clients[turn].name, mmap.ToString());
                         }
                         if (msgType.Equals("logging.info"))
                         {
-                            Debug.LogFormat("logging info for client {0}: {1}", clients[turn].name, mmap.ToString());
+                            //Debug.LogFormat("logging info for client {0}: {1}", clients[turn].name, mmap.ToString());
                         }
                         if (msgType.Equals("calibration_routines.calibrate"))
                         {
-                            Debug.LogFormat("Calibration info for client {0}: {1}", clients[turn].name, mmap.ToString());
+                            //Debug.LogFormat("Calibration info for client {0}: {1}", clients[turn].name, mmap.ToString());
                         }
                     }
                     catch

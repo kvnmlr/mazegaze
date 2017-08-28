@@ -13,7 +13,7 @@ public class Dim : PowerUp {
         badEffect.Play(true);
         AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_NEGATIVE_POWERUP);
         Debug.Log("perform on " + p.name);
-        foreach (Player player in GameController.Instance.players)
+        foreach (Player player in GameController.Instance.joinedPlayersToPosition.Keys)
         {
             if (!player.Equals(p))
             {

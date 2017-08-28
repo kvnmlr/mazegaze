@@ -53,13 +53,12 @@ public class PowerUpManager : Singleton<PowerUpManager>
                 {
                     board[row][column] = new float[MazeGenerator.Instance.numPlayers];
 
-                    for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
+                    int index = 0;
+                    foreach (Player p in GameController.Instance.joinedPlayersToPosition.Keys)
                     {
-
-                        Player p = GameController.Instance.players[i];
-
                         List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(p.cell, MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>());
-                        board[row][column][i] = (path == null) ? int.MaxValue : path.Count;
+                        board[row][column][index] = (path == null) ? int.MaxValue : path.Count;
+                        ++index;
                     }
 
                     // average distance to each cell
@@ -117,12 +116,13 @@ public class PowerUpManager : Singleton<PowerUpManager>
                 }
             }
             Debug.Log("Target fairness: " + bestCellValue);
+            Debug.Log("Target cell: " + bestCellX + ", " + bestCellY);
             return spawnPowerUp(PowerUpTypes.Target, MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
         }
         else
         {
             // get a random cell for a powerup
-            cell = UnityEngine.Random.Range(1, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
+            cell = UnityEngine.Random.Range(0, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
 
             // make sure powerup is not spawned directly on player or other powerup
             while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().players.Count > 0 || MazeGenerator.Instance.cells[cell].GetComponent<PowerUp>() != null)

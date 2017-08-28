@@ -396,6 +396,11 @@ public class Menu : Singleton<Menu> {
         GameController.Instance.players[1].points = 0;
         GameController.Instance.players[2].points = 0;
         GameController.Instance.players[3].points = 0;
+        foreach(Player player in GameController.Instance.players)
+        {
+            player.points = 0;
+            player.gameObject.SetActive(false);
+        }
     }
 
     //Main Buttons

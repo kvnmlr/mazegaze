@@ -49,6 +49,10 @@ public class CellLight : MonoBehaviour {
 
     public void mix(Player.PlayerColor other)
     {
+        if (lastVisitedPlayer  == null)
+        {
+            return;
+        }
         Player.PlayerColor color = lastVisitedPlayer.color;
         int mix = (int)color + (int)other;
         Player.MixColor mixColor = (Player.MixColor)mix;

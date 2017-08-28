@@ -149,9 +149,13 @@ public class GameController : Singleton<GameController>
         setUpPlayers();
 
         mazeBuildAttempts++;
-        if (playedGames == 0 || mazeBuildAttempts > 20)
+        Debug.Log("here");
+        if (playedGames == 0 /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
         {
             mazeGenerator.target = powerUpManager.target.gameObject;
+            Debug.Log("player games 0");
+            Debug.Log(MazeGenerator.Instance.xSize);
+            Debug.Log(mazeGenerator.xSize);
             mazeGenerator.BuildMaze();
 
             // adjust camera height
@@ -159,16 +163,20 @@ public class GameController : Singleton<GameController>
 
             if (powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target) == null)
             {
+                Debug.Log("Target not spawned");
                 mazeGenerator.DestroyMaze();
-                setUpNewRound();
+                startNewRound();
                 return;
             }
             powerUpManager.setSpawnedPowerUps(0);
             Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
+            Debug.Log(PowerUpManager.Instance.target.name);
             mazeBuildAttempts = 0;
         }
         else
         {
+            Debug.Log("here1");
+
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
             powerUpManager.setSpawnedPowerUps(0);
         }
