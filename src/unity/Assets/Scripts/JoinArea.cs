@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class JoinArea : MonoBehaviour
 {
+    Dictionary<PupilConfiguration.PupilClient, int> clientToPosition = new Dictionary<PupilConfiguration.PupilClient, int>();
+    Dictionary<PupilConfiguration.PupilClient, float> clientToFirstGazeTime = new Dictionary<PupilConfiguration.PupilClient, float>();
 
     void OnEnable()
     {
-
+        clientToPosition = new Dictionary<PupilConfiguration.PupilClient, int>();
+        clientToFirstGazeTime = new Dictionary<PupilConfiguration.PupilClient, float>();
     }
 
     void OnDisable()
@@ -21,14 +24,68 @@ public class JoinArea : MonoBehaviour
         {
             if (client.gaze_controller.gazeOnSurface)
             {
-                int index = 0;
-                foreach (Player p in GameController.Instance.players)
+                float y = client.gaze_controller.goodGazeY;
+                float x = client.gaze_controller.goodGazeX;
+                int joinPosition = 0;
+
+                if (y > 0.5f)
                 {
-                    if (p.name.Equals(client.name))
+                    // upper half
+                    if (x > 0.5f)
                     {
-                        GameController.Instance.assignPlayer(p, index+1);
+                        Debug.Log(client.name + " wants to join upper right");
+                        joinPosition = 3;
+                    } else
+                    {
+                        Debug.Log(client.name + " wants to join upper left");
+                        joinPosition = 2;
                     }
-                    index++;
+                } else
+                {
+                    // lower half
+                    if (x > 0.5f)
+                    {
+                        Debug.Log(client.name + " wants to join lower right");
+                        joinPosition = 4;
+                    }
+                    else
+                    {
+                        Debug.Log(client.name + " wants to join lower left");
+                        joinPosition = 1;
+                    }
+                }
+                if (joinPosition == 0)
+                {
+                    // something went wrong
+                    return;
+                }
+
+                if (!clientToPosition.ContainsKey(client) && !clientToFirstGazeTime.ContainsKey(client))
+                {
+                    clientToPosition.Add(client, joinPosition);
+                    clientToFirstGazeTime.Add(client, Time.time);
+                } else
+                {
+                    int lastPosition = 0;
+                    clientToPosition.TryGetValue(client, out lastPosition);
+                    if (lastPosition != joinPosition)
+                    {
+                        // user lookes at another join position
+                        clientToFirstGazeTime[client] = Time.time;
+                        clientToPosition[client] = joinPosition;
+                    }  else
+                    {
+                        if (Time.time - clientToFirstGazeTime[client] > 3)
+                        {
+                            foreach (Player p in GameController.Instance.players)
+                            {
+                                if (p.name.Equals(client.name))
+                                {
+                                    GameController.Instance.assignPlayer(p, joinPosition);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

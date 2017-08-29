@@ -13,13 +13,13 @@ public class GameController : Singleton<GameController>
     private PowerUpManager powerUpManager;
     private Menu menu;
 
-    private bool gameover;
+    public bool gameover { get; set; }
     private bool restart;
 
     private bool firstround;
 
-    private int playedGames = 0;
-    private int numGames;
+    public int playedGames { get; set; }
+    public int numGames { get; set; }
 
     private int mazeBuildAttempts = 0;
 
@@ -83,21 +83,35 @@ public class GameController : Singleton<GameController>
 
     public void startPlayerAssignment()
     {
+        Debug.Log("setUpNewRound");
         joinedPlayersToPosition = new Dictionary<Player, int>();
         Menu.Instance.joinScreen.SetActive(true);
     }
 
     public void assignMousePlayer()
     {
-        assignPlayer(players[0], 1);
+        for (int i = 1; i <= 4; ++i)
+        {
+            if(!joinedPlayersToPosition.ContainsValue(i))
+            {
+                assignPlayer(players[0], i);
+            }
+        }
     }
     public void assignKeyboardPlayer()
     {
-        assignPlayer(players[1], 2);
+        for (int i = 1; i <= 4; ++i)
+        {
+            if(!joinedPlayersToPosition.ContainsValue(i))
+            {
+                assignPlayer(players[1], i);
+            }
+        }
     }
+
     public void assignPlayer(Player player, int position)
     {
-        if (!joinedPlayersToPosition.ContainsKey(player))
+        if (!joinedPlayersToPosition.ContainsKey(player) && !joinedPlayersToPosition.ContainsValue(position))
         {
             joinedPlayersToPosition.Add(player, position);
         }
@@ -116,6 +130,7 @@ public class GameController : Singleton<GameController>
 
     public void setUpNewRound()
     {
+        Debug.Log("setUpNewRound");
         // check if player need calibration
         foreach (Player p in players)
         {
@@ -146,10 +161,10 @@ public class GameController : Singleton<GameController>
     }
 
     public void startNewRound() {
+        Debug.Log("startNewRound");
         setUpPlayers();
 
         mazeBuildAttempts++;
-        Debug.Log("here");
         if (playedGames == 0 /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
         {
             mazeGenerator.target = powerUpManager.target.gameObject;
@@ -170,7 +185,6 @@ public class GameController : Singleton<GameController>
             }
             powerUpManager.setSpawnedPowerUps(0);
             Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
-            Debug.Log(PowerUpManager.Instance.target.name);
             mazeBuildAttempts = 0;
         }
         else
@@ -181,6 +195,7 @@ public class GameController : Singleton<GameController>
             powerUpManager.setSpawnedPowerUps(0);
         }
         playedGames++;
+        gameover = false;
     }
 
 
@@ -220,7 +235,7 @@ public class GameController : Singleton<GameController>
 
     private void setUpPlayers()
     {
-        Debug.Log("Set up " + joinedPlayersToPosition.Keys.Count + " players");
+        Debug.Log("setUpPlayers");
         mazeGenerator.numPlayers = 0;
         mazeGenerator.playerA = null;
         mazeGenerator.playerB = null;

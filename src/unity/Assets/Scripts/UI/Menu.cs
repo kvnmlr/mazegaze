@@ -379,6 +379,7 @@ public class Menu : Singleton<Menu> {
     }
 
     public void GameOver(Player p) {
+        GameController.Instance.gameover = true;
         SetCountText(p);
         canvas.enabled = true;
         optionPlayer = false;

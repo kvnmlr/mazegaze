@@ -122,7 +122,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
         else
         {
             // get a random cell for a powerup
-            cell = UnityEngine.Random.Range(0, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
+            cell = UnityEngine.Random.Range(0, (MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
 
             // make sure powerup is not spawned directly on player or other powerup
             while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().players.Count > 0 || MazeGenerator.Instance.cells[cell].GetComponent<PowerUp>() != null)
@@ -179,7 +179,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
     void Update()
     {
         // have max 1 powerup per 20 cells
-        if (activePowerUps >= MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize / 20)
+        if (activePowerUps >= MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize / 20 || GameController.Instance.gameover)
         {
             return;
         }

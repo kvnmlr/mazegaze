@@ -17,6 +17,7 @@ public class Target : PowerUp
             Menu.Instance.GameOver(p);
             AudioManager.Instance.stop();
             AudioManager.Instance.play(AudioManager.SOUNDS.MENU);
+            GameController.Instance.playedGames = 0;
         }
         else
         {
