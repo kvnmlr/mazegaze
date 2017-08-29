@@ -372,7 +372,6 @@ public class MazeGenerator : Singleton<MazeGenerator> {
         int children = WallHolder.transform.childCount;
         GameObject[] allWalls = new GameObject[children];
         cellProperties = new CellProperties[xSize * ySize];
-        Debug.Log("Create cells array of size " + xSize * ySize);
         cells = new GameObject[xSize * ySize];
         int eastWestProcess = 0;
         int childprocess = 0;

@@ -83,7 +83,6 @@ public class GameController : Singleton<GameController>
 
     public void startPlayerAssignment()
     {
-        Debug.Log("setUpNewRound");
         joinedPlayersToPosition = new Dictionary<Player, int>();
         Menu.Instance.joinScreen.SetActive(true);
     }
@@ -114,23 +113,21 @@ public class GameController : Singleton<GameController>
         if (!joinedPlayersToPosition.ContainsKey(player) && !joinedPlayersToPosition.ContainsValue(position))
         {
             joinedPlayersToPosition.Add(player, position);
-        }
-        if (joinedPlayersToPosition.Keys.Count == MazeGenerator.Instance.numPlayers)
-        {
-            playersAssigned();
-        }
+            if (joinedPlayersToPosition.Keys.Count == MazeGenerator.Instance.numPlayers)
+            {
+                playersAssigned();
+            }
+        } 
     }
 
     public void playersAssigned()
     {
-        Debug.Log("All players joined");
         Menu.Instance.joinScreen.SetActive(false);
         startNewRound();
     }
 
     public void setUpNewRound()
     {
-        Debug.Log("setUpNewRound");
         // check if player need calibration
         foreach (Player p in players)
         {
@@ -161,16 +158,12 @@ public class GameController : Singleton<GameController>
     }
 
     public void startNewRound() {
-        Debug.Log("startNewRound");
         setUpPlayers();
 
         mazeBuildAttempts++;
         if (playedGames == 0 /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
         {
             mazeGenerator.target = powerUpManager.target.gameObject;
-            Debug.Log("player games 0");
-            Debug.Log(MazeGenerator.Instance.xSize);
-            Debug.Log(mazeGenerator.xSize);
             mazeGenerator.BuildMaze();
 
             // adjust camera height
@@ -180,7 +173,7 @@ public class GameController : Singleton<GameController>
             {
                 Debug.Log("Target not spawned");
                 mazeGenerator.DestroyMaze();
-                startNewRound();
+                //startNewRound();
                 return;
             }
             powerUpManager.setSpawnedPowerUps(0);
@@ -189,8 +182,6 @@ public class GameController : Singleton<GameController>
         }
         else
         {
-            Debug.Log("here1");
-
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
             powerUpManager.setSpawnedPowerUps(0);
         }
@@ -235,7 +226,6 @@ public class GameController : Singleton<GameController>
 
     private void setUpPlayers()
     {
-        Debug.Log("setUpPlayers");
         mazeGenerator.numPlayers = 0;
         mazeGenerator.playerA = null;
         mazeGenerator.playerB = null;

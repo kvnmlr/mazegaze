@@ -128,7 +128,7 @@ public class Menu : Singleton<Menu> {
         {
             roundText.gameObject.SetActive(false);
         }
-        roundText.text = "Round " + GameController.Instance.getPlayedGames() + "/" + GameController.Instance.getNumGames();
+        roundText.text = "Round " + GameController.Instance.playedGames + "/" + GameController.Instance.numGames;
     }
 
     void CheckRanking()

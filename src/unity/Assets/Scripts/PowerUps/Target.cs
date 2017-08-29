@@ -22,6 +22,7 @@ public class Target : PowerUp
         else
         {
             StartCoroutine(Menu.Instance.GetWinText(p));
+            Debug.Log("asd");
             GameController.Instance.startNewRound();
             yield return new WaitForSeconds(3);
             if (GameController.Instance.getPlayedGames() == 4)
