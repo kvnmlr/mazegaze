@@ -2,7 +2,7 @@
     "pupil_clients": [
         {
             "name": "Acer",
-            "ip": "192.168.2.100",
+            "ip": "192.168.137.246",
             "port": "50020",
             "surface_name": "screen",
             "detect_surface": true,
@@ -10,8 +10,8 @@
         },
         {
             "name": "Lenovo",
-            "ip": "192.168.1.3",
-            "port": "49565",
+            "ip": "192.168.137.1",
+            "port": "50020",
             "surface_name": "screen",
             "detect_surface": true,
             "initially_active": true

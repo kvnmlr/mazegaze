@@ -216,10 +216,10 @@ public class PupilListener : Singleton<PupilListener>
                     subscriberSocket.Subscribe("surface");
                 }
                 subscriberSocket.Subscribe("pupil.");
-                subscriberSocket.Subscribe("notify.");
-                subscriberSocket.Subscribe("calibration.");
-                subscriberSocket.Subscribe("logging.info");
-                subscriberSocket.Subscribe("calibration_routines.calibrate");
+                //subscriberSocket.Subscribe("notify.");
+                //subscriberSocket.Subscribe("calibration.");
+                //subscriberSocket.Subscribe("logging.info");
+                //subscriberSocket.Subscribe("calibration_routines.calibrate");
                 //subscriberSocket.Subscribe("frame.");
                 //subscriberSocket.Subscribe("gaze.");
 
@@ -231,12 +231,12 @@ public class PupilListener : Singleton<PupilListener>
             while (!stop_thread_)
             {
 
-                turn = ++turn % IPHeaders.Count;
+                turn = ++turn % clients.Count;
                 if (IPHeaders[turn].Equals("") || clients[turn].is_connected == false)
                 {
                     continue;
                 }
-                timeout = new System.TimeSpan(0, 0, 0, 0, 200);     // wait 200ms to receive a message
+                timeout = new System.TimeSpan(0, 0, 0, 0, 1);     // wait 200ms to receive a message
 
                 bool stillAlive = subscriberSockets[turn].TryReceiveMultipartMessage(timeout, ref (msg));
 
@@ -263,7 +263,7 @@ public class PupilListener : Singleton<PupilListener>
                         {
                         }
 
-                        if (msgType == "surfaces")
+                        if (msgType.Contains("surfaces"))
                         {
                             // surface detected
                             lock (thisLock_)
@@ -422,6 +422,10 @@ public class PupilListener : Singleton<PupilListener>
         if (newData)
         {
             PupilConfiguration.PupilClient client = clients.Find((c) => IPHeaders[turn].Contains(c.ip));
+            if (client == null)
+            {
+                return;
+            }
 
             if (client.gaze_controller != null)
             {
@@ -439,7 +443,10 @@ public class PupilListener : Singleton<PupilListener>
                     {
                         return;
                     }
-                    client.gaze_controller.move(surfaceData, client.surface_name);
+                    if (gos.on_srf)
+                    {
+                        client.gaze_controller.move(surfaceData, client.surface_name);
+                    }
                 }
 
             }

@@ -83,6 +83,10 @@ public class GameController : Singleton<GameController>
 
     public void startPlayerAssignment()
     {
+        foreach (Player p in players)
+        {
+            p.gameObject.SetActive(true);
+        }
         joinedPlayersToPosition = new Dictionary<Player, int>();
         Menu.Instance.joinScreen.SetActive(true);
     }
@@ -185,6 +189,11 @@ public class GameController : Singleton<GameController>
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
             powerUpManager.setSpawnedPowerUps(0);
         }
+        foreach(Player p in joinedPlayersToPosition.Keys)
+        {
+            p.gameObject.SetActive(true);
+        }
+
         playedGames++;
         gameover = false;
     }
@@ -226,6 +235,10 @@ public class GameController : Singleton<GameController>
 
     private void setUpPlayers()
     {
+        foreach(Player p in players)
+        {
+            p.gameObject.SetActive(false);
+        }
         mazeGenerator.numPlayers = 0;
         mazeGenerator.playerA = null;
         mazeGenerator.playerB = null;

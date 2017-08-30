@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (!Menu.Instance.canvas.enabled)
+        if (!Menu.Instance.canvas.enabled && MazeGenerator.Instance.cells != null)
         {
             depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
             int size = MazeGenerator.Instance.xSize;

@@ -19,8 +19,8 @@ public class GazeController : MonoBehaviour
     private Cell lastCell;
     private Boolean currentCellReached;
 
-    private float gazeX;
-    private float gazeY;
+    public float gazeX { get; set; }
+    public float gazeY { get; set; }
 
     public float goodGazeX { get; set; }
     public float goodGazeY { get; set; }
@@ -33,8 +33,9 @@ public class GazeController : MonoBehaviour
         Debug.Log("Listener for gaze controller " + gameObject.name + " is ready");
     }
 
-    public void move(Pupil.SurfaceData3D data, string surface = "")
+    public void move(Pupil.SurfaceData3D data, string surface = "screen")
     {
+        //Debug.Log("move");
         Pupil.GazeOnSurface gaze = new Pupil.GazeOnSurface();
         double maxConfidence = 0;
         foreach (Pupil.GazeOnSurface gos in data.gaze_on_srf)
@@ -45,6 +46,9 @@ public class GazeController : MonoBehaviour
                 gaze = gos;
             }
         }
+
+        //gaze.on_srf = !gaze.on_srf;
+        //Debug.Log(gaze.on_srf);
 
         if (!gaze.on_srf || !data.name.Equals(surface))
         {
@@ -58,18 +62,27 @@ public class GazeController : MonoBehaviour
         {
             if (GameController.Instance.joinedPlayersToPosition.Keys.Count < MazeGenerator.Instance.numPlayers)
             {
-                Debug.Log("He wants to join!");
+                //Debug.Log("He wants to join!");
             }
+            gazeOnSurface = true;
+            gazeX = (float)gaze.norm_pos[0];
+            gazeY = (float)gaze.norm_pos[1];
+
+            //Debug.Log(gazeX);
         }
 
-        gazeOnSurface = true;
-        gazeX = (float)gaze.norm_pos[0];
-        gazeY = (float)gaze.norm_pos[1];
+        
+
     }
 
     private void protectArea(int[] pos)
     {
         GameObject[][] board = MazeGenerator.Instance.toMatrix();
+
+        if (gameObject.GetComponent<Player>().cell == null)
+        {
+            return;
+        }
 
         if (Math.Abs(gameObject.GetComponent<Player>().cell.posX - pos[1]) + Math.Abs(gameObject.GetComponent<Player>().cell.posY - pos[0]) < 3)
         {
@@ -170,19 +183,20 @@ public class GazeController : MonoBehaviour
 
     void Update()
     {
+        //return;
         if (!gazeOnSurface)
         {
             if (Time.time - gazeLeftSurface > 5)
             {
                 // Player did not look at maze for more than 5 consequtive seconds, kick him out of the game
                 Player player = gameObject.GetComponent<Player>();
-                Debug.Log("Kicking player " + player.name + " out of the game (inactive)");
-                GameController.Instance.joinedPlayersToPosition.Remove(player);
-                gameObject.SetActive(false);
+                //Debug.Log("Kicking player " + player.name + " out of the game (inactive)");
+                //GameController.Instance.joinedPlayersToPosition.Remove(player);
+                //gameObject.SetActive(false);
             }
         }
 
-        if (!Menu.Instance.canvas.enabled)
+        if (!Menu.Instance.canvas.enabled || Menu.Instance.joinScreen.gameObject.activeSelf)
         {
             depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
             int size = MazeGenerator.Instance.xSize;
@@ -197,18 +211,21 @@ public class GazeController : MonoBehaviour
                 }
             }
 
-            gazeX = gazeX * Screen.width;
-            gazeY = gazeY * Screen.height;
             Vector3 gazePos = new Vector3();
 
             if (!(gazeX > 10000 || gazeY > 1000 || gazeX < -10000 || gazeY < -1000))
             {
-                goodGazeX = gazeX;
-                goodGazeY = gazeY;
+                goodGazeX = gazeX * Screen.width;
+                goodGazeY = gazeY * Screen.height;
             }
 
             gazePos = Camera.main.ScreenToWorldPoint(new Vector3(goodGazeX, goodGazeY, depth));
             cursor.gameObject.transform.position = gazePos;
+
+            if (MazeGenerator.Instance.cells == null)
+            {
+                return;
+            }
 
             float x = MazeGenerator.Instance.xSize;
             float y = MazeGenerator.Instance.ySize;
@@ -229,7 +246,10 @@ public class GazeController : MonoBehaviour
                 targetCell = currentCell;
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);         
+            if (targetCell != null)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);
+            }
         }
     }
 }

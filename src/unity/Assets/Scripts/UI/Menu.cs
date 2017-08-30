@@ -434,13 +434,20 @@ public class Menu : Singleton<Menu> {
 
     public Player[] computeRanking()
     {
-        int numPlayers = MazeGenerator.Instance.numPlayers;
+        int numPlayers = GameController.Instance.joinedPlayersToPosition.Keys.Count;
         Player[] a = new Player[numPlayers];
 
+        int index = 0;
+        foreach( Player p in GameController.Instance.joinedPlayersToPosition.Keys)
+        {
+            a[index] = p;
+            ++index;
+        }
+        /*
         for (int i = 0; i < numPlayers; i++)
         {
-            a[i] = GameController.Instance.players[i];
-        }
+            a[i] = GameController.Instance.joinedPlayersToPosition.get
+        }*/
 
         for (int i = 1; i < numPlayers; i++)
         {

@@ -20,12 +20,18 @@ public class JoinArea : MonoBehaviour
 
     void Update()
     {
+        if (!gameObject.activeSelf)
+        {
+            return;
+        }
+
         foreach (PupilConfiguration.PupilClient client in PupilListener.Instance.clients)
         {
             if (client.gaze_controller.gazeOnSurface)
             {
-                float y = client.gaze_controller.goodGazeY;
-                float x = client.gaze_controller.goodGazeX;
+                float y = client.gaze_controller.gazeY;
+                float x = client.gaze_controller.gazeX;
+
                 int joinPosition = 0;
 
                 if (y > 0.5f)
@@ -33,11 +39,11 @@ public class JoinArea : MonoBehaviour
                     // upper half
                     if (x > 0.5f)
                     {
-                        Debug.Log(client.name + " wants to join upper right");
-                        joinPosition = 3;
+                        //Debug.Log(client.name + " wants to join upper right");
+                        joinPosition = 4;
                     } else
                     {
-                        Debug.Log(client.name + " wants to join upper left");
+                       // Debug.Log(client.name + " wants to join upper left");
                         joinPosition = 2;
                     }
                 } else
@@ -45,12 +51,12 @@ public class JoinArea : MonoBehaviour
                     // lower half
                     if (x > 0.5f)
                     {
-                        Debug.Log(client.name + " wants to join lower right");
-                        joinPosition = 4;
+                        //Debug.Log(client.name + " wants to join lower right");
+                        joinPosition = 3;
                     }
                     else
                     {
-                        Debug.Log(client.name + " wants to join lower left");
+                        //Debug.Log(client.name + " wants to join lower left");
                         joinPosition = 1;
                     }
                 }
@@ -59,6 +65,8 @@ public class JoinArea : MonoBehaviour
                     // something went wrong
                     return;
                 }
+
+                //Debug.Log(joinPosition);
 
                 if (!clientToPosition.ContainsKey(client) && !clientToFirstGazeTime.ContainsKey(client))
                 {
@@ -75,12 +83,13 @@ public class JoinArea : MonoBehaviour
                         clientToPosition[client] = joinPosition;
                     }  else
                     {
-                        if (Time.time - clientToFirstGazeTime[client] > 3)
+                        if (Time.time - clientToFirstGazeTime[client] > 1)
                         {
                             foreach (Player p in GameController.Instance.players)
                             {
                                 if (p.name.Equals(client.name))
                                 {
+                                    Debug.Log(client.name);
                                     GameController.Instance.assignPlayer(p, joinPosition);
                                 }
                             }
