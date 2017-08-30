@@ -110,7 +110,7 @@ public class GazeController : MonoBehaviour
                     {
                         for (int i = 0; i < c.lights.Count; i++)
                         {
-                            c.lights[i].GetComponent<CellLight>().SaveArea(GameController.Instance.players[0]);
+                            c.lights[i].GetComponent<CellLight>().SaveArea(gameObject.GetComponent<Player>());
 
                         }
                     }
