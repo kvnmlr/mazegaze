@@ -28,6 +28,7 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
         public GazeController gaze_controller { get; set; }
         public bool is_connected { get; set; }
         public bool is_calibrated { get; set; }
+        public Player player { get; set; }
     }
 
     public Settings settings;
