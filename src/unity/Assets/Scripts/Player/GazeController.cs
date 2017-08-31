@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GazeController : MonoBehaviour
+public class GazeController : PlayerControl
 {
     public GameObject cursor;
     private Rigidbody rb;
@@ -12,6 +12,8 @@ public class GazeController : MonoBehaviour
     private Vector3 screenPoint;
     float depth;
     float radius = 10;
+    private float currentSpeed;
+    private float speedingUp = 1.1f;
 
     private Cell currentCell;
     private Cell targetCell;
@@ -184,7 +186,7 @@ public class GazeController : MonoBehaviour
     void Update()
     {
         //return;
-        if (!gazeOnSurface)
+        /*if (!gazeOnSurface)
         {
             if (Time.time - gazeLeftSurface > 5)
             {
@@ -194,7 +196,9 @@ public class GazeController : MonoBehaviour
                 //GameController.Instance.joinedPlayersToPosition.Remove(player);
                 //gameObject.SetActive(false);
             }
-        }
+        }*/
+        //Or code above with leaving screen
+        LeaveGame();
 
         if (!Menu.Instance.canvas.enabled || Menu.Instance.joinScreen.gameObject.activeSelf)
         {
@@ -245,11 +249,22 @@ public class GazeController : MonoBehaviour
             {
                 targetCell = currentCell;
             }
-
+            //if auskommentieren, falls spieler sich nicht bewegt
+            if (currentSpeed < gameObject.GetComponent<Player>().speed)
+            {
+                currentSpeed += speedingUp * Time.deltaTime;
+            }
+            //hier kommentar umkehren, falls spieler sich nicht bewegt
             if (targetCell != null)
             {
-                transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);
+                //transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, currentSpeed * Time.deltaTime);
+
             }
+        }
+        else
+        {
+            currentSpeed = 0;
         }
     }
 }

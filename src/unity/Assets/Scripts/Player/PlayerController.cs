@@ -3,25 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : PlayerControl
 {
     private Rigidbody rb;
     private Vector3 offset;
     private Vector3 screenPoint;
     float depth;
     float radius = 2;
+    private float speedingUp = 1.1f;
+    private float currentSpeed;
 
     private Cell currentCell;
     private Cell targetCell;
     private Cell lastMouseCell;
     private Cell lastCell;
+    
+    //Vector3 richtung = Vector3.zero;
 
     private Boolean currentCellReached;
 
     void Start () {
         rb = GetComponent<Rigidbody>();
         depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
-        //TODO: Radius mit Eyetracker anpassen;
         if (MazeGenerator.Instance.xSize == 9)
         {
             radius = 2;
@@ -39,6 +42,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!Menu.Instance.canvas.enabled && MazeGenerator.Instance.cells != null)
         {
+            LeaveGame();
+           
             depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
             int size = MazeGenerator.Instance.xSize;
 
@@ -52,7 +57,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
-            
+
             float x = MazeGenerator.Instance.xSize;
             float y = MazeGenerator.Instance.ySize;
             int rangeX = MazeGenerator.Instance.xSize / 7;
@@ -72,6 +77,7 @@ public class PlayerController : MonoBehaviour
                     (!currentCell.Equals(lastCell))) 
                     && currentCellReached)
                 {
+                    Debug.Log("Test");
                     lastMouseCell = mouseCell;
                     lastCell = currentCell;
                     currentCellReached = false;
@@ -86,7 +92,18 @@ public class PlayerController : MonoBehaviour
                             }
                         }
                     }
+                    
                 }
+              
+                //Beschleinigt momentan nur neu, wenn maus bildschirm verlässt
+                if (currentSpeed < gameObject.GetComponent<Player>().speed)
+                {
+                    currentSpeed += speedingUp * Time.deltaTime;
+                }
+            }
+            else
+            {
+                currentSpeed = 0;
             }
 
             if (targetCell == null)
@@ -98,9 +115,8 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
-
-
-            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, currentSpeed * Time.deltaTime);
+            
 
             // Protect area
             if (Math.Abs(gameObject.GetComponent<Player>().cell.posX - pos[1]) + Math.Abs(gameObject.GetComponent<Player>().cell.posY - pos[0]) < 3)

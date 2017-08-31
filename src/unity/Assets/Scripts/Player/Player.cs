@@ -8,6 +8,8 @@ public class Player : MonoBehaviour {
     public int points { get; set; }
     public float speed = 1;
     public string team { get; set; }
+    private Vector3 oldPosition = new Vector3(0.0f, 0.0f, 0.0f);
+    private float playerLeftGame;
 
     // the cell in which this player currently is
     public Cell cell { get; set; }
