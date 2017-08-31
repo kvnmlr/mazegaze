@@ -39,9 +39,8 @@ public class PowerUpManager : Singleton<PowerUpManager>
         if (type.Equals(PowerUpTypes.Target))
         {
             int bestCellY = 0, bestCellX = 0;
-            while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().lights.Count > 0 || counter == 0)
+            while (/*MazeGenerator.Instance.cells[cell].GetComponent<Cell>().lights.Count > 0 || */counter == 0)
             {
-                Debug.Log("Help" + counter);
                 counter++;
                 // get a fair cell for the target
                 MazeGenerator.Instance.toMatrix();
@@ -82,7 +81,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
                             float pathLength = board[row][column][i];
                             float diffToAverage = Math.Abs(average - pathLength);
 
-                            deltaVal += diffToAverage;
+                            deltaVal += (diffToAverage - (UnityEngine.Random.Range(0, pathLength / MazeGenerator.Instance.numPlayers)) * 0.01f);    // favor long paths
                         }
 
                         bool possible = true;
@@ -90,7 +89,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
                         {
                             for (int i = 0; i < MazeGenerator.Instance.numPlayers; ++i)
                             {
-                                if (board[row][column][i] < MazeGenerator.Instance.xSize * spawnDifficulty)
+                                if (board[row][column][i] < MazeGenerator.Instance.xSize * 2 * spawnDifficulty)
                                 {
                                     // do not use this cell if a user only has to go size * n cells to reach it
                                     possible = false;
@@ -114,7 +113,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
                     // did not find a suitable cell, do again
                     if (forceSpawn)
                     {
-                        return spawnPowerUp(PowerUpTypes.Target, forceSpawn, spawnDifficulty / 2.0f);
+                        return spawnPowerUp(PowerUpTypes.Target, forceSpawn, spawnDifficulty / 0.8f);
                     }
                     else
                     {
@@ -124,6 +123,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
                 Debug.Log("Target fairness: " + bestCellValue);
                 Debug.Log("Target cell: " + bestCellX + ", " + bestCellY);
             }
+
             counter = 0;
             return spawnPowerUp(PowerUpTypes.Target, MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
 

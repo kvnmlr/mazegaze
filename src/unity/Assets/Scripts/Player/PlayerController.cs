@@ -94,6 +94,11 @@ public class PlayerController : MonoBehaviour
                 targetCell = currentCell;
             }
 
+            if (targetCell == null)
+            {
+                return;
+            }
+
 
             transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);
 

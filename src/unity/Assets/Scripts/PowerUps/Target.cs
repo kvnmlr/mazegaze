@@ -10,7 +10,9 @@ public class Target : PowerUp
 
         p.points++;
         GameController.Instance.setRestart(true);
+
         AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_TARGET);
+        GameController.Instance.playedGames++;
 
         if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
         {
@@ -22,7 +24,6 @@ public class Target : PowerUp
         else
         {
             StartCoroutine(Menu.Instance.GetWinText(p));
-            Debug.Log("asd");
             GameController.Instance.startNewRound();
             yield return new WaitForSeconds(3);
             if (GameController.Instance.getPlayedGames() == 4)

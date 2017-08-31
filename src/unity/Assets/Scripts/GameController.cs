@@ -132,6 +132,8 @@ public class GameController : Singleton<GameController>
 
     public void setUpNewRound()
     {
+        restart = false;
+        playedGames = 0;
         // check if player need calibration
         foreach (Player p in players)
         {
@@ -161,12 +163,16 @@ public class GameController : Singleton<GameController>
         startPlayerAssignment();
     }
 
-    public void startNewRound() {
-        setUpPlayers();
+    public void startNewRound()
+    {
 
-        mazeBuildAttempts++;
-        if (playedGames == 0 /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
+        if (playedGames == 0 && !restart /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
         {
+            mazeBuildAttempts++;
+
+            mazeGenerator.DestroyMaze();
+            setUpPlayers();
+
             mazeGenerator.target = powerUpManager.target.gameObject;
             mazeGenerator.BuildMaze();
 
@@ -176,8 +182,7 @@ public class GameController : Singleton<GameController>
             if (powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target) == null)
             {
                 Debug.Log("Target not spawned");
-                mazeGenerator.DestroyMaze();
-                //startNewRound();
+                startNewRound();
                 return;
             }
             powerUpManager.setSpawnedPowerUps(0);
@@ -194,7 +199,7 @@ public class GameController : Singleton<GameController>
             p.gameObject.SetActive(true);
         }
 
-        playedGames++;
+        //playedGames++;
         gameover = false;
     }
 
