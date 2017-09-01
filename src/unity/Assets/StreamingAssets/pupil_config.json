@@ -1,20 +1,20 @@
 {
     "pupil_clients": [
         {
-            "name": "Acer",
-            "ip": "192.168.1.7",
-            "port": "50404",
+            "name": "Lena",
+            "ip": "192.168.137.246",
+            "port": "50020",
             "surface_name": "screen",
             "detect_surface": true,
             "initially_active": true
         },
         {
-            "name": "Lenovo",
+            "name": "Marco",
             "ip": "127.0.0.1",
             "port": "50020",
             "surface_name": "screen",
             "detect_surface": true,
-            "initially_active": true
+            "initially_active": false
         }
     ],
     "setup_id": "Testeinstellungen"

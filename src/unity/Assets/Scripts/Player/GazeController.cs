@@ -226,7 +226,7 @@ public class GazeController : PlayerControl
             Vector3 gazePos = new Vector3();
 
 
-            Debug.Log(Screen.width);
+            //Debug.Log(Screen.width);
             //Debug.Log(Screen.height);
 
             if (!(gazeX > 10000 || gazeY > 1000 || gazeX < -10000 || gazeY < -1000))
@@ -240,7 +240,7 @@ public class GazeController : PlayerControl
 
             }
 
-            Debug.Log("goodGazeX " + goodGazeX);
+            //Debug.Log("goodGazeX " + goodGazeX);
            // Debug.Log("goodGazeY " + goodGazeY);
 
 

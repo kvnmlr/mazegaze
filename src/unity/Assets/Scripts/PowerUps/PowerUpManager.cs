@@ -35,13 +35,11 @@ public class PowerUpManager : Singleton<PowerUpManager>
     {
 
         int cell = 0;
-        int counter = 0;
         if (type.Equals(PowerUpTypes.Target))
         {
             int bestCellY = 0, bestCellX = 0;
-            while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().lights.Count < 1 && counter == 0)
+            while (true)
             {
-                counter++;
                 // get a fair cell for the target
                 MazeGenerator.Instance.toMatrix();
                 int ySize = MazeGenerator.Instance.ySize;
@@ -49,7 +47,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
 
                 float[][][] board = new float[ySize][][];
                 float bestCellValue = int.MaxValue;
-               
+
 
                 for (int row = 0; row < ySize; ++row)
                 {
@@ -122,9 +120,13 @@ public class PowerUpManager : Singleton<PowerUpManager>
                 }
                 Debug.Log("Target fairness: " + bestCellValue);
                 Debug.Log("Target cell: " + bestCellX + ", " + bestCellY);
-            }
 
-            counter = 0;
+                if (MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>().lights.Count == 0 &&
+                    MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>().powerUps.Count == 0)
+                {
+                    break;
+                }
+            }
             return spawnPowerUp(PowerUpTypes.Target, MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
 
         }

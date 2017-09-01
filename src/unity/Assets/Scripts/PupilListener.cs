@@ -92,6 +92,8 @@ public class PupilListener : Singleton<PupilListener>
     private int turn = 0;
     private TimeSpan timeout = new System.TimeSpan(0, 0, 1);
 
+    private PupilConfiguration.PupilClient calibrationDoneClient = null;
+
 
     Pupil.PupilData3D pupilData = new Pupil.PupilData3D();
     Pupil.SurfaceData3D surfaceData = new Pupil.SurfaceData3D();
@@ -216,10 +218,10 @@ public class PupilListener : Singleton<PupilListener>
                     subscriberSocket.Subscribe("surface");
                 }
                 subscriberSocket.Subscribe("pupil.");
-                //subscriberSocket.Subscribe("notify.");
+                subscriberSocket.Subscribe("notify.");
                 //subscriberSocket.Subscribe("calibration.");
-                //subscriberSocket.Subscribe("logging.info");
-                //subscriberSocket.Subscribe("calibration_routines.calibrate");
+                subscriberSocket.Subscribe("logging.info");
+                subscriberSocket.Subscribe("calibration_routines.calibrate");
                 //subscriberSocket.Subscribe("frame.");
                 //subscriberSocket.Subscribe("gaze.");
 
@@ -280,17 +282,19 @@ public class PupilListener : Singleton<PupilListener>
 
                         if (msgType.Equals("notify.calibration.failed"))
                         {
+                            calibrationDoneClient = clients[turn];
                             //Debug.LogFormat("Calibration for client {0} failed", clients[turn].name);
                         }
 
                         if (msgType.Equals("notify.calibration.successful"))
                         {
+                            calibrationDoneClient = clients[turn];
                             //Debug.LogFormat("Calibration for client {0} successful", clients[turn].name);
                         }
 
                         if (msgType.Equals("notify.calibration.calibration_data"))
                         {
-                           // Debug.LogFormat("New calibration data for client {0}: {1}", clients[turn].name, mmap.ToString());
+                            //Debug.LogFormat("New calibration data for client {0}: {1}", clients[turn].name, mmap.ToString());
                         }
                         if (msgType.Equals("logging.info"))
                         {
@@ -376,7 +380,7 @@ public class PupilListener : Singleton<PupilListener>
         //sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "eye_process.should_start.0" }, { "eye_id", 0 } });
         sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "calibration.should_start" }, { "marker_size", "1.50" }, { "sample_duration", "50" } });
 
-        Calibration.Instance.StartCalibration();
+        Calibration.Instance.StartCalibration(clients[turn]);
     }
 
     NetMQMessage sendRequest(RequestSocket socket, Dictionary<string, object> data)
@@ -418,6 +422,12 @@ public class PupilListener : Singleton<PupilListener>
 
     void Update()
     {
+        if (calibrationDoneClient != null)
+        {
+            Calibration.Instance.CalibrationDone(calibrationDoneClient);
+            calibrationDoneClient = null;
+        }
+
 
         if (newData)
         {
