@@ -147,7 +147,7 @@ public class GameController : Singleton<GameController>
                 } else
                 {
                     client.player = p;
-                    //client.is_calibrated = true;
+                    client.is_calibrated = true;
                     if (!client.is_calibrated)
                     {
                         //Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
