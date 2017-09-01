@@ -10,8 +10,9 @@ public class PlayerController : PlayerControl
     private Vector3 screenPoint;
     float depth;
     float radius = 2;
-    private float speedingUp = 1.1f;
-    private float currentSpeed;
+    private float speedingUp = 0.01f;
+    private float currentSpeed = 0;
+    private Vector3 oldMousePos = new Vector3(0, 0, 0);
 
     private Cell currentCell;
     private Cell targetCell;
@@ -56,6 +57,7 @@ public class PlayerController : PlayerControl
                     currentCellReached = true;
                 }
             }
+
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, depth));
 
             float x = MazeGenerator.Instance.xSize;
@@ -74,7 +76,7 @@ public class PlayerController : PlayerControl
             {
                 Cell mouseCell = board[pos[0]][pos[1]].GetComponent<Cell>();
                 if ((!mouseCell.Equals(lastMouseCell) ||
-                    (!currentCell.Equals(lastCell))) 
+                    (!currentCell.Equals(lastCell)))
                     && currentCellReached)
                 {
                     Debug.Log("Test");
@@ -92,19 +94,25 @@ public class PlayerController : PlayerControl
                             }
                         }
                     }
-                    
                 }
-              
-                //Beschleinigt momentan nur neu, wenn maus bildschirm verlässt
-                if (currentSpeed < gameObject.GetComponent<Player>().speed)
+                /*if (!mouseCell.Equals(lastMouseCell) ||
+                   !currentCell.Equals(lastCell))
                 {
-                    currentSpeed += speedingUp * Time.deltaTime;
+                    if (currentSpeed < gameObject.GetComponent<Player>().speed)
+                    {
+                        currentSpeed += speedingUp;
+                    }
+
                 }
+                else
+                {
+                    currentSpeed = 0;
+                }*/
+
+
+
             }
-            else
-            {
-                currentSpeed = 0;
-            }
+
 
             if (targetCell == null)
             {
@@ -115,6 +123,8 @@ public class PlayerController : PlayerControl
             {
                 return;
             }
+
+           
             transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, currentSpeed * Time.deltaTime);
             
 

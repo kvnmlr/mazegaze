@@ -7,8 +7,8 @@ public class PlayerControllerArrow : PlayerControl
 
     private bool move;
     private Vector3 movement;
-    private float currentSpeed;
-    private float speedingUp = 1.0000001f;
+    private float currentSpeed=0;
+    private float speedingUp = 1.1f;
 
     void FixedUpdate()
     {
@@ -20,22 +20,22 @@ public class PlayerControllerArrow : PlayerControl
 
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                movement += Vector3.right * gameObject.GetComponent<Player>().speed * Time.deltaTime;
+                movement += Vector3.right * currentSpeed * Time.deltaTime;
                 move = true;
             }
             else if (Input.GetKey(KeyCode.LeftArrow))
             {
-                movement += Vector3.left * gameObject.GetComponent<Player>().speed * Time.deltaTime;
+                movement += Vector3.left * currentSpeed * Time.deltaTime;
                 move = true;
             }
             else if (Input.GetKey(KeyCode.UpArrow))
             {
-                movement += Vector3.forward * gameObject.GetComponent<Player>().speed * Time.deltaTime;
+                movement += Vector3.forward * currentSpeed * Time.deltaTime;
                 move = true;
             }
             else if (Input.GetKey(KeyCode.DownArrow))
             {
-                movement += Vector3.back * gameObject.GetComponent<Player>().speed * Time.deltaTime;
+                movement += Vector3.back * currentSpeed * Time.deltaTime;
                 move = true;
             }
             if (move)

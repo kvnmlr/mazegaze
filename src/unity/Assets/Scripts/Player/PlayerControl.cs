@@ -4,8 +4,7 @@ using UnityEngine;
 
 public abstract class PlayerControl : MonoBehaviour {
 
-    public Vector3 oldPosition1 = new Vector3(0.0f, 0.0f, 0.0f);
-    public Vector3 oldPosition2 = new Vector3(0.0f, 0.0f, 0.0f);
+    public Vector3 oldPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
     private float playerLeftGame;
     private int timeToLeave = 10;
@@ -20,7 +19,7 @@ public abstract class PlayerControl : MonoBehaviour {
     {
         Vector3 currentPosition = transform.position;
 
-        if (oldPosition1 == currentPosition)
+        if (oldPosition == currentPosition)
         {
             if (Time.time - playerLeftGame > timeToLeave)
             {
@@ -34,7 +33,7 @@ public abstract class PlayerControl : MonoBehaviour {
         }
         else
         {
-            oldPosition1 = currentPosition;
+            oldPosition = currentPosition;
             playerLeftGame = Time.time;
           
         }
