@@ -16,6 +16,7 @@ public class Menu : Singleton<Menu> {
     private bool optionWinText = false;
     private bool optionRanking = false;
     private bool optionRoundText = false;
+    private bool optionHelpScreen = false;
 
     private bool breakgameover = false;
 
@@ -28,6 +29,7 @@ public class Menu : Singleton<Menu> {
     public GameObject breakButton;
     public GameObject breakScreen;
     public GameObject joinScreen;
+    public GameObject helpScreen;
     public Canvas canvas;
     public Text winText;
     public Canvas canvasranking;
@@ -49,6 +51,7 @@ public class Menu : Singleton<Menu> {
         CheckWinText();
         CheckRoundText();
         CheckRanking();
+        CheckHelpScreen();
 	}
 
     //Check Screens
@@ -128,7 +131,8 @@ public class Menu : Singleton<Menu> {
         {
             roundText.gameObject.SetActive(false);
         }
-        roundText.text = "Round " + GameController.Instance.playedGames + "/" + GameController.Instance.numGames;
+        int games = GameController.Instance.playedGames + 1;
+        roundText.text = "Round " + games + "/" + GameController.Instance.numGames;
     }
 
     void CheckRanking()
@@ -142,6 +146,18 @@ public class Menu : Singleton<Menu> {
             rankingText.gameObject.SetActive(false);
         }
         computeRanking();
+    }
+
+    void CheckHelpScreen()
+    {
+        if (optionHelpScreen == true)
+        {
+            helpScreen.SetActive(true);
+        }
+        else
+        {
+            helpScreen.SetActive(false);
+        }
     }
 
     //Close Options
@@ -180,6 +196,13 @@ public class Menu : Singleton<Menu> {
     public void CloseBreakScreen() {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
         optionBreakScreen = false;
+    }
+
+    public void CloseHelpScreen()
+    {
+        AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
+        optionHelpScreen = false;
+        optionMainButton = true;
     }
 
     //Player Button Control
@@ -428,6 +451,8 @@ public class Menu : Singleton<Menu> {
 
     public void Help () {
         AudioManager.Instance.play(AudioManager.SOUNDS.BUTTON_CLICK);
+        optionMainButton = false;
+        optionHelpScreen = true;
     }
 
     //Ranking
