@@ -167,12 +167,13 @@ public class GameController : Singleton<GameController>
     public void startNewRound()
     {
 
+        setUpPlayers();
+
         if (playedGames == 0 && !restart /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
         {
             mazeBuildAttempts++;
 
             mazeGenerator.DestroyMaze();
-            setUpPlayers();
 
             mazeGenerator.target = powerUpManager.target.gameObject;
             mazeGenerator.BuildMaze();

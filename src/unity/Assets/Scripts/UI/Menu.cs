@@ -350,6 +350,10 @@ public class Menu : Singleton<Menu> {
         canvas.enabled = false;
         optionBreakButton = true;
         breakgameover = false;
+        foreach(Player p in GameController.Instance.joinedPlayersToPosition.Keys)
+        {
+            p.gameObject.GetComponent<PlayerControl>().playerLeftGame = Time.time;
+        }
     }
 
     public void LeaveGame()
@@ -538,7 +542,7 @@ public class Menu : Singleton<Menu> {
 
             Player[] ranking = computeRanking();
 
-            switch (MazeGenerator.Instance.numPlayers)
+            switch (GameController.Instance.joinedPlayersToPosition.Keys.Count)
             {
                 case 1:
                     text = "Scores:    " + ranking[0].name + ": " + ranking[0].points;

@@ -191,7 +191,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
     void Update()
     {
         // have max 1 powerup per 20 cells
-        if (activePowerUps >= MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize / 20 || GameController.Instance.gameover)
+        if (activePowerUps >= MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize|| GameController.Instance.gameover)
         {
             return;
         }

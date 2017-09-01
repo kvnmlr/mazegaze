@@ -124,8 +124,8 @@ public class PlayerController : PlayerControl
                 return;
             }
 
-           
-            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, currentSpeed * Time.deltaTime);
+
+            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, GetComponent<Player>().speed * Time.deltaTime);
             
 
             // Protect area

@@ -6,7 +6,7 @@ public abstract class PlayerControl : MonoBehaviour {
 
     public Vector3 oldPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
-    private float playerLeftGame;
+    public float playerLeftGame { get; set; }
     private int timeToLeave = 10;
 
     // Use this for initialization
