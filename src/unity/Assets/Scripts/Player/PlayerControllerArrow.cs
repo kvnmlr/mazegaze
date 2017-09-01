@@ -12,7 +12,7 @@ public class PlayerControllerArrow : PlayerControl
 
     void FixedUpdate()
     {
-        if (!Menu.Instance.canvas.enabled)
+        if (!Menu.Instance.canvas.enabled && !Menu.Instance.joinScreen.activeSelf)
         {
             movement = transform.position;
             move = false;

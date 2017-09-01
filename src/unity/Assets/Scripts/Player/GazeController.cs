@@ -185,6 +185,9 @@ public class GazeController : PlayerControl
 
     void Update()
     {
+        Debug.Log("gazeX " + gazeX);
+        //Debug.Log("gazeY " + gazeY);
+
         //return;
         /*if (!gazeOnSurface)
         {
@@ -198,10 +201,15 @@ public class GazeController : PlayerControl
             }
         }*/
         //Or code above with leaving screen
-        LeaveGame();
+
+        if (!Menu.Instance.joinScreen.gameObject.activeSelf)
+        {
+            LeaveGame();
+        }
 
         if (!Menu.Instance.canvas.enabled || Menu.Instance.joinScreen.gameObject.activeSelf)
         {
+
             depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
             int size = MazeGenerator.Instance.xSize;
 
@@ -217,11 +225,17 @@ public class GazeController : PlayerControl
 
             Vector3 gazePos = new Vector3();
 
+
+
             if (!(gazeX > 10000 || gazeY > 1000 || gazeX < -10000 || gazeY < -1000))
             {
                 goodGazeX = gazeX * Screen.width;
                 goodGazeY = gazeY * Screen.height;
             }
+
+            //Debug.Log("goodGazeX " + goodGazeX);
+           // Debug.Log("goodGazeY " + goodGazeY);
+
 
             gazePos = Camera.main.ScreenToWorldPoint(new Vector3(goodGazeX, goodGazeY, depth));
             cursor.gameObject.transform.position = gazePos;

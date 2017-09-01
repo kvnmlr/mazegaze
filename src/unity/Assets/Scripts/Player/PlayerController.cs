@@ -41,7 +41,7 @@ public class PlayerController : PlayerControl
 
     void Update()
     {
-        if (!Menu.Instance.canvas.enabled && MazeGenerator.Instance.cells != null)
+        if (!Menu.Instance.canvas.enabled && MazeGenerator.Instance.cells != null && !Menu.Instance.joinScreen.activeSelf)
         {
             LeaveGame();
            
