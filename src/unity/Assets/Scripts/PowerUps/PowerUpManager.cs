@@ -39,7 +39,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
         if (type.Equals(PowerUpTypes.Target))
         {
             int bestCellY = 0, bestCellX = 0;
-            while (/*MazeGenerator.Instance.cells[cell].GetComponent<Cell>().lights.Count > 0 || */counter == 0)
+            while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().lights.Count < 1 && counter == 0)
             {
                 counter++;
                 // get a fair cell for the target

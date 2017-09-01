@@ -16,7 +16,7 @@ public class Slowing : PowerUp {
         {
             if (!player.Equals(p))
             {
-                player.speed *= 0.9f;
+                player.speed *= 0.8f;
             }
         }
         yield return new WaitForSeconds(duration);

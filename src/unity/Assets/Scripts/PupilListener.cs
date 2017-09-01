@@ -421,6 +421,10 @@ public class PupilListener : Singleton<PupilListener>
 
         if (newData)
         {
+            if (IPHeaders[turn] == null)
+            {
+                return;
+            }
             PupilConfiguration.PupilClient client = clients.Find((c) => IPHeaders[turn].Contains(c.ip));
             if (client == null)
             {

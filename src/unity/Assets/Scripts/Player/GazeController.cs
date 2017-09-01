@@ -185,7 +185,7 @@ public class GazeController : PlayerControl
 
     void Update()
     {
-        Debug.Log("gazeX " + gazeX);
+        //Debug.Log("gazeX " + gazeX);
         //Debug.Log("gazeY " + gazeY);
 
         //return;
@@ -226,14 +226,21 @@ public class GazeController : PlayerControl
             Vector3 gazePos = new Vector3();
 
 
+            Debug.Log(Screen.width);
+            //Debug.Log(Screen.height);
 
             if (!(gazeX > 10000 || gazeY > 1000 || gazeX < -10000 || gazeY < -1000))
             {
-                goodGazeX = gazeX * Screen.width;
-                goodGazeY = gazeY * Screen.height;
+                //goodGazeX = ((gazeX * Screen.width)) * ((Screen.width + 25) / Screen.width);
+                //goodGazeY = ((gazeY * Screen.height)) * ((Screen.height + 25) / Screen.height);
+
+                goodGazeX = (gazeX * (Screen.width - 50)) + 25;
+                goodGazeY = (gazeY * (Screen.height - 50)) + 25;
+
+
             }
 
-            //Debug.Log("goodGazeX " + goodGazeX);
+            Debug.Log("goodGazeX " + goodGazeX);
            // Debug.Log("goodGazeY " + goodGazeY);
 
 

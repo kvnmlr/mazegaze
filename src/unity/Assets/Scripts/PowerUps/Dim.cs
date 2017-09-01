@@ -17,7 +17,7 @@ public class Dim : PowerUp {
         {
             if (!player.Equals(p))
             {
-                player.timeToDarkness *= 0.8f;
+                player.timeToDarkness *= 0.7f;
             }
         }
        
