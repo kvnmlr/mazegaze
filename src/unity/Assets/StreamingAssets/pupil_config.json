@@ -1,9 +1,9 @@
 {
     "pupil_clients": [
         {
-            "name": "Lena",
-            "ip": "192.168.137.204",
-            "port": "50020",
+            "name": "Kevin",
+            "ip": "192.168.1.7",
+            "port": "50404",
             "surface_name": "screen",
             "detect_surface": true,
             "initially_active": true

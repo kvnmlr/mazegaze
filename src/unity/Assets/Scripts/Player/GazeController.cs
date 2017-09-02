@@ -128,16 +128,13 @@ public class GazeController : PlayerControl
         int rangeX = 1;
         int rangeY = 1;
 
-        List<Cell> possibleCells = new List<Cell>();
+        List<List<PathFinding.AStarNode>> possibleCells = new List<List<PathFinding.AStarNode>>();
 
         for (int deltaRangeX = rangeX * (-1); deltaRangeX <= rangeX; ++deltaRangeX)
         {
             for (int deltaRangeY = rangeY * (-1); deltaRangeY <= rangeY; ++deltaRangeY)
             {
-                if (deltaRangeX * deltaRangeY != 0)
-                {
-                    continue;
-                }
+                
                 if (deltaRangeX + pos[1] < 0 || deltaRangeY + pos[0] < 0 || deltaRangeX + pos[1] >= board[0].Length || deltaRangeY + pos[0] >= board.Length)
                 {
                     continue;
@@ -148,27 +145,40 @@ public class GazeController : PlayerControl
                 {
                     continue;
                 }
+                
+
                 protectArea(new int[] { pos[0] + deltaRangeY, pos[1] + deltaRangeX });
-                if ((!gazeCell.Equals(lastMouseCell) ||
-                    (!currentCell.Equals(lastCell)))
-                    && currentCellReached)
+                if (currentCellReached)
                 {
-                    lastMouseCell = gazeCell;
-                    lastCell = currentCell;
-                    currentCellReached = false;
+                    Debug.Log("here");
                     if (PathFinding.Instance.getManhattanDistance(currentCell, gazeCell) < 5)
                     {
                         List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(currentCell, gazeCell);
-                        if (path.Count > 0)
+                        if (path.Count >= 0)
                         {
                             if (path.Count < 5)
                             {
-                                if (Math.Abs(deltaRangeX) + Math.Abs(deltaRangeY) == 0)
+                                if (Math.Abs(deltaRangeX) + Math.Abs(deltaRangeY) == 0) // if this is the cell we are actually looking at
                                 {
-                                    targetCell = path[0].c;
+                                    if (path.Count == 0)
+                                    {
+                                        targetCell = gazeCell;
+                                    } else
+                                    {
+                                        targetCell = path[0].c;
+                                    }
+                                    lastMouseCell = gazeCell;
+                                    lastCell = currentCell;
+                                    currentCellReached = false;
                                     return;
+                                } else
+                                {
+                                    if (deltaRangeX != 0 && deltaRangeY != 0 && path.Count > 0)
+                                    {
+                                        path.Add(new PathFinding.AStarNode());
+                                    }
+                                    possibleCells.Add(path);
                                 }
-                                possibleCells.Add(path[0].c);
                             }
                         }
                     }
@@ -176,11 +186,45 @@ public class GazeController : PlayerControl
             }
         }
 
+        Cell bestCell = null;
+        int bestCellPathLength = int.MaxValue;
+
+        foreach(List<PathFinding.AStarNode> path in possibleCells)
+        {
+            if (path.Count < bestCellPathLength)
+            {
+                bestCellPathLength = path.Count;
+                if (path.Count == 0)
+                {
+                    bestCell = currentCell;
+                    continue;
+                }
+                bestCell = path[0].c;
+            }
+        }
+        
+
+        lastCell = currentCell;
+        currentCellReached = false;
+
+        targetCell = bestCell;
+
+        /*
+        if (possibleCells.Count > 0)
+        {
+            possibleCells.Sort();
+            Debug.Log("Cell " + possibleCells[0].posX + ", " + possibleCells[0].posY + " is best");
+            targetCell = possibleCells[0];
+        } else
+        {
+            targetCell = null;
+        }
+
         foreach (Cell c in possibleCells)
         {
             targetCell = c;
             return;
-        }
+        }*/
     }
 
     void Update()
@@ -264,12 +308,22 @@ public class GazeController : PlayerControl
             pos[0] = (int)my;
             pos[1] = (int)System.Math.Round((double)mx);
 
-            findMostProbableCell(pos);
-
-            if (targetCell == null)
+            if (currentCellReached)
             {
-                targetCell = currentCell;
+                findMostProbableCell(pos);
+                if (targetCell == null)
+                {
+                    //Debug.Log("target cell is null");
+                    //targetCell = currentCell;
+                } else
+                {
+                    //Debug.Log("target cell is NOT null");
+                    //Debug.Log(targetCell.posX + " " + targetCell.posY);
+
+                }
             }
+
+            
             //if auskommentieren, falls spieler sich nicht bewegt
             /*if (currentSpeed < gameObject.GetComponent<Player>().speed)
             {
