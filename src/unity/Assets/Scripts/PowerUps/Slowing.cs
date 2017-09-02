@@ -14,7 +14,7 @@ public class Slowing : PowerUp {
         AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_NEGATIVE_POWERUP);
         foreach (Player player in GameController.Instance.players)
         {
-            if (!player.Equals(p))
+            if (!player.name.Equals(p.name))
             {
                 player.speed *= 0.8f;
             }

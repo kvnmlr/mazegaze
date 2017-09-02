@@ -20,10 +20,11 @@ public class Calibration : Singleton<Calibration> {
 
     public void CalibrationDone(PupilConfiguration.PupilClient client)
     {
+        AudioManager.Instance.play(AudioManager.SOUNDS.SUCCESSCALIBRATION);
+
         Debug.Log(client.name + " calibration done");
         string t = text.text;
         t = t.Replace(client.name + " is calibrating ...", client.name + " is ready");
-        AudioManager.Instance.play(AudioManager.SOUNDS.SUCCESSCALIBRATION);
         Debug.Log(t);
 
         text.text = t;
@@ -36,7 +37,14 @@ public class Calibration : Singleton<Calibration> {
         calibrationScreen.gameObject.SetActive(true);
         if (!text.text.Contains(client.name))
         {
-            text.text += ("\n" + client.name + " is calibrating ...");
+            if (client.is_calibrated)
+            {
+                text.text += ("\n" + client.name + " is ready");
+
+            } else
+            {
+                text.text += ("\n" + client.name + " is calibrating ...");
+            }
         }
         //StartCoroutine(Example());
     }

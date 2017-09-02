@@ -129,7 +129,6 @@ public class JoinArea : MonoBehaviour
 
                         if (Time.time - clientToFirstGazeTime[client] > 3)
                         {
-                            AudioManager.Instance.play(AudioManager.SOUNDS.JOIN);
                             textPosition[joinPosition - 1].text = "Welcome " + client.name + ". Get ready!";
                             joined.Add(client);
                             Debug.Log(client.name);

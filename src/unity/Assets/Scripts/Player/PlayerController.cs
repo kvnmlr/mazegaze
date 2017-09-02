@@ -79,7 +79,6 @@ public class PlayerController : PlayerControl
                     (!currentCell.Equals(lastCell)))
                     && currentCellReached)
                 {
-                    Debug.Log("Test");
                     lastMouseCell = mouseCell;
                     lastCell = currentCell;
                     currentCellReached = false;

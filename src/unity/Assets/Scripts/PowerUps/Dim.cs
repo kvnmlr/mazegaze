@@ -15,7 +15,7 @@ public class Dim : PowerUp {
         Debug.Log("perform on " + p.name);
         foreach (Player player in GameController.Instance.joinedPlayersToPosition.Keys)
         {
-            if (!player.Equals(p))
+            if (!player.name.Equals(p.name))
             {
                 player.timeToDarkness *= 0.7f;
             }

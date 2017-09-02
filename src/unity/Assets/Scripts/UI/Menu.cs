@@ -399,10 +399,7 @@ public class Menu : Singleton<Menu> {
         GameController.Instance.setUpNewRound();
         canvas.enabled = false;
         optionRoundText = true;
-        optionRanking = true;
-        AudioManager.Instance.stop();
-        AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK1);
-       
+        optionRanking = true;   
     }
 
     public void GameOver(Player p) {

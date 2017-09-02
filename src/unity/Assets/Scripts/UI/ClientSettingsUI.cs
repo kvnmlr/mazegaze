@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ClientSettingsUI : MonoBehaviour
 {
+    private bool firstTimeEnable = true;
     public int clientIndex;
     public Image connectionStatus;
     public InputField clientName;
@@ -20,7 +21,14 @@ public class ClientSettingsUI : MonoBehaviour
 
     void OnDisable()
     {
-        PupilConfiguration.Instance.SaveSettings();            
+        if (client != null)
+        {
+            if ((client.name.Equals("") || client.ip.Equals("") || client.port.Equals("") || client.surface_name.Equals("")))
+            {
+                PupilConfiguration.Instance.settings.pupil_clients.Remove(client);
+            }
+            PupilConfiguration.Instance.SaveSettings();
+        }
     }
 
     void OnEnable()
@@ -41,12 +49,14 @@ public class ClientSettingsUI : MonoBehaviour
             {
                 connectionStatus.color = new Color(1, 1, 1);
                 connect.GetComponentInChildren<Text>().text = "Disconnect";
+                if (!firstTimeEnable) AudioManager.Instance.play(AudioManager.SOUNDS.SUCCESSCALIBRATION);
                 calibrate.interactable = true;
             }
             else
             {
                 connectionStatus.color = new Color(0.1f, 0.1f, 0.1f);
                 connect.GetComponentInChildren<Text>().text = "Connect";
+                if (!firstTimeEnable) AudioManager.Instance.play(AudioManager.SOUNDS.FAILEDCALIBRATION);
                 calibrate.interactable = false;
             }
 
@@ -89,6 +99,7 @@ public class ClientSettingsUI : MonoBehaviour
     {
         PupilListener.Instance.Reconnect();
         yield return new WaitForSeconds(2);
+        firstTimeEnable = false;
         OnEnable();
     }
 
@@ -98,6 +109,7 @@ public class ClientSettingsUI : MonoBehaviour
         client.is_connected = false;
         client.initially_active = false;
         client.detect_surface = true;
+        PupilConfiguration.Instance.settings.pupil_clients.Add(client);
         PupilListener.Instance.clients.Add(client);
         OnEnable();
     }

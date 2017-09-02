@@ -114,6 +114,8 @@ public class GameController : Singleton<GameController>
 
     public void assignPlayer(Player player, int position)
     {
+        AudioManager.Instance.play(AudioManager.SOUNDS.JOIN);
+
         if (!joinedPlayersToPosition.ContainsKey(player) && !joinedPlayersToPosition.ContainsValue(position))
         {
             joinedPlayersToPosition.Add(player, position);
@@ -132,6 +134,18 @@ public class GameController : Singleton<GameController>
 
     public void setUpNewRound()
     {
+        List<string> playerNames = new List<string>();
+        foreach(Player p in players)
+        {
+            if (playerNames.Contains(p.name))
+            {
+                Debug.LogWarning("There are multiple players with the same name. Game will not function properly");
+            }
+            playerNames.Add(p.name);
+
+        }
+
+
         restart = false;
         playedGames = 0;
         // check if player need calibration
@@ -147,7 +161,7 @@ public class GameController : Singleton<GameController>
                 } else
                 {
                     client.player = p;
-                    client.is_calibrated = true;
+                    //client.is_calibrated = true;
                     if (!client.is_calibrated)
                     {
                         //Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
@@ -190,6 +204,8 @@ public class GameController : Singleton<GameController>
             powerUpManager.setSpawnedPowerUps(0);
             Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
             mazeBuildAttempts = 0;
+            AudioManager.Instance.stop();
+            AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK1);
         }
         else
         {

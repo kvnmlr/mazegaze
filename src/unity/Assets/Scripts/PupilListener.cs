@@ -149,7 +149,7 @@ public class PupilListener : Singleton<PupilListener>
                 // validate ip header
                 if (!validateIPHeader(c.ip, c.port))
                 {
-                    Debug.LogErrorFormat("{0}:{1} is not a valid ip header for client {2}", c.ip, c.port, c.name);
+                    Debug.LogWarningFormat("{0}:{1} is not a valid ip header for client {2}", c.ip, c.port, c.name);
                     continue;
                 }
 
@@ -288,6 +288,7 @@ public class PupilListener : Singleton<PupilListener>
 
                         if (msgType.Equals("notify.calibration.successful"))
                         {
+                            clients[turn].is_calibrated = true;
                             calibrationDoneClient = clients[turn];
                             //Debug.LogFormat("Calibration for client {0} successful", clients[turn].name);
                         }
@@ -374,7 +375,7 @@ public class PupilListener : Singleton<PupilListener>
         RequestSocket requestSocket = requestSockets[clients.IndexOf(client)];
         if (requestSocket == null)
         {
-            Debug.LogError("Error trying to get request socket");
+            Debug.LogWarningFormat("Error trying to get request socket");
             return;
         }
         //sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "eye_process.should_start.0" }, { "eye_id", 0 } });
@@ -398,7 +399,7 @@ public class PupilListener : Singleton<PupilListener>
         }
 
         socket.SendMultipartMessage(m);
-        //timeout = new System.TimeSpan(0, 0, 0, 0, 200);
+        timeout = new System.TimeSpan(0, 0, 0, 0, 200);
         //socket.TrySendMultipartMessage(timeout, m);
 
         NetMQMessage recievedMsg;
