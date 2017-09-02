@@ -13,6 +13,9 @@ public class Calibration : Singleton<Calibration> {
 
     void Start()
     {
+        //Wo kommen die hier hin, hab ich leider nicht gefunden..
+        //AudioManager.Instance.play(AudioManager.SOUNDS.FAILEDCALIBRATION);
+        //AudioManager.Instance.play(AudioManager.SOUNDS.SUCCESSCALIBRATION);
 
     }
 

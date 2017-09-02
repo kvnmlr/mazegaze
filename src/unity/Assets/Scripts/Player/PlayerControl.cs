@@ -23,6 +23,7 @@ public abstract class PlayerControl : MonoBehaviour {
         {
             if (Time.time - playerLeftGame > timeToLeave)
             {
+                AudioManager.Instance.play(AudioManager.SOUNDS.PLAYERKICKED);
                 // Player did not look at maze for more than 5 consequtive seconds, kick him out of the game
                 Player player = gameObject.GetComponent<Player>();
                 //Debug.Log("Kicking player " + player.name + " out of the game (inactive)");

@@ -11,6 +11,10 @@ public class AudioManager : MonoBehaviour
     public AudioClip backtrack1;
     public AudioClip backtrack2;
     public AudioClip backtrack3;
+    public AudioClip successCalibration;
+    public AudioClip failedCalibration;
+    public AudioClip join;
+    public AudioClip playerKicked;
 
     public AudioClip nativeFadeInClip;
     public AudioClip nativeFadeOutClip;
@@ -28,6 +32,10 @@ public class AudioManager : MonoBehaviour
         BACKTRACK1,
         BACKTRACK2,
         BACKTRACK3,
+        SUCCESSCALIBRATION,
+        FAILEDCALIBRATION,
+        JOIN,
+        PLAYERKICKED,
 
         NATIVE_FADE_IN,
         NATIVE_FADE_OUT,
@@ -98,6 +106,18 @@ public class AudioManager : MonoBehaviour
             case SOUNDS.BACKTRACK3:
                 mLoopSource.clip = backtrack3;
                 mLoopSource.Play();
+                break;
+            case SOUNDS.FAILEDCALIBRATION:
+                mSource.PlayOneShot(failedCalibration);
+                break;
+            case SOUNDS.SUCCESSCALIBRATION:
+                mSource.PlayOneShot(successCalibration);
+                break;
+            case SOUNDS.JOIN:
+                mSource.PlayOneShot(join);
+                break;
+            case SOUNDS.PLAYERKICKED:
+                mSource.PlayOneShot(playerKicked);
                 break;
             case SOUNDS.NATIVE_FADE_IN:
                 mSource.PlayOneShot(nativeFadeInClip);
