@@ -15,7 +15,6 @@ public class Calibration : Singleton<Calibration> {
     {
         //Wo kommen die hier hin, hab ich leider nicht gefunden..
         //AudioManager.Instance.play(AudioManager.SOUNDS.FAILEDCALIBRATION);
-        //AudioManager.Instance.play(AudioManager.SOUNDS.SUCCESSCALIBRATION);
 
     }
 
@@ -24,6 +23,7 @@ public class Calibration : Singleton<Calibration> {
         Debug.Log(client.name + " calibration done");
         string t = text.text;
         t = t.Replace(client.name + " is calibrating ...", client.name + " is ready");
+        AudioManager.Instance.play(AudioManager.SOUNDS.SUCCESSCALIBRATION);
         Debug.Log(t);
 
         text.text = t;

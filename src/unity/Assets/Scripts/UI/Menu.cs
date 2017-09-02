@@ -529,18 +529,19 @@ public class Menu : Singleton<Menu> {
 
         if (GameController.Instance.getNumGames() == GameController.Instance.getPlayedGames())
         {
+
+            Player[] ranking = computeRanking();
+
             string winner = "";
-            if (isWinner() == true)
+            if (isWinner(ranking) == true)
             {
-                winner = "Winner of the match: " + Getwinner().name;
+                winner = "Winner of the match: " + ranking[0].name;
             }
             else
             {
                 winner = "Draw";
             }
             round = "GAME OVER  -   " + winner;
-
-            Player[] ranking = computeRanking();
 
             switch (GameController.Instance.joinedPlayersToPosition.Keys.Count)
             {
@@ -568,76 +569,20 @@ public class Menu : Singleton<Menu> {
         computeRanking();
     }
 
-
-
-    Player Getwinner() {
-        switch (MazeGenerator.Instance.numPlayers) {
-            case 1:
-                return GameController.Instance.players[0];
-            case 2:
-                if (GameController.Instance.players[0].points > GameController.Instance.players[1].points) {
-                    return GameController.Instance.players[0];
-                } else  {
-                    return GameController.Instance.players[1];
-                }
-            case 3:
-                if (GameController.Instance.players[0].points > GameController.Instance.players[1].points && GameController.Instance.players[0].points > GameController.Instance.players[2].points)
-                {
-                    return GameController.Instance.players[0];
-                }
-                else if (GameController.Instance.players[1].points > GameController.Instance.players[0].points && GameController.Instance.players[1].points > GameController.Instance.players[2].points)
-                {
-                    return GameController.Instance.players[1];
-                } else
-                {
-                    return GameController.Instance.players[2];
-                }
-            case 4:
-                if (GameController.Instance.players[0].points > GameController.Instance.players[1].points && GameController.Instance.players[0].points > GameController.Instance.players[2].points && GameController.Instance.players[0].points > GameController.Instance.players[3].points)
-                {
-                    return GameController.Instance.players[0];
-                }
-                else if (GameController.Instance.players[1].points > GameController.Instance.players[0].points && GameController.Instance.players[1].points > GameController.Instance.players[2].points && GameController.Instance.players[1].points > GameController.Instance.players[3].points)
-                {
-                    return GameController.Instance.players[1];
-                }
-                else if (GameController.Instance.players[2].points > GameController.Instance.players[0].points && GameController.Instance.players[2].points > GameController.Instance.players[1].points && GameController.Instance.players[2].points > GameController.Instance.players[3].points)
-                {
-                    return GameController.Instance.players[2];
-                } else
-                {
-                    return GameController.Instance.players[3];
-                }
-        }
-        return GameController.Instance.players[1];
-    }
-
-    bool isWinner()  {
-        switch (MazeGenerator.Instance.numPlayers) {
-            case 1:
+    bool isWinner(Player[] players)  {
+        if (players.Length == 1)
+        {
+            return true;
+        } 
+        else
+        {
+            if (players[0].points == players[1].points)
+            {
+                return false;
+            } else
+            {
                 return true;
-            case 2:
-                if (GameController.Instance.players[0].points != GameController.Instance.players[1].points){
-                    return true;
-                } else  {
-                    return false;
-                }
-            case 3:
-                if (GameController.Instance.players[0].points != GameController.Instance.players[1].points && GameController.Instance.players[0].points != GameController.Instance.players[2].points && GameController.Instance.players[1].points != GameController.Instance.players[2].points) {
-                    return true;
-                } else {
-                    return false;
-                }
-            case 4:
-                if (GameController.Instance.players[0].points != GameController.Instance.players[1].points && GameController.Instance.players[0].points != GameController.Instance.players[2].points && GameController.Instance.players[0].points != GameController.Instance.players[3].points && GameController.Instance.players[1].points != GameController.Instance.players[2].points && GameController.Instance.players[1].points != GameController.Instance.players[3].points && GameController.Instance.players[2].points != GameController.Instance.players[3].points)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+            }
         }
-        return true;
     }
 }
