@@ -255,7 +255,7 @@ public class GazeController : PlayerControl
             LeaveGame();
         }
 
-        if (!Menu.Instance.canvas.enabled || Menu.Instance.joinScreen.gameObject.activeSelf)
+        if ((!Menu.Instance.canvas.enabled || Menu.Instance.joinScreen.gameObject.activeSelf))
         {
 
             depth = MazeGenerator.Instance.xSize * 4 - 0.5f;
@@ -291,6 +291,10 @@ public class GazeController : PlayerControl
             //Debug.Log("goodGazeX " + goodGazeX);
            // Debug.Log("goodGazeY " + goodGazeY);
 
+            if (currentCell == null)
+            {
+                return;
+            }
 
             gazePos = Camera.main.ScreenToWorldPoint(new Vector3(goodGazeX, goodGazeY, depth));
             cursor.gameObject.transform.position = gazePos;
@@ -319,12 +323,14 @@ public class GazeController : PlayerControl
                 {
                     //Debug.Log("target cell is null");
                     //targetCell = currentCell;
-                } else
+                }
+                else
                 {
                     //Debug.Log("target cell is NOT null");
                     //Debug.Log(targetCell.posX + " " + targetCell.posY);
 
                 }
+
             }
 
             if (transform.position != targetCell.transform.position)

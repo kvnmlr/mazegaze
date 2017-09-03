@@ -9,7 +9,9 @@ public class GameController : Singleton<GameController>
     public bool useMenu = false;
     public Dictionary<Player, int> joinedPlayersToPosition = new Dictionary<Player, int>();
     public Player[] players;
+    public ParticleSystem fogHolder;
     public ParticleSystem fog;
+
     private int fogComes;
     private bool fogIsSpawned = false;
     private float time;
@@ -62,7 +64,7 @@ public class GameController : Singleton<GameController>
         AudioManager.Instance.play(AudioManager.SOUNDS.MENU);
         gameover = false;
         restart = false;
-        fog.gameObject.SetActive(false);
+        fogHolder.gameObject.SetActive(false);
         mazeGenerator = MazeGenerator.Instance;
         powerUpManager = PowerUpManager.Instance;
         menu = Menu.Instance;
@@ -225,6 +227,8 @@ public class GameController : Singleton<GameController>
             AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK1);
             System.Random rnd = new System.Random();
             fogComes = rnd.Next(2, numGames+2);
+            fogComes = rnd.Next(2,3);
+
             Debug.Log(fogComes);
          
         }
@@ -245,6 +249,8 @@ public class GameController : Singleton<GameController>
 
     private void Update()
     {
+        //fog.startColor = Color.green;
+        fog.maxParticles = playedGames * 25;
         int oldFog = -1;
         if (fogComes == playedGames+1 && playedGames != 0 && !fogIsSpawned)
         {
@@ -254,7 +260,7 @@ public class GameController : Singleton<GameController>
         {
             if(Time.time - time > 100 || oldFog > playedGames+1)
             {
-                fog.gameObject.SetActive(false);
+                fogHolder.gameObject.SetActive(false);
             }
         }
     }
@@ -339,7 +345,7 @@ public class GameController : Singleton<GameController>
 
     private void spawnFog()
     {
-        fog.gameObject.SetActive(true);
+        fogHolder.gameObject.SetActive(true);
         time = Time.time;
         fogIsSpawned = true;
         System.Random rd = new System.Random();
