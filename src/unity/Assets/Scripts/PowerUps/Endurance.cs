@@ -11,6 +11,8 @@ public class Endurance : PowerUp
 
     public override IEnumerator performPowerUp(Player p)
     {
+        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_POSITIVE_POWERUP);
+
         goodEffect.transform.position = gameObject.transform.position;
         goodEffect.Play(true);
         p.timeToDarkness = p.timeToDarkness * factor;
@@ -42,7 +44,6 @@ public class Endurance : PowerUp
                 }
             }
         }
-        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_POSITIVE_POWERUP);
         gameObject.SetActive(false);
 
     }
@@ -50,9 +51,4 @@ public class Endurance : PowerUp
     void Start () {
         this.type = PowerUpManager.PowerUpTypes.Endurance;
 	}
-
-    void Update()
-    {
-
-    }
 }

@@ -322,7 +322,7 @@ public class GazeController : PlayerControl
                 if (targetCell == null)
                 {
                     //Debug.Log("target cell is null");
-                    //targetCell = currentCell;
+                    targetCell = currentCell;
                 }
                 else
                 {

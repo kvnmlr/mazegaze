@@ -82,7 +82,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
                             float pathLength = board[row][column][i];
                             float diffToAverage = Math.Abs(average - pathLength);
 
-                            deltaVal += (diffToAverage - (UnityEngine.Random.Range(0, pathLength / MazeGenerator.Instance.numPlayers)) * 0.01f);    // favor long paths
+                            deltaVal += (diffToAverage - (UnityEngine.Random.Range(0, pathLength / GameController.Instance.joinedPlayersToPosition.Keys.Count)));    // favor long paths
                         }
 
                         bool possible = true;
@@ -96,6 +96,11 @@ public class PowerUpManager : Singleton<PowerUpManager>
                                     possible = false;
                                 }
                                 if (deltaVal / average > 0.2f * MazeGenerator.Instance.numPlayers && !forceSpawn)
+                                {
+                                    possible = false;
+                                }
+                                if (!(MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>().lights.Count == 0 &&
+                                    MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>().powerUps.Count == 0))
                                 {
                                     possible = false;
                                 }
@@ -123,12 +128,8 @@ public class PowerUpManager : Singleton<PowerUpManager>
                 }
                 Debug.Log("Target fairness: " + bestCellValue);
                 Debug.Log("Target cell: " + bestCellX + ", " + bestCellY);
-
-                if (MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>().lights.Count == 0 &&
-                    MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>().powerUps.Count == 0)
-                {
-                    break;
-                }
+                break;
+                
             }
             return spawnPowerUp(PowerUpTypes.Target, MazeGenerator.Instance.toMatrix()[bestCellY][bestCellX].GetComponent<Cell>());
 
@@ -146,8 +147,6 @@ public class PowerUpManager : Singleton<PowerUpManager>
                 }
             }
             
-            
-
             return spawnPowerUp(type, MazeGenerator.Instance.cells[cell].GetComponent<Cell>());
         }
     }
@@ -198,7 +197,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
     void Update()
     {
         // have max so viele powerups wie das Maze breit ist * kleiner faktor
-        if (activePowerUps >= ((MazeGenerator.Instance.xSize) * 1.3)|| GameController.Instance.gameover)
+        if (activePowerUps >= ((MazeGenerator.Instance.xSize))|| GameController.Instance.gameover)
         {
             return;
         }

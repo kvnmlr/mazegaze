@@ -21,9 +21,4 @@ public class ShowTarget : PowerUp {
     {
         this.type = PowerUpManager.PowerUpTypes.ShowTarget;
     }
-
-    void Update()
-    {
-
-    }
 }

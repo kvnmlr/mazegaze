@@ -202,7 +202,7 @@ public class GameController : Singleton<GameController>
 
         setUpPlayers();
 
-        if (playedGames == 0 && !restart  || inGameJoin /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
+        if ((playedGames == 0 && !restart)  || inGameJoin /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
         {
             mazeBuildAttempts++;
 
@@ -227,17 +227,19 @@ public class GameController : Singleton<GameController>
             AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK1);
             System.Random rnd = new System.Random();
             fogComes = rnd.Next(2, numGames+2);
-            fogComes = rnd.Next(2,3);
+            //fogComes = rnd.Next(2,3);
 
-            Debug.Log(fogComes);
+            Debug.Log("Fog comes in round" + fogComes);
          
         }
         else
         {
+            Debug.Log(1);
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
             //powerUpManager.setSpawnedPowerUps(0);
+            Debug.Log(2);
         }
-        foreach(Player p in joinedPlayersToPosition.Keys)
+        foreach (Player p in joinedPlayersToPosition.Keys)
         {
             p.gameObject.SetActive(true);
         }
@@ -251,6 +253,31 @@ public class GameController : Singleton<GameController>
     {
         //fog.startColor = Color.green;
         fog.maxParticles = playedGames * 25;
+        
+        int maxPoints = 0;
+        Player bestPlayer = null;
+        foreach (Player p in joinedPlayersToPosition.Keys)
+        {
+            if (p.points == maxPoints)
+            {
+                bestPlayer = null;
+            }
+            else if (p.points > maxPoints)
+            {
+                bestPlayer = p;
+                maxPoints = p.points;
+            }
+        }
+
+        if (bestPlayer == null)
+        {
+            fog.startColor = new Color(0.2f, 0.2f, 0.2f);
+        } else
+        {
+            Color c = bestPlayer.getColor(bestPlayer.color);
+            fog.startColor =  new Color(c.r, c.g, c.b, 0.2f);
+        }
+        
         int oldFog = -1;
         if (fogComes == playedGames+1 && playedGames != 0 && !fogIsSpawned)
         {

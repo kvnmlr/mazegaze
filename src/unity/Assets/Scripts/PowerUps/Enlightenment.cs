@@ -9,6 +9,8 @@ public class Enlightenment : PowerUp {
 
     public override IEnumerator performPowerUp(Player p)
     {
+        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_POSITIVE_POWERUP);
+
         goodEffect.transform.position = gameObject.transform.position;
         goodEffect.Play(true);
 
@@ -41,7 +43,6 @@ public class Enlightenment : PowerUp {
         }
         yield return new WaitForSeconds(3);
         p.timeToDarkness = timeToDarknessOld;
-        AudioManager.Instance.play(AudioManager.SOUNDS.COLLECT_POSITIVE_POWERUP);
         gameObject.SetActive(false);
 
     }
@@ -49,10 +50,5 @@ public class Enlightenment : PowerUp {
     void Start()
     {
         this.type = PowerUpManager.PowerUpTypes.Enlightenment;
-    }
-
-    void Update()
-    {
-
     }
 }
