@@ -64,7 +64,7 @@ public class GazeController : PlayerControl
         {
             if (GameController.Instance.joinedPlayersToPosition.Keys.Count < MazeGenerator.Instance.numPlayers)
             {
-                //Debug.Log("He wants to join!");
+                processGaze();
             }
             gazeOnSurface = true;
             gazeX = (float)gaze.norm_pos[0];
@@ -150,7 +150,6 @@ public class GazeController : PlayerControl
                 protectArea(new int[] { pos[0] + deltaRangeY, pos[1] + deltaRangeX });
                 if (currentCellReached)
                 {
-                    Debug.Log("here");
                     if (PathFinding.Instance.getManhattanDistance(currentCell, gazeCell) < 5)
                     {
                         List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(currentCell, gazeCell);
@@ -228,6 +227,11 @@ public class GazeController : PlayerControl
     }
 
     void Update()
+    {
+        processGaze();
+    }
+
+    void processGaze()
     {
         //Debug.Log("gazeX " + gazeX);
         //Debug.Log("gazeY " + gazeY);

@@ -8,7 +8,7 @@ public class JoinArea : MonoBehaviour
     Dictionary<PupilConfiguration.PupilClient, int> clientToPosition = new Dictionary<PupilConfiguration.PupilClient, int>();
     Dictionary<PupilConfiguration.PupilClient, float> clientToFirstGazeTime = new Dictionary<PupilConfiguration.PupilClient, float>();
     private List<PupilConfiguration.PupilClient> joined = new List<PupilConfiguration.PupilClient>();
-
+    public List<int> positions = new List<int>();
     public Image[] backgroundPosition;
 
     public Text[] textPosition;
@@ -21,14 +21,36 @@ public class JoinArea : MonoBehaviour
         clientToPosition = new Dictionary<PupilConfiguration.PupilClient, int>();
         clientToFirstGazeTime = new Dictionary<PupilConfiguration.PupilClient, float>();
         joined = new List<PupilConfiguration.PupilClient>();
-
-        foreach(Image i in backgroundPosition)
+        foreach (Image i in backgroundPosition)
         {
             i.color = emptyColor;
         }
         foreach(Text t in textPosition)
         {
             t.text = emptyText;
+        }
+
+        
+    }
+
+    public void addPossiblePosition(int position)
+    {
+        if (positions.Contains(position))
+        {
+            return;
+        }
+        positions.Add(position);
+        for (int i = 0; i < backgroundPosition.Length; ++i)
+        {
+            if (!positions.Contains(i+1))
+            {
+                backgroundPosition[i].gameObject.SetActive(false);
+                textPosition[i].gameObject.SetActive(false);
+            } else
+            {
+                backgroundPosition[i].gameObject.SetActive(true);
+                textPosition[i].gameObject.SetActive(true);
+            }
         }
     }
 
@@ -46,6 +68,14 @@ public class JoinArea : MonoBehaviour
 
         foreach (PupilConfiguration.PupilClient client in PupilListener.Instance.clients)
         {
+            foreach (Player p in GameController.Instance.joinedPlayersToPosition.Keys)
+            {
+                if (p.Equals(client.player))
+                {
+                    joined.Add(client);
+                }
+            }
+
             if (joined.Contains(client))
             {
                 continue;
@@ -88,7 +118,23 @@ public class JoinArea : MonoBehaviour
                     // something went wrong
                     return;
                 }
+                if (!positions.Contains(joinPosition))
+                {
+                    
+                    int lastPosition = -1;
+                    clientToPosition.TryGetValue(client, out lastPosition);
+                    if (lastPosition > 0)
+                    {
+                        backgroundPosition[lastPosition - 1].color = emptyColor;
+                        textPosition[lastPosition - 1].text = emptyText;
+                        
+                    }
+                    clientToFirstGazeTime.Remove(client);
+                    clientToPosition.Remove(client);
+                    return;
+                }
 
+                
                 //Debug.Log(joinPosition);
 
                 if (clientToPosition.ContainsValue(joinPosition))
@@ -131,8 +177,7 @@ public class JoinArea : MonoBehaviour
                         {
                             textPosition[joinPosition - 1].text = "Welcome " + client.name + ". Get ready!";
                             joined.Add(client);
-                            Debug.Log(client.name);
-                            GameController.Instance.assignPlayer(client.player, joinPosition);
+                            GameController.Instance.assignPlayer(client.player, joinPosition, positions.Count == 4, positions.Count != 4);
                         }
                     }
                 }

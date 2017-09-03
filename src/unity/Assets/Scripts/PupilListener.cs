@@ -190,6 +190,12 @@ public class PupilListener : Singleton<PupilListener>
                     }
                     requestSockets.Add(requestSocket);
                     //requestSocket.Close();
+                } else
+                {
+                    string failHeader = "";
+                    subports.Add(failHeader);
+                    IPHeaders.Add(failHeader);
+                    c.is_connected = false;
                 }
 
             }
@@ -220,8 +226,8 @@ public class PupilListener : Singleton<PupilListener>
                 subscriberSocket.Subscribe("pupil.");
                 subscriberSocket.Subscribe("notify.");
                 //subscriberSocket.Subscribe("calibration.");
-                subscriberSocket.Subscribe("logging.info");
-                subscriberSocket.Subscribe("calibration_routines.calibrate");
+                //subscriberSocket.Subscribe("logging.info");
+                //subscriberSocket.Subscribe("calibration_routines.calibrate");
                 //subscriberSocket.Subscribe("frame.");
                 //subscriberSocket.Subscribe("gaze.");
 
@@ -232,7 +238,11 @@ public class PupilListener : Singleton<PupilListener>
             turn = 0;   // used receive a message from each client in turn
             while (!stop_thread_)
             {
-
+                if (IPHeaders.Count != clients.Count)
+                {
+                    Debug.LogError("Something wrong");
+                    
+                }
                 turn = ++turn % clients.Count;
                 if (IPHeaders[turn].Equals("") || clients[turn].is_connected == false)
                 {

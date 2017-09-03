@@ -12,6 +12,9 @@ public class GameController : Singleton<GameController>
     private MazeGenerator mazeGenerator;
     private PowerUpManager powerUpManager;
     private Menu menu;
+    private bool inGameJoin = false;
+
+    public JoinArea inGameJoinArea;
 
     public bool gameover { get; set; }
     private bool restart;
@@ -88,6 +91,10 @@ public class GameController : Singleton<GameController>
             p.gameObject.SetActive(true);
         }
         joinedPlayersToPosition = new Dictionary<Player, int>();
+        Menu.Instance.joinScreen.GetComponent<JoinArea>().addPossiblePosition(1);
+        Menu.Instance.joinScreen.GetComponent<JoinArea>().addPossiblePosition(2);
+        Menu.Instance.joinScreen.GetComponent<JoinArea>().addPossiblePosition(3);
+        Menu.Instance.joinScreen.GetComponent<JoinArea>().addPossiblePosition(4);
         Menu.Instance.joinScreen.SetActive(true);
     }
 
@@ -112,14 +119,19 @@ public class GameController : Singleton<GameController>
         }
     }
 
-    public void assignPlayer(Player player, int position)
+    public void assignPlayer(Player player, int position, bool newRound = true, bool isInGameJoin=false)
     {
+        inGameJoin = isInGameJoin;
+        inGameJoinArea.gameObject.SetActive(false);
         AudioManager.Instance.play(AudioManager.SOUNDS.JOIN);
 
         if (!joinedPlayersToPosition.ContainsKey(player) && !joinedPlayersToPosition.ContainsValue(position))
         {
             joinedPlayersToPosition.Add(player, position);
-            if (joinedPlayersToPosition.Keys.Count == MazeGenerator.Instance.numPlayers)
+            Debug.Log("num p: " + MazeGenerator.Instance.numPlayers);
+            Debug.Log("joined num: " + joinedPlayersToPosition.Keys.Count);
+            Debug.Log("new round: " + newRound);
+            if (joinedPlayersToPosition.Keys.Count == MazeGenerator.Instance.numPlayers && newRound)
             {
                 playersAssigned();
             }
@@ -161,7 +173,7 @@ public class GameController : Singleton<GameController>
                 } else
                 {
                     client.player = p;
-                    //client.is_calibrated = true;
+                    client.is_calibrated = true;
                     if (!client.is_calibrated)
                     {
                         //Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
@@ -183,7 +195,7 @@ public class GameController : Singleton<GameController>
 
         setUpPlayers();
 
-        if (playedGames == 0 && !restart /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
+        if (playedGames == 0 && !restart  || inGameJoin /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
         {
             mazeBuildAttempts++;
 

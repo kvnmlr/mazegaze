@@ -59,9 +59,12 @@ public class PowerUpManager : Singleton<PowerUpManager>
                         int index = 0;
                         foreach (Player p in GameController.Instance.joinedPlayersToPosition.Keys)
                         {
-                            List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(p.cell, MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>());
-                            board[row][column][index] = (path == null) ? int.MaxValue : path.Count;
-                            ++index;
+                            if (p.cell != null)
+                            {
+                                List<PathFinding.AStarNode> path = PathFinding.Instance.AStar(p.cell, MazeGenerator.Instance.toMatrix()[row][column].GetComponent<Cell>());
+                                board[row][column][index] = (path == null) ? int.MaxValue : path.Count;
+                                ++index;
+                            }    
                         }
 
                         // average distance to each cell
