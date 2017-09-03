@@ -97,16 +97,7 @@ public class PlayerController : PlayerControl
                 /*if (!mouseCell.Equals(lastMouseCell) ||
                    !currentCell.Equals(lastCell))
                 {
-                    if (currentSpeed < gameObject.GetComponent<Player>().speed)
-                    {
-                        currentSpeed += speedingUp;
-                    }
-
-                }
-                else
-                {
-                    currentSpeed = 0;
-                }*/
+                   */
 
 
 
@@ -122,10 +113,24 @@ public class PlayerController : PlayerControl
             {
                 return;
             }
+            if(transform.position != targetCell.transform.position)
+            {
+                if (currentSpeed < gameObject.GetComponent<Player>().speed)
+                {
+                    currentSpeed += speedingUp;
+                }
+
+            }
+            else
+            {
+                currentSpeed = 0;
+            }
 
 
-            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, GetComponent<Player>().speed * Time.deltaTime);
-            
+
+            //transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, GetComponent<Player>().speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, currentSpeed * Time.deltaTime);
+
 
             // Protect area
             if (Math.Abs(gameObject.GetComponent<Player>().cell.posX - pos[1]) + Math.Abs(gameObject.GetComponent<Player>().cell.posY - pos[0]) < 3)

@@ -327,17 +327,23 @@ public class GazeController : PlayerControl
                 }
             }
 
-            
-            //if auskommentieren, falls spieler sich nicht bewegt
-            /*if (currentSpeed < gameObject.GetComponent<Player>().speed)
+            if (transform.position != targetCell.transform.position)
             {
-                currentSpeed += speedingUp * Time.deltaTime;
-            }*/
-            //hier kommentar umkehren, falls spieler sich nicht bewegt
+                if (currentSpeed < gameObject.GetComponent<Player>().speed)
+                {
+                    currentSpeed += speedingUp;
+                }
+
+            }
+            else
+            {
+                currentSpeed = 0;
+            }
+
             if (targetCell != null)
             {
-                transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);
-                //transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, currentSpeed * Time.deltaTime);
+                //transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, currentSpeed * Time.deltaTime);
 
             }
         }

@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GameController : Singleton<GameController>
 {
     public GameObject cursor;
     public bool useMenu = false;
     public Dictionary<Player, int> joinedPlayersToPosition = new Dictionary<Player, int>();
     public Player[] players;
+    public ParticleSystem fog;
+    private int fogComes;
+    private bool fogIsSpawned = false;
+    private float time;
 
     private MazeGenerator mazeGenerator;
     private PowerUpManager powerUpManager;
@@ -57,7 +62,7 @@ public class GameController : Singleton<GameController>
         AudioManager.Instance.play(AudioManager.SOUNDS.MENU);
         gameover = false;
         restart = false;
-
+        fog.gameObject.SetActive(false);
         mazeGenerator = MazeGenerator.Instance;
         powerUpManager = PowerUpManager.Instance;
         menu = Menu.Instance;
@@ -218,6 +223,10 @@ public class GameController : Singleton<GameController>
             mazeBuildAttempts = 0;
             AudioManager.Instance.stop();
             AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK1);
+            System.Random rnd = new System.Random();
+            fogComes = rnd.Next(2, numGames+2);
+            Debug.Log(fogComes);
+         
         }
         else
         {
@@ -236,7 +245,18 @@ public class GameController : Singleton<GameController>
 
     private void Update()
     {
-
+        int oldFog = -1;
+        if (fogComes == playedGames+1 && playedGames != 0 && !fogIsSpawned)
+        {
+            oldFog = fogComes;
+            spawnFog();
+        }else if (fogIsSpawned)
+        {
+            if(Time.time - time > 100 || oldFog > playedGames+1)
+            {
+                fog.gameObject.SetActive(false);
+            }
+        }
     }
 
     public void GameOver()
@@ -315,6 +335,18 @@ public class GameController : Singleton<GameController>
                 Physics.IgnoreCollision(p1.gameObject.GetComponent<Collider>(), p2.gameObject.GetComponent<Collider>());
             }
         }
+    }
+
+    private void spawnFog()
+    {
+        fog.gameObject.SetActive(true);
+        time = Time.time;
+        fogIsSpawned = true;
+        System.Random rd = new System.Random();
+        fogComes = rd.Next(fogComes+1, numGames+2);
+        Debug.Log(fogComes);
+
+
     }
 
 }

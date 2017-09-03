@@ -7,8 +7,8 @@ public class PowerUpManager : Singleton<PowerUpManager>
 {
     public PowerUp[] powerUps;
     public PowerUp target;
-    public ParticleSystem goodEffect;
-    public ParticleSystem badEffect;
+    //public ParticleSystem goodEffect;
+    //public ParticleSystem badEffect;
 
     public enum PowerUpTypes
 
