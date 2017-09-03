@@ -10,7 +10,7 @@ public class PlayerController : PlayerControl
     private Vector3 screenPoint;
     float depth;
     float radius = 2;
-    private float speedingUp = 0.5f;
+    private float speedingUp = 0.1f;
     private float currentSpeed = 0;
     private Vector3 oldMousePos = new Vector3(0, 0, 0);
 

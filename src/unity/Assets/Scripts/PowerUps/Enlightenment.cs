@@ -11,6 +11,7 @@ public class Enlightenment : PowerUp {
     {
         goodEffect.transform.position = gameObject.transform.position;
         goodEffect.Play(true);
+
         int rangeX = MazeGenerator.Instance.xSize / 7;
         int rangeY = MazeGenerator.Instance.ySize / 7;
 

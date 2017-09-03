@@ -8,7 +8,7 @@ public class PlayerControllerArrow : PlayerControl
     private bool move;
     private Vector3 movement;
     private float currentSpeed=0;
-    private float speedingUp = 1.1f;
+    private float speedingUp = 0.4f;
 
     void FixedUpdate()
     {

@@ -13,7 +13,7 @@ public class GazeController : PlayerControl
     float depth;
     float radius = 10;
     private float currentSpeed;
-    private float speedingUp = 1.1f;
+    private float speedingUp = 0.1f;
 
     private Cell currentCell;
     private Cell targetCell;

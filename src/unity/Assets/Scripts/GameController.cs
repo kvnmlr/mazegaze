@@ -235,7 +235,7 @@ public class GameController : Singleton<GameController>
         else
         {
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
-            powerUpManager.setSpawnedPowerUps(0);
+            //powerUpManager.setSpawnedPowerUps(0);
         }
         foreach(Player p in joinedPlayersToPosition.Keys)
         {

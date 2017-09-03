@@ -26,7 +26,7 @@ public class PowerUpManager : Singleton<PowerUpManager>
     public int activePowerUps { get; set; }
 
     // time to wait until new powerup spawns
-    public float waitTime = 3.0f;
+    public float waitTime = 4.5f;
 
     // elapsed time since last powerup spawned
     private float elapsedTime = 0.0f;
@@ -135,14 +135,16 @@ public class PowerUpManager : Singleton<PowerUpManager>
         }
         else
         {
-           // get a random cell for a powerup
-            cell = UnityEngine.Random.Range(0, (MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
-            
-            // make sure powerup is not spawned directly on player or other powerup
-            while (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().players.Count > 0 || MazeGenerator.Instance.cells[cell].GetComponent<PowerUp>() != null)
-           {
-              cell = UnityEngine.Random.Range(1, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
-           }
+            while (true)
+            {
+                cell = UnityEngine.Random.Range(1, (int)(MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize) - 1);
+
+                if (MazeGenerator.Instance.cells[cell].GetComponent<Cell>().players.Count == 0 &&
+                    MazeGenerator.Instance.cells[cell].GetComponent<Cell>().powerUps.Count == 0)
+                {
+                    break;
+                }
+            }
             
             
 
@@ -195,8 +197,8 @@ public class PowerUpManager : Singleton<PowerUpManager>
 
     void Update()
     {
-        // have max 1 powerup per 20 cells
-        if (activePowerUps >= MazeGenerator.Instance.xSize * MazeGenerator.Instance.ySize|| GameController.Instance.gameover)
+        // have max so viele powerups wie das Maze breit ist * kleiner faktor
+        if (activePowerUps >= ((MazeGenerator.Instance.xSize) * 1.3)|| GameController.Instance.gameover)
         {
             return;
         }
