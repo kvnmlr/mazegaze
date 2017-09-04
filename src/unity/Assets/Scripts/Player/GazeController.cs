@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GazeController : PlayerControl
 {
-    public GameObject cursor;
+    //public GameObject cursor;
     private Rigidbody rb;
 
     private Vector3 offset;
@@ -13,7 +13,7 @@ public class GazeController : PlayerControl
     float depth;
     float radius = 10;
     private float currentSpeed;
-    private float speedingUp = 0.1f;
+    private float speedingUp = 0.5f;
 
     private Cell currentCell;
     private Cell targetCell;
@@ -297,7 +297,7 @@ public class GazeController : PlayerControl
             }
 
             gazePos = Camera.main.ScreenToWorldPoint(new Vector3(goodGazeX, goodGazeY, depth));
-            cursor.gameObject.transform.position = gazePos;
+            //cursor.gameObject.transform.position = gazePos;
 
             if (MazeGenerator.Instance.cells == null)
             {

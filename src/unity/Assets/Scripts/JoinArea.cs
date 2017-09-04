@@ -72,6 +72,8 @@ public class JoinArea : MonoBehaviour
             {
                 if (p.Equals(client.player))
                 {
+                    //Debug.Log(0);
+
                     joined.Add(client);
                 }
             }
@@ -145,7 +147,7 @@ public class JoinArea : MonoBehaviour
                         clientToPosition.TryGetValue(c, out pos);
                         if (pos == joinPosition && !c.Equals(client))
                         {
-                            Debug.Log("This position is already taken by " + c.name);
+                            //Debug.Log("This position is already taken by " + c.name);
                             return;
                         }
                     }
@@ -159,6 +161,7 @@ public class JoinArea : MonoBehaviour
 
                 } else
                 {
+                    //Debug.Log(client.name + " asd ");
                     int lastPosition = 0;
                     clientToPosition.TryGetValue(client, out lastPosition);
                     if (lastPosition != joinPosition)

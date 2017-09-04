@@ -190,12 +190,6 @@ public class PupilListener : Singleton<PupilListener>
                     }
                     requestSockets.Add(requestSocket);
                     //requestSocket.Close();
-                } else
-                {
-                    string failHeader = "";
-                    subports.Add(failHeader);
-                    IPHeaders.Add(failHeader);
-                    c.is_connected = false;
                 }
 
             }
@@ -218,32 +212,39 @@ public class PupilListener : Singleton<PupilListener>
                     subscriberSockets.Add(new SubscriberSocket());
                     continue;
                 }
-                SubscriberSocket subscriberSocket = new SubscriberSocket(header + subports[IPHeaders.IndexOf(header)]);
-                if (clients[IPHeaders.IndexOf(header)].detect_surface)
+                else
                 {
-                    subscriberSocket.Subscribe("surface");
-                }
-                subscriberSocket.Subscribe("pupil.");
-                subscriberSocket.Subscribe("notify.");
-                //subscriberSocket.Subscribe("calibration.");
-                //subscriberSocket.Subscribe("logging.info");
-                //subscriberSocket.Subscribe("calibration_routines.calibrate");
-                //subscriberSocket.Subscribe("frame.");
-                //subscriberSocket.Subscribe("gaze.");
+                    SubscriberSocket subscriberSocket = new SubscriberSocket(header + subports[IPHeaders.IndexOf(header)]);
+                    if (clients[IPHeaders.IndexOf(header)].detect_surface)
+                    {
+                        subscriberSocket.Subscribe("surface");
+                    }
+                    subscriberSocket.Subscribe("pupil.");
+                    subscriberSocket.Subscribe("notify.");
+                    //subscriberSocket.Subscribe("calibration.");
+                    //subscriberSocket.Subscribe("logging.info");
+                    //subscriberSocket.Subscribe("calibration_routines.calibrate");
+                    //subscriberSocket.Subscribe("frame.");
+                    //subscriberSocket.Subscribe("gaze.");
 
-                subscriberSockets.Add(subscriberSocket);
+                    subscriberSockets.Add(subscriberSocket);
+                }
             }
 
             var msg = new NetMQMessage();
             turn = 0;   // used receive a message from each client in turn
+            Debug.Log(subscriberSockets.Count);
             while (!stop_thread_)
             {
                 if (IPHeaders.Count != clients.Count)
                 {
                     Debug.LogError("Something wrong");
-                    
+
                 }
-                turn = ++turn % clients.Count;
+                turn = ++turn % IPHeaders.Count;
+                //Debug.Log(clients[turn].name);
+                //Debug.Log(turn);
+
                 if (IPHeaders[turn].Equals("") || clients[turn].is_connected == false)
                 {
                     continue;
@@ -251,14 +252,17 @@ public class PupilListener : Singleton<PupilListener>
                 timeout = new System.TimeSpan(0, 0, 0, 0, 1);     // wait 200ms to receive a message
 
                 bool stillAlive = subscriberSockets[turn].TryReceiveMultipartMessage(timeout, ref (msg));
-
+                //Debug.Log(turn);
+                //Debug.Log(clients[turn].name);
+                //Debug.Log(stillAlive);
                 if (stillAlive)
                 {
                     try
                     {
+                        //Debug.Log("connect: " + clients[turn].name);
+
                         string msgType = msg[0].ConvertToString();
                         var message = MsgPack.Unpacking.UnpackObject(msg[1].ToByteArray());
-
                         MsgPack.MessagePackObject mmap = message.Value;
                         if (msgType.Contains("pupil"))
                         {
@@ -280,8 +284,32 @@ public class PupilListener : Singleton<PupilListener>
                             // surface detected
                             lock (thisLock_)
                             {
-                                newData = true;
-                                surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
+                                if (!newData)
+                                {
+                                    newData = true;
+                                    surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
+
+                                    if (surfaceData == null)
+                                    {
+                                        return;
+                                    }
+                                    foreach (Pupil.GazeOnSurface gos in surfaceData.gaze_on_srf)
+                                    {
+                                        if (gos == null)
+                                        {
+                                            return;
+                                        }
+                                        if (gos.norm_pos == null)
+                                        {
+                                            return;
+                                        }
+                                        if (gos.on_srf)
+                                        {
+                                            Debug.Log("onsrf" + clients[turn].name);
+                                            clients[turn].gaze_controller.move(surfaceData, clients[turn].surface_name);
+                                        }
+                                    }
+                                }  
                             }
                         }
 
@@ -326,7 +354,7 @@ public class PupilListener : Singleton<PupilListener>
             {
                 s.Close();
             }
-            
+
             subscriberSockets.Clear();
         }
         else
@@ -409,7 +437,7 @@ public class PupilListener : Singleton<PupilListener>
         }
 
         socket.SendMultipartMessage(m);
-        timeout = new System.TimeSpan(0, 0, 0, 0, 200);
+        timeout = new System.TimeSpan(0, 0, 0, 0, 100);
         //socket.TrySendMultipartMessage(timeout, m);
 
         NetMQMessage recievedMsg;
@@ -439,18 +467,34 @@ public class PupilListener : Singleton<PupilListener>
             calibrationDoneClient = null;
         }
 
-
         if (newData)
         {
+            /*Debug.Log(turn);
+            Debug.Log(clients[turn].name);*/
+            //Debug.Log("");
+            
+            foreach(PupilConfiguration.PupilClient c in clients)
+            {
+                //Debug.Log(c.name);
+            }
+
             if (IPHeaders[turn] == null)
             {
+                newData = false;
+                surfaceData = null;
                 return;
             }
-            PupilConfiguration.PupilClient client = clients.Find((c) => IPHeaders[turn].Contains(c.ip));
+            PupilConfiguration.PupilClient client = clients[turn]; //clients.Find((c) => IPHeaders[turn].Contains(c.ip));
+
             if (client == null)
             {
+                Debug.Log(turn + " is null");
+
+                newData = false;
+                surfaceData = null;
                 return;
             }
+            //Debug.Log(clients[turn].name);
 
             if (client.gaze_controller != null)
             {
@@ -470,12 +514,13 @@ public class PupilListener : Singleton<PupilListener>
                     }
                     if (gos.on_srf)
                     {
+                        Debug.Log("onsrf" + clients[turn].name); 
                         client.gaze_controller.move(surfaceData, client.surface_name);
                     }
                 }
-
             }
             newData = false;
+            surfaceData = null;
         }
     }
 }

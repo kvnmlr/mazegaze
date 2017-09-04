@@ -90,7 +90,7 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
             player.AddComponent<GazeController>();
             player.GetComponent<Player>().name = c.name;
             c.gaze_controller = player.GetComponent<GazeController>();
-            c.gaze_controller.cursor = Instantiate(GameController.Instance.cursor, null);
+            //c.gaze_controller.cursor = Instantiate(GameController.Instance.cursor, null);
             ++count;
         }
 
