@@ -8,18 +8,26 @@
 \BOOKMARK [2][-]{subsection.17}{Immersive Game Controll Using Gaze}{section.11}% 8
 \BOOKMARK [2][-]{subsection.19}{Pursuit Calibration}{section.11}% 9
 \BOOKMARK [1][-]{section.21}{Requirements and Design}{}% 10
-\BOOKMARK [2][-]{subsection.23}{Design Decisions}{section.21}% 11
+\BOOKMARK [2][-]{subsection.23}{Gaze Interaction Design Decisions}{section.21}% 11
 \BOOKMARK [2][-]{subsection.25}{Agile Development Approach}{section.21}% 12
 \BOOKMARK [2][-]{subsection.27}{Formal Requirements}{section.21}% 13
 \BOOKMARK [1][-]{section.29}{Implementation}{}% 14
 \BOOKMARK [2][-]{subsection.31}{Hardware}{section.29}% 15
 \BOOKMARK [2][-]{subsection.33}{Software}{section.29}% 16
-\BOOKMARK [3][-]{subsubsection.35}{Maze Generator}{subsection.33}% 17
-\BOOKMARK [3][-]{subsubsection.37}{...}{subsection.33}% 18
-\BOOKMARK [1][-]{section.39}{Evaluation}{}% 19
-\BOOKMARK [2][-]{subsection.41}{Performance}{section.39}% 20
-\BOOKMARK [2][-]{subsection.43}{User-Experience}{section.39}% 21
-\BOOKMARK [1][-]{section.45}{Conclusion}{}% 22
-\BOOKMARK [2][-]{subsection.47}{Résume}{section.45}% 23
-\BOOKMARK [2][-]{subsection.49}{Future Work}{section.45}% 24
-\BOOKMARK [1][-]{section.51}{TOTAL: 8 pages}{}% 25
+\BOOKMARK [3][-]{subsubsection.35}{Menu}{subsection.33}% 17
+\BOOKMARK [3][-]{subsubsection.37}{Maze Generator}{subsection.33}% 18
+\BOOKMARK [3][-]{subsubsection.39}{Power-Ups}{subsection.33}% 19
+\BOOKMARK [3][-]{subsubsection.41}{Smart Player Controls}{subsection.33}% 20
+\BOOKMARK [3][-]{subsubsection.43}{Game Fairness}{subsection.33}% 21
+\BOOKMARK [3][-]{subsubsection.45}{Pupil Integration}{subsection.33}% 22
+\BOOKMARK [3][-]{subsubsection.47}{Calibration}{subsection.33}% 23
+\BOOKMARK [3][-]{subsubsection.49}{Game Lobbys}{subsection.33}% 24
+\BOOKMARK [3][-]{subsubsection.51}{Graphical Interface}{subsection.33}% 25
+\BOOKMARK [1][-]{section.53}{Evaluation}{}% 26
+\BOOKMARK [2][-]{subsection.55}{Performance}{section.53}% 27
+\BOOKMARK [2][-]{subsection.57}{User-Experience}{section.53}% 28
+\BOOKMARK [1][-]{section.59}{Conclusion}{}% 29
+\BOOKMARK [2][-]{subsection.61}{Résume}{section.59}% 30
+\BOOKMARK [2][-]{subsection.63}{Lessons Learned}{section.59}% 31
+\BOOKMARK [2][-]{subsection.65}{Future Work}{section.59}% 32
+\BOOKMARK [1][-]{section.67}{TOTAL: 8 pages}{}% 33
