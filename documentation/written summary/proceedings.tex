@@ -116,7 +116,7 @@
   \alignauthor{Marco Siweris\\
     \affaddr{Saarland University}\\
     \affaddr{Saarbr{\"u}cken, Germany}\\
-    \email{e-mail address}}\\
+    \email{s8masiwe@stud.uni-saarland.de}}\\
   \alignauthor{Lena Hornberger\\
     \affaddr{Saarland University}\\
     \affaddr{Saarbr{\"u}cken, Germany}\\
@@ -158,7 +158,7 @@ The paper "Pursuit Calibration: Making Gaze Calibration Less Tedious and More Fl
 As we know, every application which works with gaze input needs a user calibration before you can interact with it. But a "normal" calibration maybe is difficult and tedious. It requires five or more calibration points. In this paper they present another method to calibrate: "Pursuit Calibration" at which the users are following moving targets to calibrate.\\
 In the experiment they test how the calibration should be: They test different speeds of the moving target and the time the target moves. First the target moves with a constant speed and second with a accelerating moving target which slows down at the corner of the screen and accelerates at the straight side of the screen. The results were: The target does not have the travel across the entire screen, because the final accuracy is already reached around 66\% of its whole path and durations that lasts longer than 10 seconds are better.\\
 This resulted how the calibration should be: it should introduce users to the application and be very intuitive (e.g in a stargazing application, following shooting stars). The duration of the calibration should be between 10 to 20 seconds and the size of the target should be, in our case, the width of the path, because the size of the target has an impact on the accuracy of the calibration.\\
-In our project the pursuit calibration was a may have we didn't implemented.
+In our project the pursuit calibration was a may have we did not implemented.
 
 ---\\
 TOTAL: 1.5 Pages
@@ -169,7 +169,38 @@ TOTAL: 1.5 Pages
 \subsection{Agile Development Approach}
 1/4 page (Marco)
 \subsection{Formal Requirements}
-1/2 page (Marco)\\
+	Must-Haves
+	\begin{itemize}
+		\item You could play the game on a conventional Laptop display or TV set
+		\item It could play 1-4 players at a time 
+		\item \textbf{Player can enter a running game???} 
+		\item The match field is a maze consisting of walls and paths 
+		\item Maze is random generated. The Maze does not change in playtime
+		\item Each Player starts in one corner of the Maze
+		\item At the beginning of the game is the hole maze dark
+		\item The play figure of a player is a colored light cone
+		\item Each player has a different color
+		\item Light cone follows the gaze of the player
+		\item Light cone tries to follow the gaze in a constant speed and tries to minimize the distance to the gaze
+		\item If the distance of the gaze an the light cone is too big, the gaze can no longer be control the light cone.
+		\item 	If the light cone can not minimize the distance to the gaze because of walls, he stops
+		\item 	A small part around the light cone is lit
+		\item The paths on which the light cone had previously been left also remain bright, but gradually darken
+		\item 	illuminated area is only for the player visible how reached the are
+		\item If a player's gaze moves near a path discovered by another opponent and not by himself, it is completely darkened 
+		\item 	The light cone of the player is always lit
+		\item 	Lightened areas a player himself has discovered will not be darkened for this player, even if they were discovered by another player
+		\item At the beginning of a round, a target is placed at a random position in the maze
+		\item It gave different good power ups (enlightenment, show tart, endurance)
+	\end{itemize}
+	May-Haves
+	\begin{itemize}
+		\item Player can choose different levels at the beginning of a round, thereby increasing the size of the maze
+		\item New players could join a game, without pausing 
+		\item More different bad power ups (dim, slowing, darkness)
+		\item If a player does not look at the field for more than 10 seconds, he leaves the game and his light cone disappears from the field
+		
+	\end{itemize}
 ---\\
 TOTAL: 1.25 Pages
 
@@ -181,8 +212,9 @@ TOTAL: 1.25 Pages
 2 pages
 \subsubsection{Menu}
 At the beginning of the game you can choose between many game configurations. You have the option to start the game, to finish the application, to get some help information (e.g. link to GitLab) and to call settings, where you can connect to new clients, disconnect connected clients and calibrate clients. On starting the game you can set the game configurations. You can choose the number of players, the number of rounds you want to play and the difficulty of the game (simple, medium or hard) which affects the size of the labyrinth and the paths. If the game lasts longer than one round the next round starts automatically after a short break. The game also supports in-game interruptions with a break button. In this interruption mode you can continue the game and also go back to the main menu.
-\subsubsection{Maze Generator} Marco
-\subsubsection{Power-Ups} Marco
+\subsubsection{Maze Generator} 
+The Maze a generated with a depth-first-search algorithm. First we generate a $n*m$ large matrix and in every step we have a wall from $x_{0}$ to $x_{n}$ and from $y_{0}$ to $y_{m}$. In the next step we generate a datatype Cell with for walls per Cell (north, south, east, west). Now we will chose a random start cell, and destroy a random wall which has not yet been destroyed from this cell and progress with death-first-search in every cell of the matrix. You can solve this problem with a running time of $\mathcal{O}(n^2)$.
+\subsubsection{Power-Ups} We distinguish the power-ups in good and bad power ups. The good power-ups are enlightenment, endurance and show target. Enlightenment is a light explosion, if a player collect this target, a big range of $nMazeSize/7 * mMazeSize/7$ will lit. Endurance is a power-up which bring about light path is lit for a longer time. The power-up show target trigger a light flash on the target for one seconds. The bad power-ups are dim, slowing and darkness. Dim is the opposite of endurance, so the the light path is lit for a shorter time, but only of the opponents. The power ups slowing produce that the opponents getting slower and the slower speed is fix, and the player can not get his old faster speed. Darkness extinguishes the light of the opponents. 
 \subsubsection{Smart Player Controls} Kevin
 \subsubsection{Game Fairness} Kevin
 \subsubsection{Pupil Integration} Kevin
@@ -202,11 +234,12 @@ TOTAL: 2.5 pages
 TOTAL: 0.5 page
 
 \section{Conclusion}
-\subsection{Résume}
+\subsection{R{\'e}sume}
 1/4 page (Lena)
 \subsection{Lessons Learned}
 1/4 page (Kevin)
 \subsection{Future Work}
+In general, there are many possibilities to extend the game MazeGaze. In stead of control the menu by mouse you could implement a gaze bases control menu. So for example you have to look in different areas to choose different options in the menu. You also could create a collaborative team mode so that two players are in a team and other to players are in a opponent team and the teams have to play against each other. For example that means, if a player of the one team collect a bad power-up it just will be triggered on the members of the other team. Another idea would be to change the maze in play time. Like the game "Das Verrückte Labyrinth" you could destroy walls and build up other walls, but still it is a fair maze, so every can reach each point of the maze. \textbf{Calibration} \textbf{Improve Gaze Precision} \textbf{Queue} \textbf{fehlen noch hier}\\
 1/2 page (Marco)\\
 ---\\
 TOTAL: 0.75 page
