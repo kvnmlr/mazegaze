@@ -120,13 +120,13 @@
   \alignauthor{Lena Hornberger\\
     \affaddr{Saarland University}\\
     \affaddr{Saarbr{\"u}cken, Germany}\\
-    \email{e-mail address}}\\
+    \email{s8lehorn@stud.uni-saarland.de}}\\
 }
 
 \maketitle
 
 \begin{abstract}
- 1/4 page (Lena)
+This paper is the result of the Seminar "Multi-User Gaze-Based Interaction" at the Saarland University. We designed and implemented an interactive application which uses gaze input. The result of this development is a gaze based multiplayer game called "Maze Gaze" in the category "Multi-User Content Adaption". In this paper we present our project idea, the requirements we made, some design and software decisions and show that a game with gaze input can make a lot of fun despite working with a eyetracker can cause a lot of issues.
 \end{abstract}
 
 % \keywords{\plainkeywords}
@@ -148,9 +148,18 @@ TOTAL: 1.25 Pages
 \subsection{Mouse Against Gaze Input}
 1/2 page (Kevin)
 \subsection{Immersive Game Controll Using Gaze}
-1/4 page (Lena)
+The paper "Gaze-Controlled Gaming: Immersive and Difficult but not Cognitively Overloading" was published in 2014 from Kreytz et al. in Warsaw, Poland and present at the UbiCom in September 2014 in Seatlle, USA.\\
+The paper is about controlling games through eye-movements.\\
+In the experiment the participants should guide a character trough a maze with their eye movements. It was design within-subjects and had two fixed factors. The first was the game-control type which can be differ in 3 types: gaze-controlled with cues, gaze-controlled without cues and keyboard-controlled. The second factor was the maze complexity(easy and hard). Each participants played all three versions of the game two times, once with the easy and once with the hard maze.\\
+The results important for our project: the completion time was faster with cues, but there were more saccades and there were more saccades with the complex maze, but the participants were gazing on the paths of the maze about 60\% of the time.\\
+This resulted the main question: moving the character or scanning paths? For our project this means, that we are switching between two modes: gaze-controlled gaming an visual field scanning. This means we only move the character when the gaze is within a given radius. Moreover we do the game without cues that show possible directions, because this reduce the game experience. 
 \subsection{Pursuit Calibration}
-1/4 page (Lena)\\
+The paper "Pursuit Calibration: Making Gaze Calibration Less Tedious and More Flexible" was published in 2013 from Pfeuffer et al. and present at the UIST in October 2013 in St. Andrews, United Kingdom.\\
+As we know, every application which works with gaze input needs a user calibration before you can interact with it. But a "normal" calibration maybe is difficult and tedious. It requires five or more calibration points. In this paper they present another method to calibrate: "Pursuit Calibration" at which the users are following moving targets to calibrate.\\
+In the experiment they test how the calibration should be: They test different speeds of the moving target and the time the target moves. First the target moves with a constant speed and second with a accelerating moving target which slows down at the corner of the screen and accelerates at the straight side of the screen. The results were: The target does not have the travel across the entire screen, because the final accuracy is already reached around 66\% of its whole path and durations that lasts longer than 10 seconds are better.\\
+This resulted how the calibration should be: it should introduce users to the application and be very intuitive (e.g in a stargazing application, following shooting stars). The duration of the calibration should be between 10 to 20 seconds and the size of the target should be, in our case, the width of the path, because the size of the target has an impact on the accuracy of the calibration.\\
+In our project the pursuit calibration was a may have we didn't implemented.
+
 ---\\
 TOTAL: 1.5 Pages
 
