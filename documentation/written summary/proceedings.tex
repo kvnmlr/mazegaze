@@ -87,16 +87,16 @@
 %  pdfauthor={\plainauthor},
   pdfauthor={\emptyauthor},
   pdfkeywords={\plainkeywords},
-%  pdfdisplaydoctitle=true, % For Accessibility
-%  bookmarksnumbered,
-%  pdfstartview={FitH},
-%  colorlinks,
-%  citecolor=black,
-%  filecolor=black,
-%  linkcolor=black,
-%  urlcolor=linkColor,
-%  breaklinks=true,
-%  hypertexnames=false
+  pdfdisplaydoctitle=true, % For Accessibility
+  bookmarksnumbered,
+  pdfstartview={FitH},
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=linkColor,
+  breaklinks=true,
+  hypertexnames=false
 }
 
 % create a shortcut to typeset table headings
@@ -166,7 +166,16 @@ TOTAL: 1.5 Pages
 
 \section{Requirements and Design}
 \subsection{Gaze Interaction Design Decisions}
-1/2 page (Marco) (Farben, Content Adaption (private public shared areas), radius)
+Various design decisions were very important in our game. Our main theme was the for this project was content adaption. We implement the content adaption by the user having different areas. A User always have a private area and just himself can see this area, if an other player would look to the area, the area is blurred. We realized this by continuously examining the users' gaze on which cell the user is looking. Is this cell, where the user is looking, the cell of another user (that means, he/she was there few seconds before and the cell is lighted in the users' color), so we turn of the light of these cell. If the user looking away, illuminate the light again. But we also have shared areas. That means that two or more player was in the same cell few moments before, and all of them have there a private area. The color of this area is a mix of the colors of the users, where the cell is part of the private area (in this case shared area). So if one of the players if looking of one of the shared cells, it looks like a private area, but simple in another relative color, so the cell is lit. But if a another player is looking of one of these shared cells, and he/she is not part of the commune the cell will be unlit.\\ 
+The design decisions regarding the colors was very important, because we have to mix the colors for the shared areas. We choose as colors red, yellow, blue and pink. The colors at unity to mix out turned out to be not possible, as we have imagined, because one got mostly white, since our colors are a light, which is dyed. So then we calculate the mixed colors for the shared areas using the additive color mixing but without dark or lighter. We calculated it with the following Relationships: \\
+We have the Domain of a function $D$ a Codomain $Y$ and a Relation $\mathcal{R} \subseteq D\;x\;Y$ with 
+\begin{align*} D = \{1,2,4,7\}   \quad Y = \{3,5,6,8,9,11\} \end{align*} and the Relation \begin{align*} \mathcal{R} = \{(a,b) \in  A^2 | a \neq b \wedge c=a+b \; with\; c \in Y \} \end{align*}
+To assign a color to the numbers we have the following Relation $\mathcal{R}' \subseteq D \cup Y \;x\; C$ with $ C= \{red, blue, yellow, pink, purple, orange, violet, green, \\magenta, cyan\} $
+\begin{align*} \mathcal{R}' = \{(1,red),(2,blue),(3,violet), (4,yellow), (5,orange), \\ (6,green), (7,pink), (8,magenta), (9,purple), (11,cyan)\} \end{align*}
+
+We choose the colors in the set $C$, because these colors are good to recognize and distinguish.\\
+We Also had to decide how large the distance between gaze and light cone should be, so that the player can not control the light cone. At the start we chose a radius of 5 \textbf{px}. The radius is defined as the center of the circle is the center of the light cone and the end of the circle (i.e. 5 \textbf{px}) is the maximum gaze where the user can still control his player. But as we have embedded the tracker, we quickly noticed that it is not a good solution.
+So we developed an algorithm that calculates where the player most likely looks. We consider only the surrounding cells, and thus reject the control of a radius.
 \subsection{Agile Development Approach}
 The main advantage of taking an iterative approach in the development of such projects is, that one can get working prototypes really quickly and adapt the goals and requirements based on the evaluation of those prototypes. Also, by doing vertical prototypes, i.e. ones that only implement a single unit of functionality, technical limitations can be uncovered early in the development.\\
 Initially, in our small team of three, we defined high-level milestones with deadlines that would eventually lead to the completion of the project within the given time frame. Each week, we met to discuss and assign smaller action items called ''issues'' to each team member using GitLab. Our initial focus was on developing two prototypes that would ensure our idea was possible. We implemented a horizontal prototype with a limited set of features, very basic graphics and only mouse and keyboard controlls. By testing this prototype with some users, we could quickly find out that our game is indeed fun to play and the competitive nature of the game does work.\\
@@ -217,7 +226,8 @@ TOTAL: 1.25 Pages
 At the beginning of the game you can choose between many game configurations. You have the option to start the game, to finish the application, to get some help information (e.g. link to GitLab) and to call settings, where you can connect to new clients, disconnect connected clients and calibrate clients. On starting the game you can set the game configurations. You can choose the number of players, the number of rounds you want to play and the difficulty of the game (simple, medium or hard) which affects the size of the labyrinth and the paths. If the game lasts longer than one round the next round starts automatically after a short break. The game also supports in-game interruptions with a break button. In this interruption mode you can continue the game and also go back to the main menu.
 \subsubsection{Maze Generator} 
 The Maze a generated with a depth-first-search algorithm. First we generate a $n*m$ large matrix and in every step we have a wall from $x_{0}$ to $x_{n}$ and from $y_{0}$ to $y_{m}$. In the next step we generate a datatype Cell with four walls per Cell (north, south, east, west). Now we will chose a random start cell, and destroy a random wall which has not yet been destroyed from this cell and progress with death-first-search in every cell of the matrix. You can solve this problem with a running time of $\mathcal{O}(n^2)$.
-\subsubsection{Power-Ups} We distinguish the power-ups in good and bad power ups. The good power-ups are enlightenment, endurance and show target. Enlightenment is a light explosion, if a player collect this target, a big range of $nMazeSize/7 * mMazeSize/7$ will lit. Endurance is a power-up which bring about light path is lit for a longer time. The power-up show target trigger a light flash on the target for one seconds. The bad power-ups are dim, slowing and darkness. Dim is the opposite of endurance, so the the light path is lit for a shorter time, but only of the opponents. The power ups slowing produce that the opponents getting slower and the slower speed is fix, and the player can not get his old faster speed. Darkness extinguishes the light of the opponents. 
+\subsubsection{Power-Ups} 
+We distinguish the power-ups in good and bad power ups. The good power-ups are enlightenment, endurance and show target. Enlightenment is a light explosion, if a player collect this target, a big range of $nMazeSize/7 * mMazeSize/7$ will lit. Endurance is a power-up which bring about light path is lit for a longer time. The power-up show target trigger a light flash on the target for one seconds. The bad power-ups are dim, slowing and darkness. Dim is the opposite of endurance, so the the light path is lit for a shorter time, but only of the opponents. The power ups slowing produce that the opponents getting slower and the slower speed is fix, and the player can not get his old faster speed. Darkness extinguishes the light of the opponents. 
 \subsubsection{Smart Player Controls} Kevin
 \subsubsection{Game Fairness} Kevin
 \subsubsection{Pupil Integration} Kevin
