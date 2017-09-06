@@ -167,9 +167,6 @@ In the experiment they test how the calibration should be: They test different s
 This resulted how the calibration should be: it should introduce users to the application and be very intuitive (e.g in a stargazing application, following shooting stars). The duration of the calibration should be between 10 to 20 seconds and the size of the target should be, in our case, the width of the path, because the size of the target has an impact on the accuracy of the calibration.\\
 In our project the pursuit calibration was a may have we did not implemented.
 
----\\
-TOTAL: 1.5 Pages
-
 \section{Requirements and Design}
 \subsection{Gaze Interaction Design Decisions}
 Various design decisions were very important in our game. Our main theme was the for this project was content adaption. We implement the content adaption by the user having different areas. A User always have a private area and just himself can see this area, if an other player would look to the area, the area is blurred. We realized this by continuously examining the users' gaze on which cell the user is looking. Is this cell, where the user is looking, the cell of another user (that means, he/she was there few seconds before and the cell is lighted in the users' color), so we turn of the light of these cell. If the user looking away, illuminate the light again. But we also have shared areas. That means that two or more player was in the same cell few moments before, and all of them have there a private area. The color of this area is a mix of the colors of the users, where the cell is part of the private area (in this case shared area). So if one of the players if looking of one of the shared cells, it looks like a private area, but simple in another relative color, so the cell is lit. But if a another player is looking of one of these shared cells, and he/she is not part of the commune the cell will be unlit.\\ 
@@ -219,12 +216,11 @@ Because this has not been done before and there was no reference implementation 
 		\item If a player does not look at the field for more than 10 seconds, he leaves the game and his light cone disappears from the field
 		
 	\end{itemize}
----\\
-TOTAL: 1.25 Pages
 
 \section{Implementation}
 \subsection{Hardware}
-1/4 page (Kevin)
+We used the pupil framework developed by pupil labs \cite{kassner2014pupil} for this project. Pupil is an open source platform for mobile eye tracking and can be used for a variety of mobile eye-tracking applications. Although the software has its bugs as we had to find out, it is still a lot more sophisticated than it was some years ago and tracking performance is very good. The headset consists of two cameras. One front facing webcam is capturing what is in the view of the user. A second smaller camera is located slightly below one eye and captures the whole eye. The software extracts the pupil from this image of the eye. The framework comes with a set of calibration methods that provide a way to map eye positions to points on the world view camera image. A user of the platform can easily add new plugins such as surface tracking or network capabilities to the basic pupil capture application. Some issues we discovered with the software and hardware were that the eye camera quickly gets very hot and needs to cool down. Also, the cameras are quite frequently not recognized by windows and drivers need to be reinstalled. The calibration sometimes crashes the application while othertimes theuser's pupil can't be recognized reliably.
+
 \subsection{Software}
 The main crux in this project was developing a software system that integrates well with the given hardware and is fun to play. Also, there should be some experimental aspects to the implementation. In the following, we will show how we achieved this by explaining the key components of the software. The whole application was built using the Unity game engine with the programming language C\#. Implementation and testing took place on regular windows machines. We used git as VCS and GitLab to host our code and track issues.
 \subsubsection{Menu}
