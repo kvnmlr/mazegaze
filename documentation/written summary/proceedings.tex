@@ -132,7 +132,8 @@ This paper is the result of the Seminar "Multi-User Gaze-Based Interaction" at t
 % \keywords{\plainkeywords}
 
 \section{Introduction}
-1/4 page intro (Kevin)
+Human computer interaction is a discipline of computer science that is concerned with improving existing or coming up with new ways for humans to interact with computer systems. One such interaction style is gaze-based interaction which has it's own challenges. In this paper we examine gaze-based interaction in a multi-user scenario, meaning how multiple users can simultaneously interact with a system using only their eyes. While gaze-based interaction is already well studied, such a multi-user interaction is rather new which gives us the opportunity to gain new insights in this field.
+
 \subsection{Motivation}
 Gaze can be a very intuitive and fast way of interacting with a system. However, there are still many unsolved problems related to areas such as tracking accuracy, calibration methods or unintended interactions. Because of that, currently eye-tracking is still very uncommon for end users although applications of it are countless. Researchers are working hard on solving those issues and making eye-tracking more usable in different areas of life, both for personal and professional use.\\
 There is another important fact to consider: People who are partially or fully paralized have a very limited set of possibilities to interact with their environment. Because it is a hand-free interaction, gaze can be a very benefitial for people with physical impairments, giving them many possibilities to interact with other people and perform tasks that otherwise would be very hard or even impossible.
@@ -145,9 +146,13 @@ This paper consists of three main parts. The first one will lay out the foundati
 
 \section{Related Work}
 \subsection{Gaze Input Performance}
-\cite{san2009evaluation} 1/2 page (Kevin)
+In the year 2009, San Augustin et al. published a paper about their ''Evaluation of the potential of gaze input for game interaction.'' \cite{san2009evaluation} They evaluated two main tasks in game interaction, namely target acquisition and target tracking. The motivation behind their research was to find out whether gaze interaction can, besides yielding higher levels of immersion, increase effectiveness in video games. In their experiment, the researchers used several devices including two eye-trackers, head tracker, mouse, touch screen and a joystick. The target acquisition task asked the participants to move the cursor as quickly as possible two a highlighted point on the screen. Once reached, this point steadily moved back to the middle of the screen, which is called target tracking. From this experiment they gained several important insights. First, giving auditory and movement feedback increases time on target. Second, the target size metters a lot when using an eye-tracker: When the size of the point was sufficiently big enough (150px), the time on target for gaze-tracking was almost as good as for mouse.\\
+San Augustin et al. also did a subjective evaluation and found out important factors for the user experience. They found out that tracking accuracy is extremely important. Some users reported that ''if tracking is very precise, it feels as if the system was responding to their intentions, rather than to their explicit commands.''\cite{san2009evaluation} (TODO check citation) We found this to be very interesting and set to achieve this in our game as well as a goal for this project. As a final remark, the authors claim that the full potential of gaze input in games can only be reached with an accurate and responsive tracker and a well-designed interface.
+
 \subsection{Mouse Against Gaze Input}
-\cite{dorr2009gaze} 1/2 page (Kevin)
+We also studied a paper entitled ''Gaze Beats Mouse'' by Dorr et al. \cite{dorr2009gaze}. Although it is from the year 2009 and about 8 years old, we still found it applicable to our problem and especially interesting regarding our own goal for this project. Their main motivation behind this study was the goal to find out if disabled players could play against non-disabled players on an equal level using gaze input. Of course, they were sure that this would not work out of the box but they were eager to find out which gameplay adaptions would be necessary to achieve their goal. They took the popular, yet very simple game called Breakout and adapted it. In the following, we explain some of the adaptions we found to be most related to our game: Gaze-based interfaces in general have problems with confirmation of actions related to the midas touch problem. The authors suggest to make actions automatic whenever possible. Also, giving the user time to practice before the game starts gives them the possibility to better expect and handle the imprecisions. Due to the intuitive interaction of gaze, on can introduce visual complexity to make the game more challenging and fun.\\
+They conducted an actual tournament with 20 participants and the results were very clearly in favour of gaze-interaction. The score for gaze was much higher and two thirds of all rounds were won by gaze players. Gaze control was a statistically significant advantage.
+
 \subsection{Immersive Game Controll Using Gaze}
 The paper "Gaze-Controlled Gaming: Immersive and Difficult but not Cognitively Overloading" was published in 2014 from Kreytz et al. in Warsaw, Poland and present at the UbiCom in September 2014 in Seatlle, USA \cite{krejtz2014gaze}.\\
 The paper is about controlling games through eye-movements.\\
@@ -160,9 +165,6 @@ As we know, every application which works with gaze input needs a user calibrati
 In the experiment they test how the calibration should be: They test different speeds of the moving target and the time the target moves. First the target moves with a constant speed and second with a accelerating moving target which slows down at the corner of the screen and accelerates at the straight side of the screen. The results were: The target does not have the travel across the entire screen, because the final accuracy is already reached around 66\% of its whole path and durations that lasts longer than 10 seconds are better.\\
 This resulted how the calibration should be: it should introduce users to the application and be very intuitive (e.g in a stargazing application, following shooting stars). The duration of the calibration should be between 10 to 20 seconds and the size of the target should be, in our case, the width of the path, because the size of the target has an impact on the accuracy of the calibration.\\
 In our project the pursuit calibration was a may have we did not implemented.
-
----\\
-TOTAL: 1.5 Pages
 
 \section{Requirements and Design}
 \subsection{Gaze Interaction Design Decisions}
