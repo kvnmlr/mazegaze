@@ -149,13 +149,13 @@ This paper consists of three main parts. The first one will lay out the foundati
 \subsection{Mouse Against Gaze Input}
 \cite{dorr2009gaze} 1/2 page (Kevin)
 \subsection{Immersive Game Controll Using Gaze}
-The paper "Gaze-Controlled Gaming: Immersive and Difficult but not Cognitively Overloading" was published in 2014 from Kreytz et al. in Warsaw, Poland and present at the UbiCom in September 2014 in Seatlle, USA \cite{krejtz2014gaze}.\\
+The paper "Gaze-Controlled Gaming: Immersive and Difficult but not Cognitively Overloading" was published in 2014 from Kreytz et al. in Warsaw, Poland \cite{krejtz2014gaze}.\\
 The paper is about controlling games through eye-movements.\\
 In the experiment the participants should guide a character trough a maze with their eye movements. It was design within-subjects and had two fixed factors. The first was the game-control type which can be differ in 3 types: gaze-controlled with cues, gaze-controlled without cues and keyboard-controlled. The second factor was the maze complexity(easy and hard). Each participants played all three versions of the game two times, once with the easy and once with the hard maze.\\
 The results important for our project: the completion time was faster with cues, but there were more saccades and there were more saccades with the complex maze, but the participants were gazing on the paths of the maze about 60\% of the time.\\
 This resulted the main question: moving the character or scanning paths? For our project this means, that we are switching between two modes: gaze-controlled gaming an visual field scanning. This means we only move the character when the gaze is within a given radius. Moreover we do the game without cues that show possible directions, because this reduce the game experience. 
 \subsection{Pursuit Calibration}
-The paper "Pursuit Calibration: Making Gaze Calibration Less Tedious and More Flexible" was published in 2013 from Pfeuffer et al. and present at the UIST in October 2013 in St. Andrews, United Kingdom \cite{pfeuffer2013pursuit}.\\
+The paper "Pursuit Calibration: Making Gaze Calibration Less Tedious and More Flexible" was published in 2013 from Pfeuffer et al.  \cite{pfeuffer2013pursuit}.\\
 As we know, every application which works with gaze input needs a user calibration before you can interact with it. But a "normal" calibration maybe is difficult and tedious. It requires five or more calibration points. In this paper they present another method to calibrate: "Pursuit Calibration" at which the users are following moving targets to calibrate.\\
 In the experiment they test how the calibration should be: They test different speeds of the moving target and the time the target moves. First the target moves with a constant speed and second with a accelerating moving target which slows down at the corner of the screen and accelerates at the straight side of the screen. The results were: The target does not have the travel across the entire screen, because the final accuracy is already reached around 66\% of its whole path and durations that lasts longer than 10 seconds are better.\\
 This resulted how the calibration should be: it should introduce users to the application and be very intuitive (e.g in a stargazing application, following shooting stars). The duration of the calibration should be between 10 to 20 seconds and the size of the target should be, in our case, the width of the path, because the size of the target has an impact on the accuracy of the calibration.\\
@@ -217,40 +217,44 @@ Because this has not been done before and there was no reference implementation 
 TOTAL: 1.25 Pages
 
 \section{Implementation}
-1/4 page intro
 \subsection{Hardware}
 1/4 page (Kevin)
 \subsection{Software}
-2 pages
+The main crux in this project was developing a software system that integrates well with the given hardware and is fun to play. Also, there should be some experimental aspects to the implementation. In the following, we will show how we achieved this by explaining the key components of the software. The whole application was built using the Unity game engine with the programming language C\#. Implementation and testing took place on regular windows machines. We used git as VCS and GitLab to host our code and track issues.
 \subsubsection{Menu}
-At the beginning of the game you can choose between many game configurations. You have the option to start the game, to finish the application, to get some help information (e.g. link to GitLab) and to call settings, where you can connect to new clients, disconnect connected clients and calibrate clients. On starting the game you can set the game configurations. You can choose the number of players, the number of rounds you want to play and the difficulty of the game (simple, medium or hard) which affects the size of the labyrinth and the paths. If the game lasts longer than one round the next round starts automatically after a short break. The game also supports in-game interruptions with a break button. In this interruption mode you can continue the game and also go back to the main menu.
+At the beginning of the game the user can choose between many game configurations. There are the options to start the game, to finish the application, to get some help information (e.g. link to GitLab) and to call settings, where the user can connect new clients to the application, disconnect connected clients and calibrate clients. On starting the game the game configurations can be set. The user can choose the number of players, the number of rounds the user wants to play and the difficulty of the game (simple, medium or hard) which affects the size of the labyrinth and the paths. If the game lasts longer than one round the next round starts automatically after a short break. The game also supports in-game interruptions with a break button. In this interruption mode the game can be continued and also aborted by going back to the main menu. All these options can controlled with the mouse.
 \subsubsection{Maze Generator} 
 The Maze a generated with a depth-first-search algorithm. First we generate a $n*m$ large matrix and in every step we have a wall from $x_{0}$ to $x_{n}$ and from $y_{0}$ to $y_{m}$. In the next step we generate a datatype Cell with four walls per Cell (north, south, east, west). Now we will chose a random start cell, and destroy a random wall which has not yet been destroyed from this cell and progress with death-first-search in every cell of the matrix. You can solve this problem with a running time of $\mathcal{O}(n^2)$.
-\subsubsection{Power-Ups} 
-We distinguish the power-ups in good and bad power ups. The good power-ups are enlightenment, endurance and show target. Enlightenment is a light explosion, if a player collect this target, a big range of $nMazeSize/7 * mMazeSize/7$ will lit. Endurance is a power-up which bring about light path is lit for a longer time. The power-up show target trigger a light flash on the target for one seconds. The bad power-ups are dim, slowing and darkness. Dim is the opposite of endurance, so the the light path is lit for a shorter time, but only of the opponents. The power ups slowing produce that the opponents getting slower and the slower speed is fix, and the player can not get his old faster speed. Darkness extinguishes the light of the opponents. 
-\subsubsection{Smart Player Controls} Kevin
-\subsubsection{Game Fairness} Kevin
+\subsubsection{Power-Ups} We distinguish the power-ups in good and bad power ups. The good power-ups are enlightenment, endurance and show target. Enlightenment is a light explosion, if a player collect this target, a big range of $nMazeSize/7 * mMazeSize/7$ will lit. Endurance is a power-up which bring about light path is lit for a longer time. The power-up show target trigger a light flash on the target for one seconds. The bad power-ups are dim, slowing and darkness. Dim is the opposite of endurance, so the the light path is lit for a shorter time, but only of the opponents. The power ups slowing produce that the opponents getting slower and the slower speed is fix, and the player can not get his old faster speed. Darkness extinguishes the light of the opponents. 
+\subsubsection{Smart Player Controls} 
+We quickly discovered that simply moving the player to the position of the mouse of gaze does not work very well because the player has to keep the cursor very close to his light cone all the time. Also, this would not look very good because the lights will constantly move along the walls. We therefore decided to implement smart player controls, which means that the light will move towards the position of the cursor, but not in a straight line but through the corridors of the maze. For example, if the cursor is around a corner, the light will move first horizontally and then vertically around the corner, but never diagonally directly towards the cursor. \\
+We noticed another problem with gaze: Oftentimes, the gaze is not very accurate and jumps around quite a lot. When we receive the gaze data from the eye tracker we convert this information into a cell in the maze. However, instead of blindly trying to move the light to this cell, we also look at the neighbouring cells. For each of them, we compute a simple heuristic which says how likely it is that this is the intended cell that the user wants to move to. So, even if the gaze position jumps around the intended cell, our algorithm will always give the cell that makes the most sense to move towards. This was not trivial to implement and we did not know if it would actually work. However, when we tested this approach, we found that moving the light through the maze is a lot more efficient. Without this approach, oftentimes the light went back and forth or stood still for prolonged periods of time. Now, we can move the light through the maze almost without errors or pauses.\\
+Currently, this simple heuristic only takes into consideration whether the actual gaze position is within reach for the player and the distance of the path to reach it. Even though this is so simple, the results have been quite impressive. Improving this heuristic will probably lead to even better results.
+
+\subsubsection{Game Fairness}
+We already mentioned the length of the path between two positions in the maze in the paragraph above. Obviously, getting this path is not straight-forward and we first felt that we need this functionality when we wanted to spawn our target fair, such that all players have the same chance of reaching it. In the first prototype, we used the simple manhattan distance to find the position with roughly the same distance to all players. But ofcourse, depending on the structure of the maze, this can lead to quite unfair target positions. We therefore implemented a pathfinding algorithm that takes two cells as input and returns the path (i.e. list of cells to visit) to get from the start cell to the end cell. By utilizing this, we can compute the spot in the maze which each player can reach in roughly about the same time when making perfect decisions in choosing the way. We also introduce a lower bound on the length of the path to ensure that the target will not always spawn right between two players. When a new round starts, we generate new mazes until we find one where we can spawn the perfect target. When playing multiple rounds, we gradually make the spawning algorithm more liberal such that it will eventually spawn the target somewhere because we can't generate a new maze in between rounds.
+
 \subsubsection{Pupil Integration} Kevin
 \subsubsection{Calibration} Kevin
 \subsubsection{Game Lobbys} Kevin
 \subsubsection{Graphical Interface} 
 
-Marco
+Marco\\
 ---\\
 TOTAL: 2.5 pages
 
 
 \section{Evaluation}
 \subsection{Performance}
-1/4 page (Lena)
+We tested and played the game a lot of times and it turned out that the performance of the game played with gaze input is very good. Depending on the hardware used to play the game, our game software is running without any problems. The only problem we were faced with, the eyetracker was not always accurate, but we avoid this problem, by not showing the exact position of the gaze and implemented an method, that estimate the best gaze position of the user. With this method the performance of the gaze input increased a lot. Now the game can be played with gaze, keyboard and mouse input, and everybody has the same chance to win.
 \subsection{User-Experience}
-1/4 page (Lena)\\
----\\
-TOTAL: 0.5 page
+We interviewed some people, most of them haven't played a game with gaze input till now. Because of that, they needed little time to get used to the eyetracker and the game. They said, the game and gaze control were very intuitive, easy to learn and easy to remember. They also liked the design of the game: The background of the main menu, that it has the same topic and the reference to actual game: maze, the slow music first in the menu and the faster music in the game which increases during the rounds and creates a lot of pressure and also the color of the individual pawns in the game (the cone of light) which makes which makes it easier for the observers to differ the players.
+A couple of people also make new suggestions to improve the game and make it more fun, but we hadn't the time to implement all these ideas.\\
+Summarized all interviewed people have the opinion that the game is interesting, because they haven't used eyetracker and gaze input before, but it they had all much fun playing our game.
 
 \section{Conclusion}
 \subsection{R{\'e}sume}
-1/4 page (Lena)
+We were faced with a lot of problems during the development, especially with the eyetracker. But we found ways to solve or avoid this problems and created a game that can be played only with gaze input.
 \subsection{Lessons Learned}
 1/4 page (Kevin)
 \subsection{Future Work}
