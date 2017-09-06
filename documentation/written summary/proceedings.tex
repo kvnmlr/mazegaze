@@ -134,13 +134,14 @@ This paper is the result of the Seminar "Multi-User Gaze-Based Interaction" at t
 \section{Introduction}
 1/4 page intro (Kevin)
 \subsection{Motivation}
-1/2 page (Kevin)
+Gaze can be a very intuitive and fast way of interacting with a system. However, there are still many unsolved problems related to areas such as tracking accuracy, calibration methods or unintended interactions. Because of that, currently eye-tracking is still very uncommon for end users although applications of it are countless. Researchers are working hard on solving those issues and making eye-tracking more usable in different areas of life, both for personal and professional use.\\
+There is another important fact to consider: People who are partially or fully paralized have a very limited set of possibilities to interact with their environment. Because it is a hand-free interaction, gaze can be a very benefitial for people with physical impairments, giving them many possibilities to interact with other people and perform tasks that otherwise would be very hard or even impossible.
+
 \subsection{Goal}
-1/4 page (Kevin)
+Our goal in this project is to develop a game that can be played only using the eyes. Evenmore, we want this game to be fun to play and fair against conventional input methods like mouse or keyboard. This way, everyone, including physically impaired people, can have an immersive and competitive gaming experience against other players. By doing so, we hope to gain valuable insights and make a contribution in this field of research.
+
 \subsection{Outline}
-1/4 page (Kevin)\\
----\\
-TOTAL: 1.25 Pages
+This paper consists of three main parts. The first one will lay out the foundation for the project. After examining related work from several perspectives, we will define requirements and make concrete design decisions based on the ideas we got from related papers. In the second part, we will look at the actual implementation of the prototype and explain both hardware, software and how we made it play together. The final part closes the software design cycle by evaluating the game from a performance and user-experience perspective. Based on the results and the lessons we learned along the way, we will draw conclusions and propose future work.
 
 \section{Related Work}
 \subsection{Gaze Input Performance}
@@ -167,7 +168,9 @@ TOTAL: 1.5 Pages
 \subsection{Gaze Interaction Design Decisions}
 1/2 page (Marco) (Farben, Content Adaption (private public shared areas), radius)
 \subsection{Agile Development Approach}
-1/4 page (Marco)
+The main advantage of taking an iterative approach in the development of such projects is, that one can get working prototypes really quickly and adapt the goals and requirements based on the evaluation of those prototypes. Also, by doing vertical prototypes, i.e. ones that only implement a single unit of functionality, technical limitations can be uncovered early in the development.\\
+Initially, in our small team of three, we defined high-level milestones with deadlines that would eventually lead to the completion of the project within the given time frame. Each week, we met to discuss and assign smaller action items called ''issues'' to each team member using GitLab. Our initial focus was on developing two prototypes that would ensure our idea was possible. We implemented a horizontal prototype with a limited set of features, very basic graphics and only mouse and keyboard controlls. By testing this prototype with some users, we could quickly find out that our game is indeed fun to play and the competitive nature of the game does work.\\
+Because this has not been done before and there was no reference implementation online, we did a vertical prototype covering the eye-tracking functionality to ensure we could receive the gaze data from multiple eye trackers. After a while, this worked and we could focus on putting both prototypes together into a working gaze-controlled game and increasing its technical and visual fidelity.
 \subsection{Formal Requirements}
 	Must-Haves
 	\begin{itemize}
