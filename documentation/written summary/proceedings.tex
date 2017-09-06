@@ -87,16 +87,16 @@
 %  pdfauthor={\plainauthor},
   pdfauthor={\emptyauthor},
   pdfkeywords={\plainkeywords},
-  pdfdisplaydoctitle=true, % For Accessibility
-  bookmarksnumbered,
-  pdfstartview={FitH},
-  colorlinks,
-  citecolor=black,
-  filecolor=black,
-  linkcolor=black,
-  urlcolor=linkColor,
-  breaklinks=true,
-  hypertexnames=false
+%  pdfdisplaydoctitle=true, % For Accessibility
+%  bookmarksnumbered,
+%  pdfstartview={FitH},
+%  colorlinks,
+%  citecolor=black,
+%  filecolor=black,
+%  linkcolor=black,
+%  urlcolor=linkColor,
+%  breaklinks=true,
+%  hypertexnames=false
 }
 
 % create a shortcut to typeset table headings
@@ -178,8 +178,8 @@ TOTAL: 1.5 Pages
 		\item Maze is random generated. The Maze does not change in playtime
 		\item Each Player starts in one corner of the Maze
 		\item At the beginning of the game is the hole maze dark
-		\item The play figure of a player is a colored light cone
-		\item Each player has a different color
+		\item The play figure of a player is a coloured light cone
+		\item Each player has a different colour
 		\item Light cone follows the gaze of the player
 		\item Light cone tries to follow the gaze in a constant speed and tries to minimize the distance to the gaze
 		\item If the distance of the gaze an the light cone is too big, the gaze can no longer be control the light cone.
@@ -213,14 +213,16 @@ TOTAL: 1.25 Pages
 \subsubsection{Menu}
 At the beginning of the game you can choose between many game configurations. You have the option to start the game, to finish the application, to get some help information (e.g. link to GitLab) and to call settings, where you can connect to new clients, disconnect connected clients and calibrate clients. On starting the game you can set the game configurations. You can choose the number of players, the number of rounds you want to play and the difficulty of the game (simple, medium or hard) which affects the size of the labyrinth and the paths. If the game lasts longer than one round the next round starts automatically after a short break. The game also supports in-game interruptions with a break button. In this interruption mode you can continue the game and also go back to the main menu.
 \subsubsection{Maze Generator} 
-The Maze a generated with a depth-first-search algorithm. First we generate a $n*m$ large matrix and in every step we have a wall from $x_{0}$ to $x_{n}$ and from $y_{0}$ to $y_{m}$. In the next step we generate a datatype Cell with for walls per Cell (north, south, east, west). Now we will chose a random start cell, and destroy a random wall which has not yet been destroyed from this cell and progress with death-first-search in every cell of the matrix. You can solve this problem with a running time of $\mathcal{O}(n^2)$.
+The Maze a generated with a depth-first-search algorithm. First we generate a $n*m$ large matrix and in every step we have a wall from $x_{0}$ to $x_{n}$ and from $y_{0}$ to $y_{m}$. In the next step we generate a datatype Cell with four walls per Cell (north, south, east, west). Now we will chose a random start cell, and destroy a random wall which has not yet been destroyed from this cell and progress with death-first-search in every cell of the matrix. You can solve this problem with a running time of $\mathcal{O}(n^2)$.
 \subsubsection{Power-Ups} We distinguish the power-ups in good and bad power ups. The good power-ups are enlightenment, endurance and show target. Enlightenment is a light explosion, if a player collect this target, a big range of $nMazeSize/7 * mMazeSize/7$ will lit. Endurance is a power-up which bring about light path is lit for a longer time. The power-up show target trigger a light flash on the target for one seconds. The bad power-ups are dim, slowing and darkness. Dim is the opposite of endurance, so the the light path is lit for a shorter time, but only of the opponents. The power ups slowing produce that the opponents getting slower and the slower speed is fix, and the player can not get his old faster speed. Darkness extinguishes the light of the opponents. 
 \subsubsection{Smart Player Controls} Kevin
 \subsubsection{Game Fairness} Kevin
 \subsubsection{Pupil Integration} Kevin
 \subsubsection{Calibration} Kevin
 \subsubsection{Game Lobbys} Kevin
-\subsubsection{Graphical Interface} Marco
+\subsubsection{Graphical Interface} 
+
+Marco
 ---\\
 TOTAL: 2.5 pages
 
@@ -239,10 +241,14 @@ TOTAL: 0.5 page
 \subsection{Lessons Learned}
 1/4 page (Kevin)
 \subsection{Future Work}
-In general, there are many possibilities to extend the game MazeGaze. In stead of control the menu by mouse you could implement a gaze bases control menu. So for example you have to look in different areas to choose different options in the menu. You also could create a collaborative team mode so that two players are in a team and other to players are in a opponent team and the teams have to play against each other. For example that means, if a player of the one team collect a bad power-up it just will be triggered on the members of the other team. Another idea would be to change the maze in play time. Like the game "Das Verrückte Labyrinth" you could destroy walls and build up other walls, but still it is a fair maze, so every can reach each point of the maze. \textbf{Calibration} \textbf{Improve Gaze Precision} \textbf{Queue} \textbf{fehlen noch hier}\\
-1/2 page (Marco)\\
----\\
-TOTAL: 0.75 page
+In general, there are many possibilities to extend the game MazeGaze. In stead of control the menu by mouse we could implement a gaze bases control menu. So for example the user have to look in different areas to choose different options in the menu. For instance the person has to look in the upper left corner to choose the game option to play in a small maze. Another approach would be, the user has to control a light cone in certain corner to choose something. This is also a good way of training before the the game starts.\\ 
+We also could create a collaborative team mode so that two players are in a team and other to players are in a opponent team. The teams have to play against each other. That means, if a player of the one team collect a bad power-up it just will be triggered on the members of the other team and not for the player of the own team.\\ 
+Another idea would be to change the maze in play time. Like the game "\textit{Labyrinth}" from Ravensburger in 1986. A algorithm destroy walls and build up other walls, but still it is a fair maze, so every player can reach each point of the maze. This ensures that the users can not only rely on their memory, but also a luck factor plays a role.\\
+Another point is the continuation and improvement of the calibration. We could implement a In-application-calibration, so that means if we press the calibration button, the calibration will start on the desktop where the game is running and not on the desktop where the eye tracker is connected. This ensures a better and more precise calibration. Also we could implement a  in-application pursuit calibration to get a more precise calibration and better results and a low frustration of the user.\\ 
+To reduce the frustration of the user, we could improve the gaze precision. The gaze precision is currently good enough to have a good gaming experience without major frustrations but not perfect yet. The improvement is possible by adding algorithms to the actual gaze position calculated to the desired position. \\
+Last but not least we could implement a queue to start waiting players in a fair, right sequence. If, for example, 5 people want to play, we have a problem, because the game is design for four users. So the fifth user have wait and getting in a virtual queue, when one of the four players leave to game, the waiting person will spawn in the next round. If we have two or more waiting users, they are arranged in a queue, with the principle, first come first serve.
+\\
+TOTAL: 1.0 page
 
 \section{TOTAL: 8 pages}
 
