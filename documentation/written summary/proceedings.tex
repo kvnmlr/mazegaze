@@ -240,7 +240,9 @@ Currently, this simple heuristic only takes into consideration whether the actua
 \subsubsection{Game Fairness}
 We already mentioned the length of the path between two positions in the maze in the paragraph above. Obviously, getting this path is not straight-forward and we first felt that we need this functionality when we wanted to spawn our target fair, such that all players have the same chance of reaching it. In the first prototype, we used the simple manhattan distance to find the position with roughly the same distance to all players. But ofcourse, depending on the structure of the maze, this can lead to quite unfair target positions. We therefore implemented a pathfinding algorithm that takes two cells as input and returns the path (i.e. list of cells to visit) to get from the start cell to the end cell. By utilizing this, we can compute the spot in the maze which each player can reach in roughly about the same time when making perfect decisions in choosing the way. We also introduce a lower bound on the length of the path to ensure that the target will not always spawn right between two players. When a new round starts, we generate new mazes until we find one where we can spawn the perfect target. When playing multiple rounds, we gradually make the spawning algorithm more liberal such that it will eventually spawn the target somewhere because we can't generate a new maze in between rounds.
 
-\subsubsection{Pupil Integration} Kevin
+\subsubsection{Pupil Integration}
+We created a class that stores the client information like ip adresses, ports and surface names. After those configurations have been read from the saved settings, we hand them over to the pupil listener.
+
 \subsubsection{Calibration}
 In order to use the pupil trackers and have a good level of accuracy, a calibration that maps eye positions to locations in the view of the world camera is necessary. When a calibration is done, the tracker must not move on the players head. Otherwise, the slight shift will introduce a more or less severe offset which quickly leads to very bad usability. To account for that, we introduced a calibration procedure in our application. We decided to do this in a rather simple way: From the settings screen where we can connect to pupil clients, we can also choose to start the calibration procedure for each client. This will send a request to the client computer and start the pupil internal screen marker calibration procedure. Our game then listens for an event from pupil, indicating a successful or failed procedure. Furthermore, when a new game starts each player that has not been calibrated previously will be calibrated in the same way. When the calibration for every player is done, the players can join the game.
 
@@ -266,7 +268,16 @@ Summarized all interviewed people have the opinion that the game is interesting,
 \subsection{R{\'e}sume}
 We were faced with a lot of problems during the development, especially with the eyetracker. But we found ways to solve or avoid this problems and created a game that can be played only with gaze input.
 \subsection{Lessons Learned}
-1/4 page (Kevin)
+The main benefit of having done this project is that we have learned lot's of important lessons. Besides lessons in project management and software engineering practices, we will explain the key insights related to gaze interaction. While some of them were already mentioned in related work, we also gained some new ideas from our unique approach and experimentation with different settings and implementations. We would like to present those findings as guidelines for others to implement in their eye-tracking projects.
+ \begin{itemize}
+\item Make hit areas bigger than visual parts.
+\item Use more than four markers and make them as small as possible and as big as necessary to increase stability and precision
+\item Accurate tracking is important and offsets are frustrating. Do not show the actual gaze position as cursor whenever possible.
+\item Make actions automatic whenever possible.
+\item Use two-modes for player control and scanning. This can be achieved by defining a fixed radius around the player where movement is possible.
+\item Estimate the best user gaze position. Do not take the raw gaze data but find a heuristic that yields a better estimate of what the user intends to do in the given state of the game.
+\end{itemize}
+
 \subsection{Future Work}
 In general, there are many possibilities to extend the game MazeGaze. In stead of control the menu by mouse we could implement a gaze bases control menu. So for example the user have to look in different areas to choose different options in the menu. For instance the person has to look in the upper left corner to choose the game option to play in a small maze. Another approach would be, the user has to control a light cone in certain corner to choose something. This is also a good way of training before the the game starts.\\ 
 We also could create a collaborative team mode so that two players are in a team and other to players are in a opponent team. The teams have to play against each other. That means, if a player of the one team collect a bad power-up it just will be triggered on the members of the other team and not for the player of the own team.\\ 
