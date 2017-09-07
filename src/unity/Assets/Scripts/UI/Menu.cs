@@ -487,7 +487,7 @@ public class Menu : Singleton<Menu> {
             a[j] = p;
         }
 
-        string text = "RANKING:";
+        string text = "<b>Ranking:</b>";
 
         for (int i = 0; i < numPlayers; i++)
         {

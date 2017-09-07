@@ -88,6 +88,8 @@ public class PupilListener : Singleton<PupilListener>
     private List<RequestSocket> requestSockets = new List<RequestSocket>();
 
     private bool newData = false;
+    private PupilConfiguration.PupilClient currentClient = null;
+
     private bool isConnected = true;
     private int turn = 0;
     private TimeSpan timeout = new System.TimeSpan(0, 0, 1);
@@ -157,7 +159,7 @@ public class PupilListener : Singleton<PupilListener>
                 if (requestSocket != null)
                 {
                     requestSocket.SendFrame("SUB_PORT");
-                    timeout = new System.TimeSpan(0, 0, 1);
+                    timeout = new System.TimeSpan(0, 0, 0, 100);
                     frameReceived = requestSocket.TryReceiveFrameString(timeout, out subport);  // request subport, will be saved in var subport for this client
 
                     if (frameReceived)
@@ -167,9 +169,6 @@ public class PupilListener : Singleton<PupilListener>
                             subports.Add(subport);
                             IPHeaders.Add(IPHeader);
                             c.is_connected = true;
-
-                            // set up the pupil client software
-                            // sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "eye_process.should_start.0" }, { "eye_id", 0 } });
                         }
                         else
                         {
@@ -189,7 +188,6 @@ public class PupilListener : Singleton<PupilListener>
                         Debug.LogWarningFormat("Could not connect to client {0}:{1} ({2}). Make sure address is corect and pupil remote service is running", c.ip, c.port, c.name);
                     }
                     requestSockets.Add(requestSocket);
-                    //requestSocket.Close();
                 }
 
             }
@@ -200,7 +198,7 @@ public class PupilListener : Singleton<PupilListener>
 
         }
 
-        isConnected = true; // (IPHeaders.Count == clients.Count);   // check if all clients are connected
+        isConnected = IPHeaders.Count == clients.Count;   // check if all clients are connected
 
         if (isConnected)
         {
@@ -242,8 +240,6 @@ public class PupilListener : Singleton<PupilListener>
 
                 }
                 turn = ++turn % IPHeaders.Count;
-                //Debug.Log(clients[turn].name);
-                //Debug.Log(turn);
 
                 if (IPHeaders[turn].Equals("") || clients[turn].is_connected == false)
                 {
@@ -252,15 +248,11 @@ public class PupilListener : Singleton<PupilListener>
                 timeout = new System.TimeSpan(0, 0, 0, 0, 1);     // wait 200ms to receive a message
 
                 bool stillAlive = subscriberSockets[turn].TryReceiveMultipartMessage(timeout, ref (msg));
-                //Debug.Log(turn);
-                //Debug.Log(clients[turn].name);
-                //Debug.Log(stillAlive);
+
                 if (stillAlive)
                 {
                     try
                     {
-                        //Debug.Log("connect: " + clients[turn].name);
-
                         string msgType = msg[0].ConvertToString();
                         var message = MsgPack.Unpacking.UnpackObject(msg[1].ToByteArray());
                         MsgPack.MessagePackObject mmap = message.Value;
@@ -288,27 +280,7 @@ public class PupilListener : Singleton<PupilListener>
                                 {
                                     newData = true;
                                     surfaceData = JsonUtility.FromJson<Pupil.SurfaceData3D>(mmap.ToString());
-
-                                    if (surfaceData == null)
-                                    {
-                                        return;
-                                    }
-                                    foreach (Pupil.GazeOnSurface gos in surfaceData.gaze_on_srf)
-                                    {
-                                        if (gos == null)
-                                        {
-                                            return;
-                                        }
-                                        if (gos.norm_pos == null)
-                                        {
-                                            return;
-                                        }
-                                        if (gos.on_srf)
-                                        {
-                                            Debug.Log("onsrf" + clients[turn].name);
-                                            clients[turn].gaze_controller.move(surfaceData, clients[turn].surface_name);
-                                        }
-                                    }
+                                    currentClient = clients[turn];
                                 }  
                             }
                         }
@@ -416,7 +388,6 @@ public class PupilListener : Singleton<PupilListener>
             Debug.LogWarningFormat("Error trying to get request socket");
             return;
         }
-        //sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "eye_process.should_start.0" }, { "eye_id", 0 } });
         sendRequest(requestSocket, new Dictionary<string, object> { { "subject", "calibration.should_start" }, { "marker_size", "1.50" }, { "sample_duration", "50" } });
 
         Calibration.Instance.StartCalibration(clients[turn]);
@@ -438,7 +409,6 @@ public class PupilListener : Singleton<PupilListener>
 
         socket.SendMultipartMessage(m);
         timeout = new System.TimeSpan(0, 0, 0, 0, 100);
-        //socket.TrySendMultipartMessage(timeout, m);
 
         NetMQMessage recievedMsg;
         recievedMsg = socket.ReceiveMultipartMessage();
@@ -448,7 +418,6 @@ public class PupilListener : Singleton<PupilListener>
         {
             MsgPack.UnpackingResult<MsgPack.MessagePackObject> message = MsgPack.Unpacking.UnpackObject(recievedMsg[1].ToByteArray());
             MsgPack.MessagePackObject mmap = message.Value;
-            Debug.Log("message: " + mmap.ToString());
         }
 
         return recievedMsg;
@@ -468,35 +437,22 @@ public class PupilListener : Singleton<PupilListener>
         }
 
         if (newData)
-        {
-            /*Debug.Log(turn);
-            Debug.Log(clients[turn].name);*/
-            //Debug.Log("");
-            
-            foreach(PupilConfiguration.PupilClient c in clients)
-            {
-                //Debug.Log(c.name);
-            }
-
+        {         
             if (IPHeaders[turn] == null)
             {
                 newData = false;
                 surfaceData = null;
                 return;
             }
-            PupilConfiguration.PupilClient client = clients[turn]; //clients.Find((c) => IPHeaders[turn].Contains(c.ip));
 
-            if (client == null)
+            if (currentClient == null)
             {
-                Debug.Log(turn + " is null");
-
                 newData = false;
                 surfaceData = null;
                 return;
             }
-            //Debug.Log(clients[turn].name);
 
-            if (client.gaze_controller != null)
+            if (currentClient.gaze_controller != null)
             {
                 if (surfaceData == null)
                 {
@@ -514,8 +470,7 @@ public class PupilListener : Singleton<PupilListener>
                     }
                     if (gos.on_srf)
                     {
-                        Debug.Log("onsrf" + clients[turn].name); 
-                        client.gaze_controller.move(surfaceData, client.surface_name);
+                        currentClient.gaze_controller.move(surfaceData, currentClient.surface_name);
                     }
                 }
             }

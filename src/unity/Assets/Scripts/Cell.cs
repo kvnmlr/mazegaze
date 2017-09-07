@@ -27,7 +27,7 @@ public class Cell : MonoBehaviour {
             if(lights[i].GetComponent<Light>().intensity <= 0)
             {
                 DestroyImmediate(lights[i]);
-                lights.RemoveAt(i);
+                lights.Remove(lights[i]);
             }
         }
 	}
@@ -49,7 +49,6 @@ public class Cell : MonoBehaviour {
                 p.cell = this;
             }
 
-            // TODO will always only loop once
             for (int i = 0; i < lights.Count;)
             {
                 if (lights[i].GetComponent<CellLight>().getPlayers().Contains(p))

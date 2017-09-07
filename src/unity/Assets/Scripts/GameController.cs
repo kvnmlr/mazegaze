@@ -84,7 +84,7 @@ public class GameController : Singleton<GameController>
     private void startCalibration(PupilConfiguration.PupilClient client, bool startRound = false)
     {
         PupilListener.Instance.StartCalibration(client);
-        client.is_calibrated = true;        // TODO replace with correct calibration
+        client.is_calibrated = true;
         if (startRound)
         {
             setUpNewRound();
@@ -135,9 +135,6 @@ public class GameController : Singleton<GameController>
         if (!joinedPlayersToPosition.ContainsKey(player) && !joinedPlayersToPosition.ContainsValue(position))
         {
             joinedPlayersToPosition.Add(player, position);
-            Debug.Log("num p: " + MazeGenerator.Instance.numPlayers);
-            Debug.Log("joined num: " + joinedPlayersToPosition.Keys.Count);
-            Debug.Log("new round: " + newRound);
             if (joinedPlayersToPosition.Keys.Count == MazeGenerator.Instance.numPlayers && newRound)
             {
                 playersAssigned();
@@ -163,10 +160,9 @@ public class GameController : Singleton<GameController>
             playerNames.Add(p.name);
 
         }
-
-
         restart = false;
         playedGames = 0;
+
         // check if player need calibration
         foreach (Player p in players)
         {
@@ -183,12 +179,12 @@ public class GameController : Singleton<GameController>
                     client.is_calibrated = true;
                     if (!client.is_calibrated)
                     {
-                        //Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
+                        Debug.Log(client.name + " is not calibrated. Starting calibration procedure");
                         startCalibration(client, true);
                         return;
                     } else
                     {
-                        //Debug.Log(client.name + " is calibrated and ready to play");
+                        Debug.Log(client.name + " is calibrated and ready to play");
                     }
                 }
             }
@@ -199,10 +195,8 @@ public class GameController : Singleton<GameController>
 
     public void startNewRound()
     {
-
         setUpPlayers();
-
-        if ((playedGames == 0 && !restart)  || inGameJoin /*|| mazeBuildAttempts < 20*/)     // TODO not sure why this is good
+        if ((playedGames == 0 && !restart)  || inGameJoin /*|| mazeBuildAttempts < 20*/)
         {
             mazeBuildAttempts++;
 
@@ -220,6 +214,7 @@ public class GameController : Singleton<GameController>
                 startNewRound();
                 return;
             }
+            inGameJoin = false;
             powerUpManager.setSpawnedPowerUps(0);
             Debug.Log("Took " + mazeBuildAttempts + " attempts to build a good maze");
             mazeBuildAttempts = 0;
@@ -227,31 +222,22 @@ public class GameController : Singleton<GameController>
             AudioManager.Instance.play(AudioManager.SOUNDS.BACKTRACK1);
             System.Random rnd = new System.Random();
             fogComes = rnd.Next(2, numGames+2);
-            //fogComes = rnd.Next(2,3);
-
-            Debug.Log("Fog comes in round" + fogComes);
-         
+            Debug.Log("Fog comes in round " + fogComes);
         }
         else
         {
-            Debug.Log(1);
             powerUpManager.spawnPowerUp(PowerUpManager.PowerUpTypes.Target, true);
-            //powerUpManager.setSpawnedPowerUps(0);
-            Debug.Log(2);
         }
         foreach (Player p in joinedPlayersToPosition.Keys)
         {
             p.gameObject.SetActive(true);
         }
-
-        //playedGames++;
         gameover = false;
     }
 
 
     private void Update()
     {
-        //fog.startColor = Color.green;
         fog.maxParticles = playedGames * 25;
         
         int maxPoints = 0;
@@ -294,7 +280,6 @@ public class GameController : Singleton<GameController>
 
     public void GameOver()
     {
-        //gameover = true;
     }
 
     private int getRandomCellTarget()
@@ -378,8 +363,5 @@ public class GameController : Singleton<GameController>
         System.Random rd = new System.Random();
         fogComes = rd.Next(fogComes+1, numGames+2);
         Debug.Log(fogComes);
-
-
     }
-
 }

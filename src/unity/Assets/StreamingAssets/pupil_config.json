@@ -1,20 +1,20 @@
 {
     "pupil_clients": [
         {
-            "name": "Marco",
-            "ip": "192.168.137.55",
-            "port": "50020",
+            "name": "Client 1",
+            "ip": "192.168.1.7",
+            "port": "50404",
             "surface_name": "screen",
             "detect_surface": true,
             "initially_active": true
         },
         {
-            "name": "Kevin",
-            "ip": "192.168.137.139",
-            "port": "50030",
+            "name": "Local Client",
+            "ip": "127.0.0.1",
+            "port": "50020",
             "surface_name": "screen",
             "detect_surface": true,
-            "initially_active": true
+            "initially_active": false
         }
     ],
     "setup_id": "Testeinstellungen"

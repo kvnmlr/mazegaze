@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GazeController : PlayerControl
 {
-    //public GameObject cursor;
+    public GameObject cursor;
     private Rigidbody rb;
 
     private Vector3 offset;
@@ -49,9 +49,6 @@ public class GazeController : PlayerControl
             }
         }
 
-        //gaze.on_srf = !gaze.on_srf;
-        //Debug.Log(gaze.on_srf);
-
         if (!gaze.on_srf || !data.name.Equals(surface))
         {
             if (gazeOnSurface == true)
@@ -69,12 +66,7 @@ public class GazeController : PlayerControl
             gazeOnSurface = true;
             gazeX = (float)gaze.norm_pos[0];
             gazeY = (float)gaze.norm_pos[1];
-
-            //Debug.Log(gazeX);
         }
-
-        
-
     }
 
     private void protectArea(int[] pos)
@@ -202,28 +194,10 @@ public class GazeController : PlayerControl
             }
         }
         
-
         lastCell = currentCell;
         currentCellReached = false;
 
         targetCell = bestCell;
-
-        /*
-        if (possibleCells.Count > 0)
-        {
-            possibleCells.Sort();
-            Debug.Log("Cell " + possibleCells[0].posX + ", " + possibleCells[0].posY + " is best");
-            targetCell = possibleCells[0];
-        } else
-        {
-            targetCell = null;
-        }
-
-        foreach (Cell c in possibleCells)
-        {
-            targetCell = c;
-            return;
-        }*/
     }
 
     void Update()
@@ -233,10 +207,6 @@ public class GazeController : PlayerControl
 
     void processGaze()
     {
-        //Debug.Log("gazeX " + gazeX);
-        //Debug.Log("gazeY " + gazeY);
-
-        //return;
         /*if (!gazeOnSurface)
         {
             if (Time.time - gazeLeftSurface > 5)
@@ -273,23 +243,11 @@ public class GazeController : PlayerControl
 
             Vector3 gazePos = new Vector3();
 
-
-            //Debug.Log(Screen.width);
-            //Debug.Log(Screen.height);
-
             if (!(gazeX > 10000 || gazeY > 1000 || gazeX < -10000 || gazeY < -1000))
             {
-                //goodGazeX = ((gazeX * Screen.width)) * ((Screen.width + 25) / Screen.width);
-                //goodGazeY = ((gazeY * Screen.height)) * ((Screen.height + 25) / Screen.height);
-
-                goodGazeX = (gazeX * (Screen.width - 50)) + 25;
-                goodGazeY = (gazeY * (Screen.height - 50)) + 25;
-
-
+                goodGazeX = (gazeX * (Screen.width - 25)) + 12.5f;      // subtract the marker offset
+                goodGazeY = (gazeY * (Screen.height - 25)) + 12.5f;     // subtract the marker offset
             }
-
-            //Debug.Log("goodGazeX " + goodGazeX);
-           // Debug.Log("goodGazeY " + goodGazeY);
 
             if (currentCell == null)
             {
@@ -297,7 +255,7 @@ public class GazeController : PlayerControl
             }
 
             gazePos = Camera.main.ScreenToWorldPoint(new Vector3(goodGazeX, goodGazeY, depth));
-            //cursor.gameObject.transform.position = gazePos;
+            cursor.gameObject.transform.position = gazePos;
 
             if (MazeGenerator.Instance.cells == null)
             {
@@ -321,16 +279,8 @@ public class GazeController : PlayerControl
                 findMostProbableCell(pos);
                 if (targetCell == null)
                 {
-                    //Debug.Log("target cell is null");
                     targetCell = currentCell;
                 }
-                else
-                {
-                    //Debug.Log("target cell is NOT null");
-                    //Debug.Log(targetCell.posX + " " + targetCell.posY);
-
-                }
-
             }
 
             if (transform.position != targetCell.transform.position)
@@ -348,14 +298,9 @@ public class GazeController : PlayerControl
 
             if (targetCell != null)
             {
-                //transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, gameObject.GetComponent<Player>().speed * Time.deltaTime);
                 transform.position = Vector3.MoveTowards(transform.position, targetCell.transform.position, currentSpeed * Time.deltaTime);
 
             }
         }
-        /*else
-        {
-            currentSpeed = 0;
-        }*/
     }
 }

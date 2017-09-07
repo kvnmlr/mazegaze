@@ -61,7 +61,6 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
         foreach (PupilListener p in listeners)
         {
             Debug.Log("Shutting down client " + p.name);
-            //p.StopListen();
             yield return new WaitForSeconds(3);
         }
     }
@@ -76,7 +75,6 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
     private void StartListen()
     {
         List<PupilClient> clients = new List<PupilClient>(settings.pupil_clients);
-        //clients.RemoveAll((c) => !c.initially_active);
         pupilListener.clients = clients;
 
         int count = 0;
@@ -90,10 +88,9 @@ public class PupilConfiguration : Singleton<PupilConfiguration> {
             player.AddComponent<GazeController>();
             player.GetComponent<Player>().name = c.name;
             c.gaze_controller = player.GetComponent<GazeController>();
-            //c.gaze_controller.cursor = Instantiate(GameController.Instance.cursor, null);
+            c.gaze_controller.cursor = Instantiate(GameController.Instance.cursor, null);
             ++count;
         }
-
         pupilListener.Listen();
     }
 }
