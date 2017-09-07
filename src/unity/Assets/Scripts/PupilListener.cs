@@ -119,6 +119,7 @@ public class PupilListener : Singleton<PupilListener>
 
     public void Listen()
     {
+        stop_thread_ = false;
         IPHeaders = new List<string>();
         subscriberSockets = new List<SubscriberSocket>();
         requestSockets = new List<RequestSocket>();
@@ -152,6 +153,10 @@ public class PupilListener : Singleton<PupilListener>
                 if (!validateIPHeader(c.ip, c.port))
                 {
                     Debug.LogWarningFormat("{0}:{1} is not a valid ip header for client {2}", c.ip, c.port, c.name);
+                    string failHeader = "";
+                    subports.Add(failHeader);
+                    IPHeaders.Add(failHeader);
+                    c.is_connected = false;
                     continue;
                 }
 
@@ -198,7 +203,7 @@ public class PupilListener : Singleton<PupilListener>
 
         }
 
-        isConnected = IPHeaders.Count == clients.Count;   // check if all clients are connected
+        isConnected = true;   // check if all clients are connected
 
         if (isConnected)
         {
@@ -231,13 +236,11 @@ public class PupilListener : Singleton<PupilListener>
 
             var msg = new NetMQMessage();
             turn = 0;   // used receive a message from each client in turn
-            Debug.Log(subscriberSockets.Count);
             while (!stop_thread_)
             {
                 if (IPHeaders.Count != clients.Count)
                 {
-                    Debug.LogError("Something wrong");
-
+                    break;
                 }
                 turn = ++turn % IPHeaders.Count;
 
@@ -408,7 +411,7 @@ public class PupilListener : Singleton<PupilListener>
         }
 
         socket.SendMultipartMessage(m);
-        timeout = new System.TimeSpan(0, 0, 0, 0, 100);
+        timeout = new System.TimeSpan(0, 0, 0, 1);
 
         NetMQMessage recievedMsg;
         recievedMsg = socket.ReceiveMultipartMessage();

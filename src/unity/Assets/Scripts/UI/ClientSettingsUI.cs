@@ -111,7 +111,8 @@ public class ClientSettingsUI : MonoBehaviour
         client.detect_surface = true;
         PupilConfiguration.Instance.settings.pupil_clients.Add(client);
         PupilListener.Instance.clients.Add(client);
-        OnEnable();
+        StartCoroutine(Reconnect());
+        //OnEnable();
     }
 
     public void UpdateName()

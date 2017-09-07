@@ -70,6 +70,7 @@ public class JoinArea : MonoBehaviour
         {
             foreach (Player p in GameController.Instance.joinedPlayersToPosition.Keys)
             {
+                
                 if (p.Equals(client.player))
                 {
                     //Debug.Log(0);
@@ -77,7 +78,10 @@ public class JoinArea : MonoBehaviour
                     joined.Add(client);
                 }
             }
-
+            if (client.player == null || client.gaze_controller == null)
+            {
+                continue;
+            }
             if (joined.Contains(client))
             {
                 continue;
