@@ -32,6 +32,7 @@
 \usepackage{color}
 \usepackage{booktabs}
 \usepackage{textcomp}
+\usepackage{listings}
 
 
 % Some optional stuff you might like/need.
@@ -98,6 +99,7 @@
   breaklinks=true,
   hypertexnames=false
 }
+
 
 % create a shortcut to typeset table headings
 % \newcommand\tabhead[1]{\small\textbf{#1}}
@@ -238,13 +240,56 @@ Currently, this simple heuristic only takes into consideration whether the actua
 We already mentioned the length of the path between two positions in the maze in the paragraph above. Obviously, getting this path is not straight-forward and we first felt that we need this functionality when we wanted to spawn our target fair, such that all players have the same chance of reaching it. In the first prototype, we used the simple Manhattan distance to find the position with roughly the same distance to all players. But of course, depending on the structure of the maze, this can lead to quite unfair target positions. We therefore implemented a pathfinding algorithm that takes two cells as input and returns the path (i.e. list of cells to visit) to get from the start cell to the end cell. By utilizing this, we can compute the spot in the maze which each player can reach in roughly about the same time when making perfect decisions in choosing the way. We also introduce a lower bound on the length of the path to ensure that the target will not always spawn right between two players. When a new round starts, we generate new mazes until we find one where we can spawn the perfect target. When playing multiple rounds, we gradually make the spawning algorithm more liberal such that it will eventually spawn the target somewhere because we can't generate a new maze in between rounds.
 
 \subsubsection{Pupil Integration}
-We created a class that stores the client information like ip addresses, ports and surface names. After those configurations have been read from the saved settings, we hand them over to the pupil listener.
+We created a class that stores the client information like ip addresses, ports and surface names. After those configurations have been read from the saved settings, we hand them over to the pupil listener. After validating the provided IP address and port, we establish  a request socket and send a request for the sub port to the instance of pupil capture. 
+\begin{verbatim}
+requestSocket = new RequestSocket(
+  IPHeader + c.port); 
+requestSocket.SendFrame("SUB_PORT");)
+\end{verbatim}
+
+
+ After receiving this subport, we go on to set up the subscriber socket and subscribe to surface event of pupil capture. 
+  \begin{verbatim}
+ SubscriberSocket subscriberSocket = 
+   new SubscriberSocket(header +  subport); 
+subscriberSocket.Subscribe("surface");
+subscriberSocket.Subscribe("notify.")
+\end{verbatim}
+ 
+We then enter a loop that continuously tries to read data from that socket.
+ \begin{verbatim}
+ bool stillAlive = subscriberSockets[turn].
+  TryReceiveMultipartMessage(
+    timeout, ref (msg));
+\end{verbatim}
+
+  
+  Pupil provides this data as soon as it detected a defined surface within the view of the user. The message is a json file containing all sorts of information about the gaze and the surface. We extract the relevant information, which is whether the gaze is on the surface and the relative positions on the surface ranging from 0 to 1. This data is passed on to the gaze controller which converts this data into actual screen corrdinates which are then used to determine where to move the light. All of this is done in turn for all of the four players because due to a restriction in unity we can't connect to all four pupil instances at once.\\
+Calibration is done in a similar fashion. When the calibration needs to be started, we send a request to the pupil client 
+ \begin{verbatim}
+sendRequest(requestSocket,
+   new Dictionary<string, object> { 
+     { "subject", "calibration.should_start" }, 
+     { "marker_size", "1.50" }, 
+     { "sample_duration", "50" } 
+   }
+);
+\end{verbatim}
+
+
+This starts the internal pupil screen marker calibration. We can then find out when the calibration is over by checking for each received message whether the message type equals a certain event id ).
+ \begin{verbatim}
+if (msgType.Equals(
+  "notify.calibration.successful")) {
+// end calibration }
+\end{verbatim}
 
 \subsubsection{Calibration}
 In order to use the pupil trackers and have a good level of accuracy, a calibration that maps eye positions to locations in the view of the world camera is necessary. When a calibration is done, the tracker must not move on the players head. Otherwise, the slight shift will introduce a more or less severe offset which quickly leads to very bad usability. To account for that, we introduced a calibration procedure in our application. We decided to do this in a rather simple way: From the settings screen where we can connect to pupil clients, we can also choose to start the calibration procedure for each client. This will send a request to the client computer and start the pupil internal screen marker calibration procedure. Our game then listens for an event from pupil, indicating a successful or failed procedure. Furthermore, when a new game starts each player that has not been calibrated previously will be calibrated in the same way. When the calibration for every player is done, the players can join the game.
 
 \subsubsection{Game Lobbys}
-We implemented a very intuitive and efficient way for gaze players to join a new game. Because our maximum number of players is four, we divided the screen into four areas. When a player gazes at one of those areas, a countdown from 3 to 0 is shown to indicate how long they have to keep looking there to join. After all players have joined in that manner, the game will start automatically. To ensure that games don't get empty, we implemented the possibility for mid-game joining. When players are inactive, i.e. they do not gaze at the screen for a certain number of seconds, they will be kicked out of the game. New players can then join the ongoing game in the same manner as described above, with the only difference that the other players can keep on playing. The new player will then join the game and spawn when the next round starts.
+We implemented a very intuitive and efficient way for gaze players to join a new game. Because our maximum number of players is four, we divided the screen into four areas. When a player gazes at one of those areas, a countdown from 3 to 0 is shown to indicate how long they have to keep looking there to join. After all players have joined in that manner, the game will start automatically. To ensure that games don't get empty, we implemented the possibility for mid-game joining. When players are inactive, i.e. they do not gaze at the screen for a certain number of seconds, they will be kicked out of the game. New players can then join the ongoing game in the same manner as described above, with the only difference that the other players can keep on playing. The new player will then join the game and spawn when the next round starts. 
+
 
 \subsubsection{Graphical Interface} 
 To get a immersive game experience we integrate special effects and high quality 3D objects. The special effects occurrence in many places in the project. We took our effects from ''Particle Ingredient Pack'', it is a particle System package from the asset store from unity. In this package are located so many example particle effects, we selected two special effects for the power-ups. The one SFX for the good power-ups and the other for the bad power-ups. We change some parameters of these two effects (i.e the loop, change the color, etc.) and trigger them, if a user collect a power-up. To make the game more interesting, we integrate a fog. The fog spawned irregularly and randomly. It makes the control more difficult.\\
@@ -257,7 +302,7 @@ We tested and played the game a lot of times and it turned out that the performa
 \subsection{User-Experience}
 We interviewed some people, most of them haven't played a game with gaze input till now. Because of that, they needed little time to get used to the eyetracker and the game. They said, the game and gaze control were very intuitive, easy to learn and easy to remember. They also liked the design of the game: The background of the main menu, that it has the same topic and the reference to actual game: maze, the slow music first in the menu and the faster music in the game which increases during the rounds and creates a lot of pressure and also the color of the individual pawns in the game (the cone of light) which makes which makes it easier for the observers to differ the players.
 A couple of people also make new suggestions to improve the game and make it more fun, but we had not the time to implement all these ideas.\\
-Summarized all interviewed people have the opinion that the game is interesting, because they haven't used eyetracker and gaze input before, but it they had all much fun playing our game.
+Summarized all interviewed people have the opinion that the game is interesting, because they haven't used eyetracker and gaze input before, but it they had all much fun playing our game. 
 
 \section{Conclusion}
 \subsection{R{\'e}sume}
