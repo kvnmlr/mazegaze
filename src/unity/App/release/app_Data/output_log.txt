@@ -1,0 +1,89 @@
+Initialize engine version: 5.6.1f1 (2860b30f0b54)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Intel(R) HD Graphics 4600 (ID=0x416)
+    Vendor:   Intel
+    VRAM:     1136 MB
+    Driver:   20.19.15.4531
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\Assembly-UnityScript.dll (this message is harmless)
+Loading C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\Assembly-UnityScript.dll into Unity Child Domain
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\AsyncIO.dll (this message is harmless)
+Loading C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\AsyncIO.dll into Unity Child Domain
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\MsgPack.dll (this message is harmless)
+Loading C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\MsgPack.dll into Unity Child Domain
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\NetMQ.dll (this message is harmless)
+Loading C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\NetMQ.dll into Unity Child Domain
+- Completed reload, in  0.021 seconds
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\u500304\Documents\Development\pupil-labyrinth\src\unity\App\release\app_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 3840x1080 at -1920,0
+<RI> Initializing input.
+XInput1_3.dll not found. Trying XInput9_1_0.dll instead...
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 5.425599 ms
+Testeinstellungen have been loaded
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Requesting socket for 192.168.1.X:50404 (Client 1)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+192.168.1.X:50404 is not a valid ip header for client Client 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Requesting socket for 127.0.0.X:50020 (Local Client)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+127.0.0.X:50020 is not a valid ip header for client Local Client
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Connected to 2 sockets
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Setting up 2 worker threads for Enlighten.
+  Thread -> id: 47b4 -> priority: 1 
+  Thread -> id: 6678 -> priority: 1 
+Client 1 is calibrated and ready to play
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Local Client is calibrated and ready to play
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Target fairness: -24.68163
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Target cell: 6, 0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Took 1 attempts to build a good maze
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Fog comes in round 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Network Threads terminated.
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
