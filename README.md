@@ -14,7 +14,7 @@ https://gitlab.com/3picName/pupil-labyrinth/tree/master/src/unity/App/release
 #### Debug Build (mit Cursor und großem Licht)
 https://gitlab.com/3picName/pupil-labyrinth/tree/master/src/unity/App/debug
 
-#### Anleitung zum Starten des Spiels (inkl. Troubleshooting)
+#### Anleitung zum Starten des Spiels (bitte Abschnitt "Bekannte Fehler" beachten)
 https://gitlab.com/3picName/pupil-labyrinth/wikis/anleitung
 
 #### Pupil Settings
