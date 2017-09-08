@@ -1,19 +1,29 @@
 # Aufbau
-## Schriftliche Zusammenfassung:
+#### Schriftliche Zusammenfassung:
 /documentation/pdf/mazegaze.pdf
 
-## Arbeitsaufteilung:
+#### Arbeitsaufteilung:
 /documentation/pdf/arbeitsaufteilung.pdf
 
-## Unity Projekt:
+#### Unity Projekt zum Importieren:
 /src/unity
 
-## Release Build
-/src/unity/App/release/app.exe
+#### Release Build
+https://gitlab.com/3picName/pupil-labyrinth/tree/master/src/unity/App/release
 
-## Debug Build (mit Cursor und großem Licht)
-/src/unity/App/debug/app.exe
+#### Debug Build (mit Cursor und großem Licht)
+https://gitlab.com/3picName/pupil-labyrinth/tree/master/src/unity/App/debug
 
-## Pupil Settings
-/src/unity/Assets/StreamingAssets/pupil_config.json
+#### Anleitung zum Starten des Spiels (inkl. Troubleshooting)
+https://gitlab.com/3picName/pupil-labyrinth/wikis/anleitung
+
+#### Pupil Settings
+https://gitlab.com/3picName/pupil-labyrinth/tree/master/src/unity/Assets/StreamingAssets
+
+#### Anleitung für Pupil Settings
+https://gitlab.com/3picName/pupil-labyrinth/wikis/pupil-config
+
+#### Kontakt
+kevin.mueller194@gmail.com
+
 
