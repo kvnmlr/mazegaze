@@ -1,0 +1,46 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[width=19.00cm, height=28.00cm, left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
+\begin{document}
+	\section*{Kevin}
+		\begin{itemize}
+			\item Koordination der Lichtquellen, ob das kontinuierliche Licht des Spielers, Area Licht oder Target Licht
+			\item Spieler so bearbeiten, so dass diese sich nicht gegenseitig blockieren können
+			\item Algorithmus entwickelt zum fairen spawnen des Power-ups darunter befindet sich ein Algorithmus zum um den kürzesten Pfad zwischen zwei Zellen zu berechnen
+			\item Kompletter Umgang des Eye Trackers, von Verbindungsaufbau bis hin zur Steuerung (welche Orientiert ist zur Maussteuerung), setzen der Marker, etc...
+			\item Einbetten der Offline und In-Game Kalibrierung
+			\item Anwendung entwickelt, damit Spieler in einem laufenden Spiel hinzutreten können und ab der nächsten Runde mitspielen können
+			\item Verbesserung der Gazeposition an den Rändern, in Zusammenarbeit mit Marco
+			\item Anpassen von Text- und Schriftgrößen
+		\end{itemize}
+	\section*{Marco}
+		\begin{itemize}
+			\item Generierung eines zufälligen Labyrinthes, welches jedoch von jedem Startpunk jeden Punk des Labyrinthes erreichen kann
+			\item Erstellen des erster Spielers und Implementierung der Steuerung des Spielers via Maus 
+			\item Ausbau auf 4 Spieler, welche nun per Tastatur gesteuert werden können (Pfeiltasten, WASD, UHJK)
+			\item Spiel kann gewonnen werden: Implementation dafür, dass wenn jemand das Target gesammelt hat, sich das Startmenü wieder öffnet und man wieder eine Runde Spielen kann. Später folgte Ausbau auf Rundenbasiertes Spiel, so dass man im Menu schon die Rundenanzahl wählen konnte, man nach diesen Runden jedoch wieder neue Einstellungen tätigen konnte und wieder Spielen kann, ohne das Spiel neu zu starten.
+			\item Methode zum fairen spawnen der Power-Ups, so dass die Power-ups nicht nur einmal erscheinen. Jedoch auch mit angepassten Zeitabstand. Es folgten Verbesserungen, so dass die Power-Ups nicht auf einem Target spawnen können.
+			\item Content Adaption implementieren, also wenn ein Nutzer auf einen Bereich eines anderen Spielers schaut, wird dieses Licht für den Moment ausgeschaltet, wenn er weg schaut, erleuchtet es wieder. 
+			\item Auswählen und einbetten von Sound, das betrifft klick eines Button, Hintergrundmusik, so wie Soundeffekte, wenn ein Spieler ein Power-Up oder Target sammelt, Bestätigungs- oder Fehlsignal zur Kalibrierung, Start einer neuen Runde, etc... 
+			\item Implementierung zum aus dem Spiel kicken eines Spielers, wenn er sich für längere Zeit nicht bewegt, also der Nutzer den Spieler nicht steuert.
+			\item Leichte Beschleunigung der Spieler implementieren
+			\item Da Gazedaten an den Rändern des Spielfeldes ungenau sind, Behebung des Problems ins Zusammenarbeit mit Kevin
+			\item Lösung dafür, dass das Target nie auf einem Powerup und immer im dunklen Bereich spawned.
+			\item Hinzufügen von 3D-Grafiken für Power-Ups und Target, sowie SPX wenn ein Power-Up oder Target gesammelt wurde und Implementierung der zufällig spawnenden Nebelwolke über dem Spielfeld. 
+		\end{itemize}
+	\section*{Lena}
+		\begin{itemize}
+			\item Erstellen des Menüs vom Grundaufbau bis zum Finalen Menü
+			\item Implementierung eines Pause-Buttons
+			\item Hinzufügen eines Winner-Screens, welcher im Nachhinein durchgehen an den Rändern angezeigt wird
+			\item Ideen aus Related Work zusammenfassen und Anwendungen auf unser Spiel herausfiltern
+			\item Optimierungen im Menü für besseres User-Interface-Design
+			\item Ausführliches Testen
+			\item Ranking Liste hinzufügen (durchgehender Punktestand der Spieler, welcher sortiert ist)
+			
+		\end{itemize}
+\end{document}
