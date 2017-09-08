@@ -1,46 +1,58 @@
 \documentclass[10pt,a4paper]{article}
-\usepackage[latin1]{inputenc}
+
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage[ansinew]{inputenc}
 \usepackage[width=19.00cm, height=28.00cm, left=2.00cm, right=2.00cm, top=2.00cm, bottom=2.00cm]{geometry}
 \begin{document}
 	\section*{Kevin}
 		\begin{itemize}
-			\item Koordination der Lichtquellen, ob das kontinuierliche Licht des Spielers, Area Licht oder Target Licht
-			\item Spieler so bearbeiten, so dass diese sich nicht gegenseitig blockieren können
-			\item Algorithmus entwickelt zum fairen spawnen des Power-ups darunter befindet sich ein Algorithmus zum um den kürzesten Pfad zwischen zwei Zellen zu berechnen
-			\item Kompletter Umgang des Eye Trackers, von Verbindungsaufbau bis hin zur Steuerung (welche Orientiert ist zur Maussteuerung), setzen der Marker, etc...
-			\item Einbetten der Offline und In-Game Kalibrierung
-			\item Anwendung entwickelt, damit Spieler in einem laufenden Spiel hinzutreten können und ab der nächsten Runde mitspielen können
-			\item Verbesserung der Gazeposition an den Rändern, in Zusammenarbeit mit Marco
-			\item Anpassen von Text- und Schriftgrößen
+			\item Genereller Aufbau der Architektur und Projektplanung. 
+			\item Verhalten aller Lichtquellen: Das konstante Licht der Spieler, das Licht in den Korridoren und das Licht des Targets inklusive Steuerung durch Power-Ups.
+			\item Lichter mehrer Spieler mischen sich.
+			\item Implementierung aller 6 Power-Ups.
+			\item Implementierung des Audio Controllers zum Abspielen verschiedener Audio Clips.
+			\item Implementierund des A* Algorithmus auf der Maze Datenstruktur um den k\"urzesten Pfad zwischen zwei Stellen im Maze zu finden.
+			\item Algorithmus entwickelt zum fairen spawnen des Targets. Zun\''achst prototypisch mittels Manhattandistanz, sp\"ater unter Benutzung des Suchalgorithmus.
+			\item Optimierung des Algorithmus um Targets m\"oglichst fair zu spawnen, gleichzeitig aber ein zeitnahes Spawnen zu garantieren.
+			\item Unterbenutzung des Suchalgorithmus, Implementierung der Spielersteuerung bei der die Spielfigur der Struktur des Labyrinths (z.B. um Ecken herum) folgt.
+			\item Einarbeitung in die Pupil Capture Dokumentation, Experimentierung mit verschiedenen Einstellungen und Plugins.
+			\item Implementierung eines Einstellungsbildschirms um die Daten neuer Pupil Clients einzugeben und in einer JSON Datei permanent zu speichern.
+			\item Netzwerkthread zum verbinden mit Pupil Capture und kontinuierliches Abfragen der Daten. Durch Threadingprobleme hier sehr viel Debugging notwendig. Senden von Anfragen zum starten der Eye-Camera oder des Kalibrierungsplugins. 
+			\item Konvertierung der Gaze-Daten zu Bildschirmkoordinaten und letztendlich Positionen im Maze.
+			\item M\"oglichkeit die Kalibrierung aus dem Spiel heraus manuell oder automatisch zu Beginn einer Runde zu starten.
+			\item Beitreten von Maus- und Gaze-Spielern sowohl zu Beginn einer Runde im Join-Screen als auch w\"ahrend einer laufenden Runde (hier nur Gaze).
+			\item Implementierung des Mechanismus zur Bewegung des Spielers auf Basis der Gaze Position und des aktuellen Spielzustandes (siehe Abschnitt Smart Player Controlls in der Dokumentation).
+			\item Da Gazedaten an den R\"andern des Spielfeldes ungenau sind, Behebung des Problems ins Zusammenarbeit mit Marco
+\item Ausw\"ahlen und einbetten von Sound (Buttonklick, Hintergrundmusik, Soundeffekte, Best\"atigungs- oder Fehlsignal zur Kalibrierung, Start einer neuen Runde, etc). In Zusammenarbeit mit Marco
+			\item Heraussuchen und Hinzuf\"ugen von Texturen, 3D-Objecten f\"ur Power-Ups und Target, sowie Partikeleffekte f\"r die Lichtquelle und das Sammeln von Power-Up oder Target.
+			\item Implementierung der zuf\"allig spawnenden Nebelwolke \"uber dem Spielfeld mit zunehmender Intensit\"at und in der Farbe des f\"uhrenden Spielers. In Zusammenarbeit mit Marco.
+			\item Ideen aus Related Work zusammenfassen und m\"ogliche Anwendungen auf unser Spiel herausfiltern.
 		\end{itemize}
 	\section*{Marco}
 		\begin{itemize}
-			\item Generierung eines zufälligen Labyrinthes, welches jedoch von jedem Startpunk jeden Punk des Labyrinthes erreichen kann
-			\item Erstellen des erster Spielers und Implementierung der Steuerung des Spielers via Maus 
-			\item Ausbau auf 4 Spieler, welche nun per Tastatur gesteuert werden können (Pfeiltasten, WASD, UHJK)
-			\item Spiel kann gewonnen werden: Implementation dafür, dass wenn jemand das Target gesammelt hat, sich das Startmenü wieder öffnet und man wieder eine Runde Spielen kann. Später folgte Ausbau auf Rundenbasiertes Spiel, so dass man im Menu schon die Rundenanzahl wählen konnte, man nach diesen Runden jedoch wieder neue Einstellungen tätigen konnte und wieder Spielen kann, ohne das Spiel neu zu starten.
-			\item Methode zum fairen spawnen der Power-Ups, so dass die Power-ups nicht nur einmal erscheinen. Jedoch auch mit angepassten Zeitabstand. Es folgten Verbesserungen, so dass die Power-Ups nicht auf einem Target spawnen können.
-			\item Content Adaption implementieren, also wenn ein Nutzer auf einen Bereich eines anderen Spielers schaut, wird dieses Licht für den Moment ausgeschaltet, wenn er weg schaut, erleuchtet es wieder. 
-			\item Auswählen und einbetten von Sound, das betrifft klick eines Button, Hintergrundmusik, so wie Soundeffekte, wenn ein Spieler ein Power-Up oder Target sammelt, Bestätigungs- oder Fehlsignal zur Kalibrierung, Start einer neuen Runde, etc... 
-			\item Implementierung zum aus dem Spiel kicken eines Spielers, wenn er sich für längere Zeit nicht bewegt, also der Nutzer den Spieler nicht steuert.
+			\item Generierung eines zuf\"alligen Labyrinthes, welches jedoch von jedem Startpunk jeden Punk des Labyrinthes erreichen kann.
+			\item Erstellen des erster Spielers und Implementierung der Steuerung des Spielers via Maus.
+			\item Ausbau auf 4 Spieler, welche nun per Tastatur gesteuert werden k\"onnen (Pfeiltasten, WASD, UHJK).
+			\item Spiel kann gewonnen werden: Implementation daf\"ur, dass wenn jemand das Target gesammelt hat, sich das Startmen\"u wieder \"offnet und man wieder eine Runde Spielen kann. Sp\"ater folgte Ausbau auf Rundenbasiertes Spiel, so dass man im Menu schon die Rundenanzahl w\"ahlen konnte, man nach diesen Runden jedoch wieder neue Einstellungen t\"atigen konnte und wieder Spielen kann, ohne das Spiel neu zu starten.
+			\item Methode zum fairen spawnen der Power-Ups, so dass die Power-ups nicht nur einmal erscheinen. Jedoch auch mit angepassten Zeitabstand. Es folgten Verbesserungen, so dass die Power-Ups nicht auf einem Target spawnen k\"onnen.
+			\item Content Adaption implementieren, also wenn ein Nutzer auf einen Bereich eines anderen Spielers schaut, wird dieses Licht f\"ur den Moment ausgeschaltet, wenn er weg schaut, erleuchtet es wieder. 
+			\item Ausw\"ahlen und einbetten von Sound (Buttonklick, Hintergrundmusik, Soundeffekte, Best\"atigungs- oder Fehlsignal zur Kalibrierung, Start einer neuen Runde, etc). In Zusammenarbeit mit Kevin
+			\item Implementierung zum aus dem Spiel kicken eines Spielers, wenn er sich f\"ur l\"angere Zeit nicht bewegt, also der Nutzer den Spieler nicht steuert.
 			\item Leichte Beschleunigung der Spieler implementieren
-			\item Da Gazedaten an den Rändern des Spielfeldes ungenau sind, Behebung des Problems ins Zusammenarbeit mit Kevin
-			\item Lösung dafür, dass das Target nie auf einem Powerup und immer im dunklen Bereich spawned.
-			\item Hinzufügen von 3D-Grafiken für Power-Ups und Target, sowie SPX wenn ein Power-Up oder Target gesammelt wurde und Implementierung der zufällig spawnenden Nebelwolke über dem Spielfeld. 
+			\item Da Gazedaten an den R\"andern des Spielfeldes ungenau sind, Behebung des Problems ins Zusammenarbeit mit Kevin
+			\item L\"osung daf\"ur, dass das Target nie auf einem Powerup und immer im dunklen Bereich spawned.
+			\item Implementierung der zuf\"allig spawnenden Nebelwolke \"uber dem Spielfeld mit zunehmender Intensit\"at und in der Farbe des f\"uhrenden Spielers. In Zusammenarbeit mit Kevin.
 		\end{itemize}
 	\section*{Lena}
 		\begin{itemize}
-			\item Erstellen des Menüs vom Grundaufbau bis zum Finalen Menü
-			\item Implementierung eines Pause-Buttons
-			\item Hinzufügen eines Winner-Screens, welcher im Nachhinein durchgehen an den Rändern angezeigt wird
-			\item Ideen aus Related Work zusammenfassen und Anwendungen auf unser Spiel herausfiltern
-			\item Optimierungen im Menü für besseres User-Interface-Design
-			\item Ausführliches Testen
-			\item Ranking Liste hinzufügen (durchgehender Punktestand der Spieler, welcher sortiert ist)
-			
+			\item Erstellung und stetiger Ausbau des Men\"us (ausser Einstellungsbildschirm).
+			\item Implementierung eines Pause-Buttons.
+			\item Hinzuf\"ugen eines Winner-Screens, welcher im Nachhinein durchgehen an den R\"andern angezeigt wird
+			\item Optimierungen im Men\"u f\"ur besseres User-Interface-Design
+			\item Ranking Liste hinzuf\"ugen (sortierter Punktestand der Spieler) wird am Spielfeldrand angezeigt.
+			\item Anzeige der aktuellen Rundenzahl.
 		\end{itemize}
 \end{document}
